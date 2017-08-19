@@ -2,6 +2,7 @@ package com.zhiku.DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 /**
  * 
  * @author DBD
@@ -39,4 +40,12 @@ public class DB {
 		return conn;
 	}
 	
+	
+	public static void close(Connection conn){
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
