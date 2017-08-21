@@ -53,6 +53,10 @@ public class User {
 		return dao.check(usr , pwd);
 	}
 	
+	public static boolean isExist(String col ,String value){
+		return dao.isExist(col, value);
+	}
+	
 	/**
 	 * 修改用户信息
 	 * @return是否修改成成功

@@ -40,6 +40,34 @@ public class UserDAO {
 		return isDone;
 	}
 	
+	/**
+	 * 判断USER表中是否存在col属性值为value的元素
+	 * @param col 列名称
+	 * @param value 列的属性值
+	 * @return 如果有返回真
+	 */
+	public boolean isExist(String col ,String value){
+		boolean exist = true;
+		Connection conn = DB.getConnection();
+		
+		try{
+			String sql = "select * from  user where " + col + "=" + value;
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			
+			ResultSet rs = pstm.executeQuery();
+			if(rs == null){
+				exist = false;
+			}else{
+				exist = true;
+			}
+		}catch(Exception e){
+			//如果执行SQL语句出错，则认为数据库中
+			exist = true;
+			e.printStackTrace();
+		}
+		
+		return exist;
+	}
 	
 	/**
 	 * 检查用户名和密码是否正确
