@@ -36,7 +36,7 @@ public class User {
 	public User(){}
 
 	/**
-	 * 保存用户信息
+	 * 保存用户注册信息
 	 * @return是否保存成功
 	 */
 	public boolean save(){
