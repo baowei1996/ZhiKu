@@ -5,7 +5,14 @@
   <form-beans />
   <global-exceptions />
   <global-forwards />
-  <action-mappings />
+  <action-mappings >
+    <action
+      path="/login"
+      type="com.zhiku.struts.action.LoginAction"
+      cancellable="true" />
+
+  </action-mappings>
+
   <message-resources parameter="com.zhiku.struts.ApplicationResources" />
 </struts-config>
 
