@@ -61,7 +61,7 @@ public class UserDAO {
 				exist = true;
 			}
 		}catch(Exception e){
-			//如果执行SQL语句出错，则认为数据库中
+			//如果执行SQL语句出错，则认为数据库中已经存在这个数据
 			exist = true;
 			e.printStackTrace();
 		}
