@@ -39,7 +39,7 @@ public class LoginAction extends Action {
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setContentType("txt/html;charset=utf-8");
+		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
 		PrintWriter out = null;
 		

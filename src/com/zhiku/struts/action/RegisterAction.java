@@ -43,6 +43,9 @@ public class RegisterAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 		
+		response.setContentType("application/json;charset=utf-8");
+		response.setHeader("pragme", "no-cache");
+		
 		//设置返回信息
 		RMessage rmsg = new RMessage();
 		PrintWriter out = null ;
