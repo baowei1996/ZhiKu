@@ -4,27 +4,21 @@
  */
 package com.zhiku.struts.action;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.zhiku.user.User;
-import com.zhiku.util.RMessage;
-
 /** 
  * MyEclipse Struts
- * Creation date: 08-21-2017
+ * Creation date: 08-22-2017
  * 
  * XDoclet definition:
  * @struts.action validate="true"
  */
-public class LoginAction extends Action {
+public class MailCheckAction extends Action {
 	/*
 	 * Generated Methods
 	 */
@@ -39,32 +33,8 @@ public class LoginAction extends Action {
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setContentType("application/json;charset=utf-8");
-		response.setHeader("pragme", "no-cache");
-		PrintWriter out = null;
 		
-		RMessage rmsg = new RMessage();
-		try{
-			String usr = request.getParameter("usr");
-			String pwd = request.getParameter("pwd");
-			
-			if(User.check(usr, pwd)){
-				rmsg.setStatus(200);
-				rmsg.setMessage("OK");
-			}else{
-				rmsg.setStatus(300);
-				rmsg.setMessage("Username or password wrong");
-			}
-			
-			out = response.getWriter();
-			out.write(rmsg.getJson());
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			out.flush();
-			out.close();
-		}
+		
 		return null;
 	}
 }

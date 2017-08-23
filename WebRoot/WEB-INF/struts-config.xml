@@ -14,6 +14,10 @@
       path="/register"
       type="com.zhiku.struts.action.RegisterAction"
       cancellable="true" />
+    <action
+      path="/mailCheck"
+      type="com.zhiku.struts.action.MailCheckAction"
+      cancellable="true" />
 
   </action-mappings>
 

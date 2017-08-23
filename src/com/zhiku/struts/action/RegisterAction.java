@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.user.User;
+import com.zhiku.util.EMail;
 import com.zhiku.util.RMessage;
 
 /** 
@@ -99,7 +100,10 @@ public class RegisterAction extends Action {
 				out.write(rmsg.getJson());
 			}
 			
-		} catch (IOException e) {
+			//给用户的邮箱发送一个激活邮件,激活使用用户编号！
+			EMail.sendMail(u.getUsr(), u.getMail(), u.getUid()+"");
+			
+		} catch (Exception e) {
 			
 			e.printStackTrace();
 		}finally{
@@ -107,7 +111,6 @@ public class RegisterAction extends Action {
 			out.close();
 		}
 		
-		//send an e-mail to the user's mail
 		
 		
 		return null;
