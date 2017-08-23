@@ -36,5 +36,7 @@
 			<attribute name="owner.project.facets" value="me.hibernate"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activation.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javax.mail-1.6.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
