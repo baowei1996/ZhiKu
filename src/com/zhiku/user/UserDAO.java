@@ -215,24 +215,4 @@ public class UserDAO {
 		return userList;
 	}
 	
-	public static User findByUid(int uid){
-		User u = new User();
-		
-Connection conn = DB.getConnection();
-		
-		String sql = "select uid, usr from user where uid = " + uid;
-		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			ResultSet rs = pstm.executeQuery();
-			
-			String username = rs.getString("usr");
-			
-			u.setUid(uid);
-			u.setUsr(username);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return u;
-	}
 }
