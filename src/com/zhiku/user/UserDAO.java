@@ -1,12 +1,13 @@
 package com.zhiku.user;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import com.zhiku.DB.DB;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import com.zhiku.hibernate.HibernateSessionFactory;
 
 public class UserDAO {
 	/**
@@ -16,28 +17,69 @@ public class UserDAO {
 	 */
 	public boolean save(User u){
 		boolean isDone = true;
-		Connection conn = DB.getConnection();
 		
-		String sql = "insert into user(usr,nick,pwd,phone,mail,regip,regtime,mailtime,status) values(?,?,?,?,?,?,?,?)";
-		try {
-			//设置用户的基本信息
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			pstm.setString(1, u.getUsr());
-			pstm.setString(2, u.getNick());
-			pstm.setString(3, u.getPwd());
-			pstm.setString(4, u.getPhone());
-			pstm.setString(5, u.getMail());
-			pstm.setString(6, u.getRegip());
-			pstm.setDate(7, new Date(u.getRegtime().getTime()));
-			pstm.setDate(8, new Date(u.getMailtime().getTime()));
-			pstm.setInt(9, u.getStatus());
-			pstm.executeQuery();
-		} catch (SQLException e) {
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			Transaction trans = session.beginTransaction();
+			
+			session.persist(u);
+			trans.commit();
+			
+		}catch(Exception e){
 			isDone = false;
+			session.getTransaction().rollback();
 			e.printStackTrace();
+		}finally{
+			session.close();
 		}
 		
 		return isDone;
+	}
+	
+	/**
+	 * 通过uid找到用户
+	 * @param uid 用户的uid
+	 * @return 返回对应的用户对象
+	 */
+	public static User findByUid(int uid){
+		User u = null;
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			u = (User) session.get(User.class, uid);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return u;
+	}
+	
+	/**
+	 * 通过用户名找用户
+	 * @param usr 用户名
+	 * @return 返回对应的用户对象，没有则返回null
+	 */
+	public static User findByUsr(String usr){
+		User u = null;
+		Session session = null;
+		try{
+			session = HibernateSessionFactory.getSession();
+			String sql = "from user where usr = " + usr;	//省略了select * ,之前加上试过总是不能识别*，所以把省略了
+			Query q = session.createQuery(sql);
+			u = (User)q.uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return u;
 	}
 	
 	/**
@@ -46,24 +88,26 @@ public class UserDAO {
 	 * @param value 列的属性值
 	 * @return 如果有返回真
 	 */
-	public boolean isExist(String col ,String value){
+	public static boolean isExist(String col ,String value){
 		boolean exist = true;
-		Connection conn = DB.getConnection();
+		Session session = null;
 		
 		try{
-			String sql = "select * from  user where " + col + "=" + value;
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			
-			ResultSet rs = pstm.executeQuery();
-			if(rs == null){
-				exist = false;
-			}else{
+			session = HibernateSessionFactory.getSession();
+			String sql = "select count(*) from  user where " + col + "=" + value;
+			Query q = session.createQuery(sql);
+			long result = (Long)q.uniqueResult();
+			if(result != 0){
 				exist = true;
+			}else{
+				exist = false;
 			}
 		}catch(Exception e){
 			//如果执行SQL语句出错，则认为数据库中已经存在这个数据
 			exist = true;
 			e.printStackTrace();
+		}finally{
+			session.close();
 		}
 		
 		return exist;
@@ -75,32 +119,99 @@ public class UserDAO {
 	 * @param pwd 密码
 	 * @return 是否正确
 	 */
-	public boolean check(String usr , String pwd){
+	public static boolean check(String usr , String pwd){
 		
 		boolean isCorrect = true;
-		Connection conn = DB.getConnection();
-		
-		String sql = "select usr , pwd from user where usr = \'" + usr +"\'";
+		Session session = null;
+		User u = null;
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			ResultSet rs = pstm.executeQuery();
+			session = HibernateSessionFactory.getSession();
+			u = User.findByUsr(usr);
 			
-			String username = rs.getString("usr");
-			String password = rs.getString("pwd");
-			
-			if(!username.equals(usr) || !password.equals(pwd)){
+			if(u == null || pwd.equals(u.getPwd())){
 				isCorrect = false;
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			isCorrect = false;
 			e.printStackTrace();
+		}finally{
+			session.close();
 		}
 		
 		return isCorrect;
 	}
 	
-	public boolean modify(){
-		//do something
-		return true;
+	/**
+	 * 修改用户的信息并提交
+	 * @param u 修改后的用户对象
+	 * @return 是否修改成功
+	 */
+	public boolean modify(User u){
+		boolean modified = true;
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			session.update(u);
+			session.getTransaction().commit();
+		}catch(Exception e){
+			modified = false;
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return modified;
+	}
+	
+	/**
+	 * 删除指定用户编号的用户信息
+	 * @param uid 用户编号
+	 * @return 如果删除返回true
+	 */
+	public static boolean delete(int uid){
+		boolean isDone = true;
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			User u = (User)session.get(User.class, uid);
+			session.delete(u);
+			session.getTransaction().commit();
+			
+		}catch(Exception e){
+			isDone = false;
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		return isDone;
+	}
+	
+	@SuppressWarnings("unchecked")
+	/**
+	 * 依据sql返回一个用户列表对象
+	 * @param sql 查询SQL
+	 * @return 用户列表
+	 */
+	public static List<User> showList(String sql){
+		Session session = null;
+		List<User> userList = null;
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			userList = session.createQuery(sql).list();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		return userList;
 	}
 }
