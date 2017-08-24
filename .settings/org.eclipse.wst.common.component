@@ -4,5 +4,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <property name="context-root" value="JPidea"/>
         <property name="java-output-path" value="/JPidea/WebRoot/WEB-INF/classes"/>
+        <property name="me-struts-base-pkg" value="com.zhiku.struts"/>
     </wb-module>
 </project-modules>
