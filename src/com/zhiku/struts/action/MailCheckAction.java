@@ -69,7 +69,7 @@ public class MailCheckAction extends Action {
 				}
 			}
 			
-			out.write(rmsg.getJson());
+			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
 			e.printStackTrace();

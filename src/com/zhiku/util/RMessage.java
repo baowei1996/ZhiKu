@@ -1,6 +1,5 @@
 package com.zhiku.util;
 
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +14,7 @@ public class RMessage {
 	private int status ;
 	private String message;
 	
-	private Map<String ,Object> data;
+	private Object data;
 	
 	public RMessage(){}
 
@@ -31,14 +30,15 @@ public class RMessage {
 	}
 
 	/**
-	 * 将RMessage类中的信息转化为Json格式
-	 * @return Json格式的字符串
+	 * 静态方法，将message的内容格式化为json
+	 * @param m 要格式化的内容
+	 * @return 格式化之后的json字符
 	 */
-	public String getJson(){
+	public static String getJson(RMessage m){
 		String result = null;
 		ObjectMapper om = new ObjectMapper();
 		try {
-			result = om.writeValueAsString(this);
+			result = om.writeValueAsString(m);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -62,11 +62,11 @@ public class RMessage {
 		this.message = message;
 	}
 
-	public Map<String, Object> getData() {
+	public Object getData() {
 		return data;
 	}
 
-	public void setData(Map<String, Object> data) {
+	public void setData(Object data) {
 		this.data = data;
 	}
 	

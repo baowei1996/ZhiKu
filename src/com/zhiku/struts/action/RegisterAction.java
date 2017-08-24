@@ -59,7 +59,7 @@ public class RegisterAction extends Action {
 			if(User.isExist("usr", username)){
 				rmsg.setStatus(300);
 				rmsg.setMessage("Username has been used");
-				out.write(rmsg.getJson());
+				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
 			
@@ -68,7 +68,7 @@ public class RegisterAction extends Action {
 			if(User.isExist("mail", mail)){
 				rmsg.setStatus(300);
 				rmsg.setMessage("Mail has been used");
-				out.write(rmsg.getJson());
+				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
 			
@@ -99,7 +99,7 @@ public class RegisterAction extends Action {
 			if(u.save()){
 				rmsg.setStatus(200);
 				rmsg.setMessage("OK");
-				out.write(rmsg.getJson());
+				out.write(RMessage.getJson(rmsg));
 			}
 			
 			//给用户的邮箱发送一个激活邮件,激活使用用户编号！
