@@ -4,7 +4,6 @@
  */
 package com.zhiku.struts.action;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,7 +103,7 @@ public class RegisterAction extends Action {
 			}
 			
 			//给用户的邮箱发送一个激活邮件,激活使用用户编号！
-			EMail.sendMail(u.getUsr(), u.getMail(), u.getUid()+"");
+			EMail.sendMail(u.getUsr(), u.getMail(), u.hashCode()+"");
 			
 		} catch (Exception e) {
 			

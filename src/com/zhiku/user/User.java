@@ -134,6 +134,50 @@ public class User {
 	}
 	
 	
+	/*
+	 * 覆写了hashCode和equals方法
+	 * 对用户的用户名，邮箱和注册时间进行hash
+	 * 这个hash值作为用户的激活验证码
+	 * @see java.lang.Object#hashCode()
+	 */
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+		result = prime * result + ((regtime == null) ? 0 : regtime.hashCode());
+		result = prime * result + ((usr == null) ? 0 : usr.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (mail == null) {
+			if (other.mail != null)
+				return false;
+		} else if (!mail.equals(other.mail))
+			return false;
+		if (regtime == null) {
+			if (other.regtime != null)
+				return false;
+		} else if (!regtime.equals(other.regtime))
+			return false;
+		if (usr == null) {
+			if (other.usr != null)
+				return false;
+		} else if (!usr.equals(other.usr))
+			return false;
+		return true;
+	}
+
 	//setter和getter方法
 	public int getUid() {
 		return uid;
