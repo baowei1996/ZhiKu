@@ -108,4 +108,57 @@ public class FileDAO {
 		return filelist;
 	}
 	
+	@SuppressWarnings("unchecked")
+	/**
+	 * 找出对应课程下的所有文件
+	 * @param course 课程
+	 * @return 返回对应课程下的所有文件对象
+	 */
+	public static List<JFile> findByCourse(int course){
+		Session session = null;
+		List<JFile> filelist = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			String sql = "from file_info where course = " + course;
+			filelist = session.createQuery(sql).list();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		return filelist;
+	}
+	
+	@SuppressWarnings("unchecked")
+	/**
+	 * 重载方法，提供对多个课程对应文件的查找
+	 * @param courses 多个课程的课号
+	 * @return 课程对应的文件
+	 */
+	public static List<JFile> findByCourse(List<Integer> courses){
+		Session session = null;
+		List<JFile> filelist = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			
+			String sql = "from file_info where course in" + courses.toString().replace('[', '(').replace(']', ')');
+			filelist = session.createQuery(sql).list();
+			
+					
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		return filelist;
+	}
+	
 }

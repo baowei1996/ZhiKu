@@ -109,6 +109,25 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 		return FileDAO.search(sql);
 	}
 	
+	/**
+	 * 找出对应课程下的所有文件
+	 * @param course 课程
+	 * @return 返回对应课程下的所有文件对象
+	 */
+	public static List<JFile> findByCourse(int course){
+		return FileDAO.findByCourse(course);
+	}
+	
+	/**
+	 * 找出对应多个课程下的所有文件
+	 * 按照学院专业筛选时，可能会有多个课程，这个时候要把所有的文件都找出来
+	 * @param courses 课程号的集合
+	 * @return 返回对应课程的所有文件对象
+	 */
+	public static List<JFile> findByCourse(List<Integer> courses){
+		return FileDAO.findByCourse(courses);
+	}
+	
 	
 	//setter getter 方法
 	
