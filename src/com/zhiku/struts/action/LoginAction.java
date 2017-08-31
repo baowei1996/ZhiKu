@@ -57,7 +57,7 @@ public class LoginAction extends Action {
 			}
 			
 			out = response.getWriter();
-			out.write(rmsg.getJson());
+			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
 			e.printStackTrace();

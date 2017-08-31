@@ -70,7 +70,7 @@ public class UserDAO {
 		Session session = null;
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from user where usr = " + usr;	//省略了select * ,之前加上试过总是不能识别*，所以把省略了
+			String sql = "from User where usr = " + usr;	//省略了select * ,之前加上试过总是不能识别*，所以把省略了
 			Query q = session.createQuery(sql);
 			u = (User)q.uniqueResult();
 		}catch(Exception e){
@@ -94,7 +94,7 @@ public class UserDAO {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "select count(*) from  user where " + col + "=" + value;
+			String sql = "select count(*) from  User where " + col + "=" + value;
 			Query q = session.createQuery(sql);
 			long result = (Long)q.uniqueResult();
 			if(result != 0){

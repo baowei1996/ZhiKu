@@ -15,8 +15,16 @@
       type="com.zhiku.struts.action.RegisterAction"
       cancellable="true" />
     <action
-      path="/mailCheck"
+      path="/mailcheck"
       type="com.zhiku.struts.action.MailCheckAction"
+      cancellable="true" />
+    <action
+      path="/upload"
+      type="com.zhiku.struts.action.FileUploadAction"
+      cancellable="true" />
+    <action
+      path="/document/search"
+      type="com.zhiku.struts.action.SearchDocumentAction"
       cancellable="true" />
 
   </action-mappings>

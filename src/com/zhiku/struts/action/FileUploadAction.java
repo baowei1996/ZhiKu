@@ -15,17 +15,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.zhiku.user.User;
+import com.zhiku.file.JFile;
+import com.zhiku.util.Data;
+import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
 
 /** 
  * MyEclipse Struts
- * Creation date: 08-22-2017
+ * Creation date: 08-24-2017
  * 
  * XDoclet definition:
  * @struts.action validate="true"
  */
-public class MailCheckAction extends Action {
+public class FileUploadAction extends Action {
 	/*
 	 * Generated Methods
 	 */
@@ -49,37 +51,44 @@ public class MailCheckAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			String username = request.getParameter("usr");
-			int key = Integer.parseInt(request.getParameter("key"));
-			User u = User.findByUsr(username);
+			//获取文件的相关属性
+			int module = Integer.parseInt(request.getParameter("module"));
+			int upuid = Integer.parseInt(request.getParameter("upuid"));
+			int origin = Integer.parseInt(request.getParameter("origin"));
+			String desc = request.getParameter("desc");
 			
-			//如果用户不存在，或者用户的验证码不正确，则返回错误链接
-			if(u == null || key != u.hashCode()){
-				rmsg.setStatus(300);
-				rmsg.setMessage("Invalid mailcheck link");
-			}else {
-				Date current = new Date();
-				//如果激活时间过期，则返回注册过期
-				if(current.compareTo(u.getMailtime()) < 0){
-					rmsg.setStatus(300);
-					rmsg.setMessage("MailCheck link time out");
-				}else{
+			FileUpDownLoad fileUpload = new FileUpDownLoad();
+			Data data = fileUpload.upload(this.getServlet(), request);
+			
+			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){
+				JFile file = new JFile();
+				file.setName((String)data.get("filename"));
+				file.setPath((String)data.get("savePath"));
+				file.setModule(module);
+				file.setUptime(new Date());
+				file.setUpuid(upuid);
+				file.setOrigin(origin);
+				file.setDesc(desc);
+				
+				if(file.save()){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
+				}else{
+					rmsg.setStatus(300);
+					rmsg.setMessage("fail ,please try again");
 				}
+			}else{
+				rmsg.setStatus(300);
+				rmsg.setMessage((String)data.get("message"));
 			}
 			
 			out.write(RMessage.getJson(rmsg));
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			out.flush();
 			out.close();
 		}
-		
-		
-		
 		return null;
 	}
 }
