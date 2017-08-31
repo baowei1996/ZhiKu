@@ -21,7 +21,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "select cid from mtoc where xid = " + xid + "and mid = " + mid;
+			String sql = "select cid from Mtoc where xid = " + xid + "and mid = " + mid;
 			courses = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -43,7 +43,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from college";
+			String sql = "from College";
 			colleges = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -66,7 +66,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from major";
+			String sql = "from Major";
 			majors = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -90,7 +90,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from course where cname like %" + key + "%";
+			String sql = "from Course where cname like %" + key + "%";
 			courses = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();

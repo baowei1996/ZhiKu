@@ -78,6 +78,8 @@ public class RegisterAction extends Action {
 			String qq = request.getParameter("qq");
 			String regip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			
+			//给密码使用MD5加密
+			
 			//创建一个用户并设置信息
 			User u = new User();
 			u.setUsr(username);

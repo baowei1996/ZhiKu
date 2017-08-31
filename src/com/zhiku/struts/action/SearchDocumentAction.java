@@ -16,8 +16,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.file.FileView;
-import com.zhiku.file.JFile;
-import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
 

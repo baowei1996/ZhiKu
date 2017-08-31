@@ -95,7 +95,7 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	 * @return
 	 */
 	public static List<JFile> search(String key){
-		String sql = "from file_info where name like %" + key + "%";
+		String sql = "from JFile where name like %" + key + "%";
 		return FileDAO.search(sql);
 	}
 	
@@ -105,12 +105,12 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	 * @return
 	 */
 	public static List<JFile> advancedSearch(String key){
-		String sql = "from file_info where name like " + key + "%";
+		String sql = "from JFile where name like " + key + "%";
 		return FileDAO.search(sql);
 	}
 	
 	
-	
+	 
 	//setter getter 方法
 	
 	public int getFid() {
