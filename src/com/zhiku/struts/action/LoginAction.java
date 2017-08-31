@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -46,7 +47,7 @@ public class LoginAction extends Action {
 		RMessage rmsg = new RMessage();
 		try{
 			String usr = request.getParameter("usr");
-			String pwd = request.getParameter("pwd");
+			String pwd = DigestUtils.md5Hex(request.getParameter("pwd"));
 			
 			if(User.check(usr, pwd)){
 				rmsg.setStatus(200);

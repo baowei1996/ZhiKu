@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -99,6 +100,8 @@ public class FileUpDownLoad {
 		        InputStream in = item.getInputStream();
 		        //得到文件保存的名称
 		        String saveFilename = makeFileName(filename);
+		        //获得文件的摘要信息
+		        String sha256 = DigestUtils.sha256Hex(in);
 		        //得到文件的保存目录
 		        String realSavePath = makePath(saveFilename, savePath);
 		        //创建一个文件输出流
@@ -123,6 +126,7 @@ public class FileUpDownLoad {
 		        data.put("filename", filename);
 		        data.put("fileExtName",fileExtName);
 		        data.put("savePath", realSavePath);
+		        data.put("sha256",sha256);
 		        data.put("message", "OK");
 	       }
 	      }

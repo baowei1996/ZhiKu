@@ -57,7 +57,7 @@ public class EMail {
             //设置邮件主题  
             message.setSubject("来自吉鹏智库的激活邮件");  
             //设置邮件正文  
-            message.setContent("<h1>吉鹏智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://localhost:8080/zhiku/mailcheck.action?usr="+usr+"&code="+code+"'>http://localhost:8080/zhiku/mailcheck.action?code="+code+"</a></h3>","text/html;charset=UTF-8");  
+            message.setContent("<h1>吉鹏智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://localhost:8080/zhiku/mailcheck.action?usr="+usr+"&code="+code+"'>http://localhost:8080/zhiku/mailcheck.action?usr"+usr+"code="+code+"</a></h3>","text/html;charset=UTF-8");  
           
             //3.发送邮件  
             Transport.send(message);  

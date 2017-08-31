@@ -64,6 +64,7 @@ public class FileUploadAction extends Action {
 				JFile file = new JFile();
 				file.setName((String)data.get("filename"));
 				file.setPath((String)data.get("savePath"));
+				file.setSha((String)data.get("sha256"));
 				file.setModule(module);
 				file.setUptime(new Date());
 				file.setUpuid(upuid);

@@ -11,6 +11,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -78,13 +79,13 @@ public class RegisterAction extends Action {
 			String qq = request.getParameter("qq");
 			String regip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			
-			//给密码使用MD5加密
+			String passwordMd5 = DigestUtils.md5Hex(password);
 			
 			//创建一个用户并设置信息
 			User u = new User();
 			u.setUsr(username);
 			u.setNick(nickname);
-			u.setPwd(password);
+			u.setPwd(passwordMd5);
 			u.setMail(mail);
 			u.setPhone(phone);
 			u.setQq(qq);
