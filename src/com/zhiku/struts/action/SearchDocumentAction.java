@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.zhiku.file.FileView;
 import com.zhiku.file.JFile;
 import com.zhiku.user.User;
 import com.zhiku.util.Data;
@@ -50,33 +51,31 @@ public class SearchDocumentAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			int course = Integer.parseInt(request.getParameter("course"));
-			List<JFile> filelist = JFile.findByCourse(course);
+			int cid = Integer.parseInt(request.getParameter("course"));
+			List<FileView> filelist = FileView.findByCid(cid);
 			
 			Data[] data = new Data[filelist.size()];
 			int index = 0;
-			User u = null;
-			for(JFile f : filelist){
+			for(FileView f : filelist){
 				data[index].put("fid", f.getFid());
-				data[index].put("upuid", f.getUpuid());
+				data[index].put("upuid", f.getUid());
 				
 				Data fileinfo = new Data();
 				fileinfo.put("name", f.getName());
 				fileinfo.put("module", f.getModule());
-				fileinfo.put("course", f.getCourse());
-				fileinfo.put("docformat", f.getDocformat());
+				fileinfo.put("course", f.getCname());
+//				fileinfo.put("docformat", f.getDocformat());	//个人感觉不需要提供这个属性，文件名中包含后缀，不要刻意提取
 				fileinfo.put("origin", f.getOrigin());
 				fileinfo.put("uptime", f.getUptime());
 				fileinfo.put("desc", f.getDesc());
 				data[index].put("fileinfo", fileinfo);
 				
-				u = User.findByUid(f.getUpuid());
 				Data upperinfo = new Data();
-				upperinfo.put("nickname", u.getNick());
-				upperinfo.put("xid", u.getXid());
-//				upperinfo.put("xname", value);
-				upperinfo.put("mid", u.getMid());
-//				upperinfo.put("mname", value);
+				upperinfo.put("nickname", f.getNick());
+//				upperinfo.put("xid", f.getXid());	//个人感觉没有必要提供
+				upperinfo.put("xname", f.getXname());
+//				upperinfo.put("mid", f.getMid());	//个人感觉没有必要提供
+				upperinfo.put("mname", f.getMname());
 				data[index].put("upperinfo", upperinfo);
 				
 				index++;

@@ -111,17 +111,42 @@ public class FileDAO {
 	@SuppressWarnings("unchecked")
 	/**
 	 * 找出对应课程下的所有文件
-	 * @param course 课程
-	 * @return 返回对应课程下的所有文件对象
+	 * @param cid 课程
+	 * @return 返回对应课程下的所有文件视图对象
 	 */
-	public static List<JFile> findByCourse(int course){
+	public static List<FileView> findByCid(int cid){
 		Session session = null;
-		List<JFile> filelist = null;
+		List<FileView> filelist = null;
 		
 		try{
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
-			String sql = "from file_info where course = " + course;
+			String sql = "from FileView where cid = " + cid;
+			filelist = session.createQuery(sql).list();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		return filelist;
+	}
+	
+	@SuppressWarnings("unchecked")
+	/**
+	 * 依据课程名找到相应的文件视图对象
+	 * @param cname 课程名
+	 * @return 文件视图对象
+	 */
+	public static List<FileView> findByCname(String cname){
+		Session session = null;
+		List<FileView> filelist = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			String sql = "from FileView where cname = \'" + cname + "\'";
 			filelist = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -136,18 +161,18 @@ public class FileDAO {
 	@SuppressWarnings("unchecked")
 	/**
 	 * 重载方法，提供对多个课程对应文件的查找
-	 * @param courses 多个课程的课号
+	 * @param cids 多个课程的课号
 	 * @return 课程对应的文件
 	 */
-	public static List<JFile> findByCourse(List<Integer> courses){
+	public static List<FileView> findByCids(List<Integer> cids){
 		Session session = null;
-		List<JFile> filelist = null;
+		List<FileView> filelist = null;
 		
 		try{
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			String sql = "from file_info where course in" + courses.toString().replace('[', '(').replace(']', ')');
+			String sql = "from FileView where cid in" + cids.toString().replace('[', '(').replace(']', ')');
 			filelist = session.createQuery(sql).list();
 			
 					
