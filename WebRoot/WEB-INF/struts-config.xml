@@ -26,6 +26,18 @@
       path="/document/search"
       type="com.zhiku.struts.action.SearchDocumentAction"
       cancellable="true" />
+    <action
+      path="/document/coltomajor"
+      type="com.zhiku.struts.action.MajorSearchAction"
+      cancellable="true" />
+    <action
+      path="/document/coursesearch"
+      type="com.zhiku.struts.action.CourseSearchAction"
+      cancellable="true" />
+    <action
+      path="/document/getcollege"
+      type="com.zhiku.struts.action.CollegeSearchAction"
+      cancellable="true" />
 
   </action-mappings>
 

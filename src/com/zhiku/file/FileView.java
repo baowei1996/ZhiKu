@@ -24,6 +24,8 @@ public class FileView {
 	private int module;
 	private int cid;
 	private String cname;
+	private int docformat;
+	private String fileformat;
 	private String teacher;
 	private int dncnt;
 	private int colcnt;
@@ -116,6 +118,26 @@ public class FileView {
 	public String getTeacher() {
 		return teacher;
 	}
+	public int getDocformat() {
+		return docformat;
+	}
+
+	public void setDocformat(int docformat) {
+		this.docformat = docformat;
+	}
+
+	public String getFileformat() {
+		return fileformat;
+	}
+
+	public void setFileformat(String fileformat) {
+		this.fileformat = fileformat;
+	}
+
+	public void setCname(String cname) {
+		this.cname = cname;
+	}
+
 	public void setTeacher(String teacher) {
 		this.teacher = teacher;
 	}

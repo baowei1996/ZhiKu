@@ -4,6 +4,9 @@
   <StrutsActivity path="/register.do" location="350,50" dimension="260,104" />
   <StrutsActivity path="/mailcheck.do" location="950,50" dimension="272,104" />
   <StrutsActivity path="/upload.do" location="50,250" dimension="274,104" />
-  <StrutsActivity path="/document/search.do" />
+  <StrutsActivity path="/document/search.do" location="650,250" dimension="310,104" />
+  <StrutsActivity path="/document/coltomajor.do" location="50,450" dimension="286,104" />
+  <StrutsActivity path="/document/coursesearch.do" location="650,450" dimension="292,104" />
+  <StrutsActivity path="/document/getcollege.do" />
 </FlowViewLayout>
 

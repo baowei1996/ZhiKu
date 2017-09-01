@@ -2,6 +2,7 @@ package com.zhiku.xmc;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.zhiku.hibernate.HibernateSessionFactory;
@@ -99,5 +100,63 @@ public class XMCService {
 		}
 		
 		return courses;
+	}
+	
+	@SuppressWarnings("unchecked")
+	/**
+	 * 依据学院编号找到对应学院下的所有专业
+	 * @param xid 学院编号
+	 * @return 专业集合
+	 */
+	public static List<Major> findMajorByXid(int xid){
+		Session session = null;
+		List<Major> majors = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			//因为一个学院一个专业下有多个课程，所以其中应该包含重复的专业数据，使用distinct去重
+			String sql = "select distinct mid from Mtoc where xid = " + xid;
+			List<Integer> mids = session.createQuery(sql).list();
+			String searchMajor = "from Major where mid in " + mids.toString().replace('[', '(').replace(']', ')');
+			majors = session.createQuery(searchMajor).list();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return majors;
+	}
+	
+	/**
+	 * 判断对应表中的字段是否包含某个值
+	 * @param table 表名
+	 * @param col 字段名
+	 * @param value 值
+	 * @return 如果存在返回true
+	 */
+	public static boolean isExist(String table , String col , int value){
+		boolean exist = true;
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			String sql = "select count(*) from  " + table + "where " + col + "=" + value;
+			Query q = session.createQuery(sql);
+			long result = (Long)q.uniqueResult();
+			if(result != 0){
+				exist = true;
+			}else{
+				exist = false;
+			}
+		}catch(Exception e){
+			//如果执行SQL语句出错，则认为数据库中不已经存在这个数据
+			exist = false;
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return exist;
 	}
 }
