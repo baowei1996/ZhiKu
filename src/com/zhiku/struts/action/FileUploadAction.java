@@ -51,19 +51,21 @@ public class FileUploadAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			//获取文件的相关属性
-			int module = Integer.parseInt(request.getParameter("module"));
-			int upuid = Integer.parseInt(request.getParameter("upuid"));
-			int origin = Integer.parseInt(request.getParameter("origin"));
-			String desc = request.getParameter("desc");
-			String teacher = request.getParameter("teacher");
-			int course = Integer.parseInt(request.getParameter("course"));
-			
 			FileUpDownLoad fileUpload = new FileUpDownLoad();
 			Data data = fileUpload.upload(this.getServlet(), request);
 			
+			
 			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){
 				JFile file = new JFile();
+				
+				//获取文件的相关属性
+				int module = Integer.parseInt((String)data.get("module"));
+				int upuid = Integer.parseInt((String)data.get("upuid"));
+				int origin = Integer.parseInt((String)data.get("origin"));
+				String desc = (String)data.get("desc");
+				String teacher = (String)data.get("teacher");
+				int course = Integer.parseInt((String)data.get("course"));
+				
 				file.setName((String)data.get("filename"));
 				file.setPath((String)data.get("savePath"));
 				file.setSha((String)data.get("sha256"));
