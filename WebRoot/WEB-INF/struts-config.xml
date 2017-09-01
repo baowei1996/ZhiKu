@@ -38,6 +38,14 @@
       path="/document/getcollege"
       type="com.zhiku.struts.action.CollegeSearchAction"
       cancellable="true" />
+    <action
+      path="/usermodify/*"
+      type="com.zhiku.struts.action.UserInfoModifyAction"
+      cancellable="true" />
+    <action
+      path="/document/modify/*"
+      type="com.zhiku.struts.action.FileModifyAction"
+      cancellable="true" />
 
   </action-mappings>
 

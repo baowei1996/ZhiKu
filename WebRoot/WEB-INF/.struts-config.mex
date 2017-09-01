@@ -7,6 +7,8 @@
   <StrutsActivity path="/document/search.do" location="650,250" dimension="310,104" />
   <StrutsActivity path="/document/coltomajor.do" location="50,450" dimension="286,104" />
   <StrutsActivity path="/document/coursesearch.do" location="650,450" dimension="292,104" />
-  <StrutsActivity path="/document/getcollege.do" />
+  <StrutsActivity path="/document/getcollege.do" location="50,650" dimension="295,104" />
+  <StrutsActivity path="/usermodify/*.do" location="650,650" dimension="303,104" />
+  <StrutsActivity path="/document/modify/*.do" />
 </FlowViewLayout>
 

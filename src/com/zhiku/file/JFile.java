@@ -95,6 +95,14 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	}
 	
 	/**
+	 *修改文件信息并提交 
+	 * @return 是否修改成功
+	 */
+	public boolean modify(){
+		return dao.modify(this);
+	}
+	
+	/**
 	 * 依据关键字key模糊查询
 	 * @param key
 	 * @return

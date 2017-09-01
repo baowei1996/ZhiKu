@@ -83,6 +83,31 @@ public class FileDAO {
 		return isDone;
 	}
 	
+	/**
+	 * 修改文件f的信息并提交
+	 * @param f 文件
+	 * @return 是否修改成功
+	 */
+	public boolean modify(JFile f){
+		boolean modified = true;
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			session.update(f);
+			session.getTransaction().commit();
+		}catch(Exception e){
+			modified = false;
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return modified;
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	/**
