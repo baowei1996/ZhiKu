@@ -64,6 +64,10 @@ public class MailCheckAction extends Action {
 					rmsg.setStatus(300);
 					rmsg.setMessage("MailCheck link time out");
 				}else{
+					//一切正常,将用户状态改为正常并更新
+					u.setStatus(User.NORMAL);
+					u.modify();
+					
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
 				}

@@ -57,6 +57,11 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public static final int NORMAL = 1;
 	public static final int CHECKING = 2;
 	
+	//定义文件后缀的常量
+	public static final int TYPE_DOC = 0;
+	public static final int TYPE_XSL = 1;
+	public static final int TYPE_PPT = 2;
+	
 	private FileDAO dao = null;
 	
 	public JFile(){

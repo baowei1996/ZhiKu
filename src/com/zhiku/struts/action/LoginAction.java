@@ -46,8 +46,8 @@ public class LoginAction extends Action {
 		
 		RMessage rmsg = new RMessage();
 		try{
-			String usr = request.getParameter("usr");
-			String pwd = DigestUtils.md5Hex(request.getParameter("pwd"));
+			String usr = request.getParameter("username");
+			String pwd = DigestUtils.md5Hex(request.getParameter("password"));
 			
 			if(User.check(usr, pwd)){
 				rmsg.setStatus(200);

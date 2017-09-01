@@ -77,6 +77,8 @@ public class RegisterAction extends Action {
 			String password = request.getParameter("password");
 			String phone = request.getParameter("phone");
 			String qq = request.getParameter("qq");
+			int xid = Integer.parseInt(request.getParameter("xid"));
+			int mid = Integer.parseInt(request.getParameter("mid"));
 			String regip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			
 			String passwordMd5 = DigestUtils.md5Hex(password);
@@ -89,6 +91,8 @@ public class RegisterAction extends Action {
 			u.setMail(mail);
 			u.setPhone(phone);
 			u.setQq(qq);
+			u.setXid(xid);
+			u.setMid(mid);
 			u.setRegip(regip);
 			Date current_time = new Date();
 			u.setRegtime(current_time);
@@ -97,7 +101,7 @@ public class RegisterAction extends Action {
 			calendar.setTime(current_time);
 			calendar.add(Calendar.DAY_OF_MONTH, 1);
 			u.setMailtime(calendar.getTime());
-			u.setStatus(0);
+			u.setStatus(User.UNACTIVE);
 			
 			if(u.save()){
 				rmsg.setStatus(200);
