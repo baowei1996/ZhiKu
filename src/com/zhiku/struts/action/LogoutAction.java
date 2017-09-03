@@ -48,7 +48,8 @@ public class LogoutAction extends Action {
 			out = response.getWriter();
 			
 			HttpSession session = request.getSession();
-			session.removeAttribute("uid");
+			//清楚session中的所有信息
+			session.invalidate();
 			
 			rmsg.setStatus(200);
 			rmsg.setMessage("OK");
