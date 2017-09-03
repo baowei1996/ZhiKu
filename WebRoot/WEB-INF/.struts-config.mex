@@ -10,6 +10,7 @@
   <StrutsActivity path="/document/getcollege.do" location="50,650" dimension="295,104" />
   <StrutsActivity path="/usermodify/*.do" location="650,650" dimension="303,104" />
   <StrutsActivity path="/document/modify/*.do" location="50,850" dimension="272,104" />
-  <StrutsActivity path="/filedl/*.do" />
+  <StrutsActivity path="/filedl/*.do" location="650,850" dimension="290,104" />
+  <StrutsActivity path="/logout.do" />
 </FlowViewLayout>
 

@@ -10,23 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.zhiku.user.User;
 import com.zhiku.util.RMessage;
 
 /** 
  * MyEclipse Struts
- * Creation date: 08-21-2017
+ * Creation date: 09-03-2017
  * 
  * XDoclet definition:
  * @struts.action validate="true"
  */
-public class LoginAction extends Action {
+public class LogoutAction extends Action {
 	/*
 	 * Generated Methods
 	 */
@@ -47,30 +45,14 @@ public class LoginAction extends Action {
 		
 		RMessage rmsg = new RMessage();
 		try{
-			String usr = request.getParameter("username");
-			String pwd = DigestUtils.md5Hex(request.getParameter("password"));
-			
-			if(User.check(usr, pwd)){
-				User u = User.findByUsr(usr);
-				if(u.getStatus() == User.NORMAL){
-					rmsg.setStatus(200);
-					rmsg.setMessage("OK");
-					//将uid的值放到session中
-					HttpSession session = request.getSession();
-					session.setAttribute("uid", u.getUid());
-				}else if(u.getStatus() == User.UNACTIVE){
-					rmsg.setStatus(300);
-					rmsg.setMessage("Sorry ,your e-mail doesn't check!");
-				}else {
-					rmsg.setStatus(300);
-					rmsg.setMessage("Sorry ,you have been locked!");
-				}
-			}else{
-				rmsg.setStatus(300);
-				rmsg.setMessage("Username or password wrong");
-			}
-			
 			out = response.getWriter();
+			
+			HttpSession session = request.getSession();
+			session.removeAttribute("uid");
+			
+			rmsg.setStatus(200);
+			rmsg.setMessage("OK");
+			
 			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
