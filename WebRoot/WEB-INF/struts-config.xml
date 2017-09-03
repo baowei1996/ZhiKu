@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+/filedl/${fid}<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 
 <struts-config>
@@ -45,6 +45,10 @@
     <action
       path="/document/modify/*"
       type="com.zhiku.struts.action.FileModifyAction"
+      cancellable="true" />
+    <action
+      path="/filedl/*"
+      type="com.zhiku.struts.action.FileDownloadAction"
       cancellable="true" />
 
   </action-mappings>
