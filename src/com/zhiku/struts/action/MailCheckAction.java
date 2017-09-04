@@ -38,6 +38,7 @@ public class MailCheckAction extends Action {
 	 * @param response
 	 * @return ActionForward
 	 */
+	//NO Problem!
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 		
@@ -60,7 +61,7 @@ public class MailCheckAction extends Action {
 			}else {
 				Date current = new Date();
 				//如果激活时间过期，则返回注册过期
-				if(current.compareTo(u.getMailtime()) < 0){
+				if(current.compareTo(u.getMailtime()) > 0){
 					rmsg.setStatus(300);
 					rmsg.setMessage("MailCheck link time out");
 				}else{

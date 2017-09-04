@@ -87,7 +87,7 @@ public class HibernateSessionFactory {
         threadLocal.set(null);
 
         if (session != null) {
-            session.close();
+            HibernateSessionFactory.closeSession();
         }
     }
 

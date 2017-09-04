@@ -47,8 +47,11 @@ public class LoginAction extends Action {
 		
 		RMessage rmsg = new RMessage();
 		try{
+			out = response.getWriter();
+			
 			String usr = request.getParameter("username");
 			String pwd = DigestUtils.md5Hex(request.getParameter("password"));
+			System.out.println("pwd" + pwd);
 			
 			if(User.check(usr, pwd)){
 				User u = User.findByUsr(usr);
@@ -70,7 +73,6 @@ public class LoginAction extends Action {
 				rmsg.setMessage("Username or password wrong");
 			}
 			
-			out = response.getWriter();
 			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
