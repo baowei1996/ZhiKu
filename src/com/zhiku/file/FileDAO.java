@@ -29,7 +29,7 @@ public class FileDAO {
 			session.getTransaction().rollback();
 			e.printStackTrace();
 		}finally{
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return saved;
@@ -50,7 +50,7 @@ public class FileDAO {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return f;
@@ -78,7 +78,7 @@ public class FileDAO {
 			session.getTransaction().rollback();
 			e.printStackTrace();
 		}finally{
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		return isDone;
 	}
@@ -102,7 +102,7 @@ public class FileDAO {
 			session.getTransaction().rollback();
 			e.printStackTrace();
 		}finally{
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return modified;
@@ -127,7 +127,7 @@ public class FileDAO {
 			e.printStackTrace();
 		}finally{
 			session.getTransaction().commit();
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return filelist;
@@ -152,7 +152,7 @@ public class FileDAO {
 			e.printStackTrace();
 		}finally{
 			session.getTransaction().commit();
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return filelist;
@@ -177,7 +177,7 @@ public class FileDAO {
 			e.printStackTrace();
 		}finally{
 			session.getTransaction().commit();
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return filelist;
@@ -205,7 +205,7 @@ public class FileDAO {
 			e.printStackTrace();
 		}finally{
 			session.getTransaction().commit();
-			session.close();
+			HibernateSessionFactory.closeSession();
 		}
 		
 		return filelist;

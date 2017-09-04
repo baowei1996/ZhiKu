@@ -153,7 +153,6 @@ public class User {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
-		result = prime * result + ((regtime == null) ? 0 : regtime.hashCode());
 		result = prime * result + ((usr == null) ? 0 : usr.hashCode());
 		return result;
 	}
@@ -171,11 +170,6 @@ public class User {
 			if (other.mail != null)
 				return false;
 		} else if (!mail.equals(other.mail))
-			return false;
-		if (regtime == null) {
-			if (other.regtime != null)
-				return false;
-		} else if (!regtime.equals(other.regtime))
 			return false;
 		if (usr == null) {
 			if (other.usr != null)

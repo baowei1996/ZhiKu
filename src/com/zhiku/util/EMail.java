@@ -57,7 +57,7 @@ public class EMail {
             //设置邮件主题  
             message.setSubject("来自吉鹏智库的激活邮件");  
             //设置邮件正文  
-            message.setContent("<h1>吉鹏智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://localhost:8080/zhiku/mailcheck.action?usr="+usr+"&code="+code+"'>http://localhost:8080/zhiku/mailcheck.action?usr"+usr+"code="+code+"</a></h3>","text/html;charset=UTF-8");  
+            message.setContent("<h1>吉鹏智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://localhost:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"'>http://localhost:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"</a></h3>","text/html;charset=UTF-8");  
           
             //3.发送邮件  
             Transport.send(message);  
@@ -68,4 +68,16 @@ public class EMail {
         }  
                   
     }
+	
+	public static void main(String[] args) {
+		try {
+			EMail.sendMail("baowei", "1368183370@qq.com", "asdfghjkl");
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
