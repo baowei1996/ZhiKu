@@ -8,7 +8,9 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -45,12 +47,24 @@ public class LoginAction extends Action {
 		
 		RMessage rmsg = new RMessage();
 		try{
-			String usr = request.getParameter("usr");
-			String pwd = request.getParameter("pwd");
+			String usr = request.getParameter("username");
+			String pwd = DigestUtils.md5Hex(request.getParameter("password"));
 			
 			if(User.check(usr, pwd)){
-				rmsg.setStatus(200);
-				rmsg.setMessage("OK");
+				User u = User.findByUsr(usr);
+				if(u.getStatus() == User.NORMAL){
+					rmsg.setStatus(200);
+					rmsg.setMessage("OK");
+					//将uid的值放到session中
+					HttpSession session = request.getSession();
+					session.setAttribute("uid", u.getUid());
+				}else if(u.getStatus() == User.UNACTIVE){
+					rmsg.setStatus(300);
+					rmsg.setMessage("Sorry ,your e-mail doesn't check!");
+				}else {
+					rmsg.setStatus(300);
+					rmsg.setMessage("Sorry ,you have been locked!");
+				}
 			}else{
 				rmsg.setStatus(300);
 				rmsg.setMessage("Username or password wrong");

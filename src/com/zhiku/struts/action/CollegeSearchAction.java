@@ -5,7 +5,9 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,17 +17,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.zhiku.user.User;
+import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
+import com.zhiku.xmc.College;
+import com.zhiku.xmc.XMCService;
 
 /** 
  * MyEclipse Struts
- * Creation date: 08-22-2017
+ * Creation date: 09-01-2017
  * 
  * XDoclet definition:
  * @struts.action validate="true"
  */
-public class MailCheckAction extends Action {
+public class CollegeSearchAction extends Action {
 	/*
 	 * Generated Methods
 	 */
@@ -40,39 +44,32 @@ public class MailCheckAction extends Action {
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
-		
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
-		RMessage rmsg = new RMessage();
 		PrintWriter out = null;
 		
+		RMessage rmsg = new RMessage();
 		try{
 			out = response.getWriter();
-			
-			String username = request.getParameter("usr");
-			int key = Integer.parseInt(request.getParameter("key"));
-			User u = User.findByUsr(username);
-			
-			//如果用户不存在，或者用户的验证码不正确，则返回错误链接
-			if(u == null || key != u.hashCode()){
-				rmsg.setStatus(300);
-				rmsg.setMessage("Invalid mailcheck link");
-			}else {
-				Date current = new Date();
-				//如果激活时间过期，则返回注册过期
-				if(current.compareTo(u.getMailtime()) < 0){
-					rmsg.setStatus(300);
-					rmsg.setMessage("MailCheck link time out");
-				}else{
-					//一切正常,将用户状态改为正常并更新
-					u.setStatus(User.NORMAL);
-					u.modify();
-					
-					rmsg.setStatus(200);
-					rmsg.setMessage("OK");
-				}
+			//获得所有的学院
+			List<College> collegelist = XMCService.getAllCollege();
+			//将学院的信息添加到data中
+			Iterator<College> it = collegelist.iterator();
+			List<Data> data = new ArrayList<Data>();
+			College c = null;
+			Data d = null;
+			while(it.hasNext()){
+				d = new Data();
+				c = it.next();
+				d.put("xid", c.getXid());
+				d.put("xname", c.getXname());
+				data.add(d);
 			}
 			
+			//设置rmsg的信息
+			rmsg.setStatus(200);
+			rmsg.setMessage("OK");
+			rmsg.setData(data);
 			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
@@ -81,9 +78,6 @@ public class MailCheckAction extends Action {
 			out.flush();
 			out.close();
 		}
-		
-		
-		
 		return null;
 	}
 }

@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import com.zhiku.file.FileView;
 import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
+import com.zhiku.xmc.XMCService;
 
 /** 
  * MyEclipse Struts
@@ -48,10 +49,35 @@ public class SearchDocumentAction extends Action {
 		RMessage rmsg = new RMessage();
 		try{
 			out = response.getWriter();
-			
+			int method = Integer.parseInt(request.getParameter("method"));
+			int xid = Integer.parseInt(request.getParameter("college"));
+			int mid = Integer.parseInt(request.getParameter("major"));
 			int cid = Integer.parseInt(request.getParameter("course"));
-			List<FileView> filelist = FileView.findByCid(cid);
 			
+			if(!XMCService.isExist("Major", "mid", mid)){	//如果不存在则返回非法专业
+				rmsg.setStatus(300);
+				rmsg.setMessage("Invalid major");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
+			
+			if(!XMCService.isExist("Course", "cid", cid)){	//如果课程不存在则返回非法课程
+				rmsg.setStatus(300);
+				rmsg.setMessage("Invalid course");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
+			
+			List<FileView> filelist = null;
+			
+			//根据不同的搜索方式，给filelist赋值
+			if(method == 1){	//关键字搜索
+				filelist = FileView.findByCid(cid);
+			}else if(method == 2){  	//学院专业搜索
+				filelist = FileView.findByCids(XMCService.findCoursesInXM(xid, mid));
+			}
+			
+			//设置返回的data信息
 			Data[] data = new Data[filelist.size()];
 			int index = 0;
 			for(FileView f : filelist){
@@ -62,7 +88,7 @@ public class SearchDocumentAction extends Action {
 				fileinfo.put("name", f.getName());
 				fileinfo.put("module", f.getModule());
 				fileinfo.put("course", f.getCname());
-//				fileinfo.put("docformat", f.getDocformat());	//个人感觉不需要提供这个属性，文件名中包含后缀，不要刻意提取
+				fileinfo.put("docformat", f.getDocformat());
 				fileinfo.put("origin", f.getOrigin());
 				fileinfo.put("uptime", f.getUptime());
 				fileinfo.put("desc", f.getDesc());
@@ -70,9 +96,7 @@ public class SearchDocumentAction extends Action {
 				
 				Data upperinfo = new Data();
 				upperinfo.put("nickname", f.getNick());
-//				upperinfo.put("xid", f.getXid());	//个人感觉没有必要提供
 				upperinfo.put("xname", f.getXname());
-//				upperinfo.put("mid", f.getMid());	//个人感觉没有必要提供
 				upperinfo.put("mname", f.getMname());
 				data[index].put("upperinfo", upperinfo);
 				
@@ -82,13 +106,11 @@ public class SearchDocumentAction extends Action {
 			rmsg.setStatus(200);
 			rmsg.setMessage("OK");
 			rmsg.setData(data);
+			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
-			rmsg.setStatus(300);
-			rmsg.setMessage("wrong , please try again");
 			e.printStackTrace();
 		}finally{
-			out.write(RMessage.getJson(rmsg));
 			out.flush();
 			out.close();
 		}

@@ -51,24 +51,50 @@ public class FileUploadAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			//获取文件的相关属性
-			int module = Integer.parseInt(request.getParameter("module"));
-			int upuid = Integer.parseInt(request.getParameter("upuid"));
-			int origin = Integer.parseInt(request.getParameter("origin"));
-			String desc = request.getParameter("desc");
-			
 			FileUpDownLoad fileUpload = new FileUpDownLoad();
 			Data data = fileUpload.upload(this.getServlet(), request);
 			
+			
 			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){
 				JFile file = new JFile();
+				
+				//获取文件的相关属性
+				int module = Integer.parseInt((String)data.get("module"));
+				int upuid = Integer.parseInt((String)data.get("upuid"));
+				int origin = Integer.parseInt((String)data.get("origin"));
+				String desc = (String)data.get("desc");
+				String teacher = (String)data.get("teacher");
+				int course = Integer.parseInt((String)data.get("course"));
+				
 				file.setName((String)data.get("filename"));
 				file.setPath((String)data.get("savePath"));
+				file.setSha((String)data.get("sha256"));
 				file.setModule(module);
+				file.setCourse(course);
+				file.setTeacher(teacher);
+				file.setStatus(JFile.NORMAL);	//暂时统一规定文件为normal状态，之后添加验证时再修改
 				file.setUptime(new Date());
 				file.setUpuid(upuid);
 				file.setOrigin(origin);
 				file.setDesc(desc);
+				
+				//依据后缀名判断
+				String fileExtName = (String)data.get("FileExtName");
+				if(fileExtName.matches("doc(x)?")){
+					file.setDocformat(JFile.TYPE_DOC);
+				}else{
+					if(fileExtName.matches("ppt(x)?")){
+						file.setDocformat(JFile.TYPE_PPT);
+					}else{
+						if(fileExtName.matches("xsl(x)?")){
+							file.setDocformat(JFile.TYPE_XSL);
+						}else{
+							file.setDocformat(-1);
+						}
+					}
+				}
+				
+				file.setFileformat(fileExtName);
 				
 				if(file.save()){
 					rmsg.setStatus(200);

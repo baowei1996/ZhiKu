@@ -67,6 +67,13 @@ public class User {
 	private int dncnt;
 	private int colcnt;
 	
+	
+	//自定义常量
+	//用户状态的常量
+	public static int UNACTIVE = 0;
+	public static int NORMAL = 1;
+	public static int LOCKED = 2;
+	
 	private static UserDAO dao = new UserDAO();
 	
 	public User(){}
