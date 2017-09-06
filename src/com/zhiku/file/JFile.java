@@ -62,18 +62,16 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public static final int TYPE_XSL = 1;
 	public static final int TYPE_PPT = 2;
 	
-	private FileDAO dao = null;
+	private static FileDAO dao = new FileDAO();
 	
-	public JFile(){
-		this.dao = new FileDAO();
-	}
+	public JFile(){	}
 	
 	/**
 	 * 将自身保存到数据库中
 	 * @return 是否保存成功
 	 */
 	public boolean save(){
-		return this.dao.save(this);
+		return dao.save(this);
 	}
 	
 	/**

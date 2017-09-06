@@ -15,6 +15,7 @@ public class Course {
 	private int cid;
 	private String cname;
 	
+	public Course(){}
 	public Course(String cname){
 		this.cname = cname;
 	}

@@ -91,7 +91,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from Course where cname like %" + key + "%";
+			String sql = "from Course where cname like \'%" + key + "%\'";
 			courses = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();

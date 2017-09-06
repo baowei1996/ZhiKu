@@ -14,6 +14,7 @@ public class College {
 	private int xid;
 	private String xname;
 	
+	public College(){}
 	public College(String xname){
 		this.xname = xname;
 	}
