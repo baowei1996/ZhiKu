@@ -6,23 +6,19 @@
 <hibernate-configuration>
 
 <session-factory>
-	<property name="dialect">
-		org.hibernate.dialect.MySQLDialect
-	</property>
-	<property name="connection.url">
-		jdbc:mysql://localhost:3306/zhiku
-	</property>
+	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	<property name="connection.url">jdbc:mysql://localhost:3306/zhiku</property>
 	<property name="connection.username">root</property>
-	<property name="connection.password"></property>
-	<property name="connection.driver_class">
-		com.mysql.jdbc.Driver
-	</property>
+	<property name="connection.password">root</property>
+	<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 	<property name="myeclipse.connection.profile">ZhiKu MySQL</property>
 	<mapping class="com.zhiku.xmc.College" />
 	<mapping class="com.zhiku.xmc.Course" />
 	<mapping class="com.zhiku.xmc.Major" />
 	<mapping class="com.zhiku.user.User" />
 	<mapping class="com.zhiku.file.FileView" />
+	<mapping class="com.zhiku.file.JFile" />
+	<mapping class="com.zhiku.xmc.Mtoc" />
 </session-factory>
 
 </hibernate-configuration>

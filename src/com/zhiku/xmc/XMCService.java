@@ -91,7 +91,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from Course where cname like %" + key + "%";
+			String sql = "from Course where cname like \'%" + key + "%\'";
 			courses = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -141,7 +141,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "select count(*) from  " + table + "where " + col + "=" + value;
+			String sql = "select count(*) from " + table + " where " + col + " = " + value;
 			Query q = session.createQuery(sql);
 			long result = (Long)q.uniqueResult();
 			if(result != 0){

@@ -31,17 +31,17 @@ public class EMail {
          */  
         //1.获得连接对象  
         Properties props = new Properties(); 
-        //发送邮件服务器163
-        props.put("mail.smtp.host", "smtp.163.com");
-        //发送端口
-        props.put("mail.smtp.port", "25");
+        //发送邮件服务器exmail.qq.com
+        props.put("mail.smtp.host", "smtp.exmail.qq.com");
+        //发送端口-995
+        props.put("mail.smtp.port", "995");
         props.put("mail.smtp.auth", "true");
         Session session = Session.getInstance(props, new Authenticator(){  
   
             @Override  
             protected PasswordAuthentication getPasswordAuthentication() {  
-                //使用我的邮箱，和授权密码  
-                return new PasswordAuthentication("m17864154913@163.com","forjavasake78647");  
+                //使用晓敏的邮箱，和授权密码  
+                return new PasswordAuthentication("baka719@719daze.me","719NoVocaloid");  
             }  
               
         });  
@@ -49,7 +49,7 @@ public class EMail {
         Message message = new MimeMessage(session);  
         try{  
             //设置发件人  
-            message.setFrom(new InternetAddress("m17864154913@163.com"));  
+            message.setFrom(new InternetAddress("baka719@719daze.me"));  
             //设置收件人  
             message.addRecipient(RecipientType.TO, new InternetAddress(to));  
             // 抄送 CC 暗送 BCC  

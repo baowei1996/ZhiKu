@@ -5,6 +5,7 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,11 +79,12 @@ public class SearchDocumentAction extends Action {
 			}
 			
 			//设置返回的data信息
-			Data[] data = new Data[filelist.size()];
-			int index = 0;
+			List<Data> data = new ArrayList<Data>();
+			Data d = null;
 			for(FileView f : filelist){
-				data[index].put("fid", f.getFid());
-				data[index].put("upuid", f.getUid());
+				d = new Data();
+				d.put("fid", f.getFid());
+				d.put("upuid", f.getUid());
 				
 				Data fileinfo = new Data();
 				fileinfo.put("name", f.getName());
@@ -91,16 +93,16 @@ public class SearchDocumentAction extends Action {
 				fileinfo.put("docformat", f.getDocformat());
 				fileinfo.put("origin", f.getOrigin());
 				fileinfo.put("uptime", f.getUptime());
-				fileinfo.put("desc", f.getDesc());
-				data[index].put("fileinfo", fileinfo);
+				fileinfo.put("desc", f.getDescs());
+				d.put("fileinfo", fileinfo);
 				
 				Data upperinfo = new Data();
 				upperinfo.put("nickname", f.getNick());
 				upperinfo.put("xname", f.getXname());
 				upperinfo.put("mname", f.getMname());
-				data[index].put("upperinfo", upperinfo);
+				d.put("upperinfo", upperinfo);
 				
-				index++;
+				data.add(d);
 			}
 			
 			rmsg.setStatus(200);

@@ -30,7 +30,7 @@ public class FileView {
 	private int dncnt;
 	private int colcnt;
 	private int origin;
-	private String desc;
+	private String descs;
 	
 	
 	
@@ -159,11 +159,11 @@ public class FileView {
 	public void setOrigin(int origin) {
 		this.origin = origin;
 	}
-	public String getDesc() {
-		return desc;
+	public String getDescs() {
+		return descs;
 	}
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescs(String descs) {
+		this.descs = descs;
 	}
 	
 	

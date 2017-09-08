@@ -62,24 +62,44 @@ public class UserInfoModifyAction extends Action {
 //				String avator = request.getParameter("avator");
 				String phone = request.getParameter("phone");
 				String qq = request.getParameter("qq");
-				int xid = Integer.parseInt(request.getParameter("xid"));
-				int mid = Integer.parseInt(request.getParameter("mid"));
+				int xid;
+				int mid;
+				try {
+					xid = Integer.parseInt(request.getParameter("xid"));
+					mid = Integer.parseInt(request.getParameter("mid"));
+				} catch (NumberFormatException nfe) {
+					xid = -1;
+					mid = -1;
+					nfe.printStackTrace();
+				}
 				
 				//设置这些信息
-				u.setNick(nickname);
-				u.setPwd(DigestUtils.md5Hex(newpwd));
+				if(nickname != null){
+					u.setNick(nickname);
+				}
+				if(newpwd != null){
+					u.setPwd(DigestUtils.md5Hex(newpwd));
+				}
+//				if(avator != null){
 //				u.setAvator(avator);
-				u.setPhone(phone);
-				u.setQq(qq);
-				u.setXid(xid);
-				u.setMid(mid);
+//				}
+				if(phone !=  null){
+					u.setPhone(phone);
+				}
+				if(qq != null){
+					u.setQq(qq);
+				}
+				if(xid != -1 && mid != -1){
+					u.setXid(xid);
+					u.setMid(mid);
+				}
 				
 				if(u.modify()){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
 				}else{
 					rmsg.setStatus(300);
-					rmsg.setMessage("Fail,please try again!");
+					rmsg.setMessage("Fail,some information wrong ,please try again!");
 				}
 				
 			}else{

@@ -55,25 +55,53 @@ public class FileModifyAction extends Action {
 			
 			//从前端获取修改信息
 			String name = request.getParameter("name");
-			int module = Integer.parseInt(request.getParameter("module"));
+			int module;
+			int course;
+			int docformat;
+			int origin;
+			try {
+				module = Integer.parseInt(request.getParameter("module"));
+				course = Integer.parseInt(request.getParameter("course"));
+				docformat = Integer.parseInt(request.getParameter("docformat"));
+				origin = Integer.parseInt(request.getParameter("origin"));
+			} catch (NumberFormatException nfe) {
+				module = -1;
+				course = -1;
+				docformat = -1;
+				origin = -1;
+				nfe.printStackTrace();
+			}
+			//			int upuid = Integer.parseInt(request.getParameter("upuid"));	//不建议对文件的上传者修改
 			String teacher = request.getParameter("teacher");
-			int course = Integer.parseInt(request.getParameter("course"));
-			int docformat = Integer.parseInt(request.getParameter("docformat"));
 			String fileformat = request.getParameter("fileformat");
-//			int upuid = Integer.parseInt(request.getParameter("upuid"));	//不建议对文件的上传者修改
-			int origin = Integer.parseInt(request.getParameter("origin"));
 			String desc = request.getParameter("desc");
 			
 			//设置文件的新属性
-			f.setName(name);
-			f.setModule(module);
-			f.setTeacher(teacher);
-			f.setCourse(course);
-			f.setDocformat(docformat);
-			f.setFileformat(fileformat);
+			if(name != null){
+				f.setName(name);
+			}
+			if(module != -1){
+				f.setModule(module);
+			}
+			if (teacher != null){
+				f.setTeacher(teacher);
+			}
+			if(course != -1){
+				f.setCourse(course);
+			}
+			if(docformat != -1){
+				f.setDocformat(docformat);
+			}
+			if(fileformat != null){
+				f.setFileformat(fileformat);
+			}
 //			f.setUpuid(upuid);
-			f.setOrigin(origin);
-			f.setDesc(desc);
+			if(origin != -1){
+				f.setOrigin(origin);
+			}
+			if(desc != null){
+				f.setDescs(desc);
+			}
 			
 			if(f.modify()){
 				rmsg.setStatus(200);

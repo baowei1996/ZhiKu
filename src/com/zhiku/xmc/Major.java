@@ -14,6 +14,7 @@ public class Major {
 	private int mid;
 	private String mname;
 	
+	public Major(){}
 	public Major(String mname){
 		this.mname = mname;
 	}

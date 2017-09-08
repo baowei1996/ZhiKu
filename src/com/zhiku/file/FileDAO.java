@@ -2,6 +2,7 @@ package com.zhiku.file;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.zhiku.hibernate.HibernateSessionFactory;
@@ -209,6 +210,38 @@ public class FileDAO {
 		}
 		
 		return filelist;
+	}
+	
+	/**
+	 * 判断JFile中col中是否存在value属性的元组
+	 * @param col 属性
+	 * @param value 值
+	 * @return 如果存在返回真，反之返回假
+	 */
+	public static boolean isExist(String col , String value){
+		boolean exist = true;
+		Session session = null;
+
+		try {
+			session = HibernateSessionFactory.getSession();
+			String sql = "select count(*) from  JFile where " + col + " = \'"
+					+ value + "\'";
+			Query q = session.createQuery(sql);
+			long result = (Long) q.uniqueResult();
+			if (result != 0) {
+				exist = true;
+			} else {
+				exist = false;
+			}
+		} catch (Exception e) {
+			// 如果执行SQL语句出错，则认为数据库中已经存在这个数据
+			exist = true;
+			e.printStackTrace();
+		} finally {
+			HibernateSessionFactory.closeSession();
+		}
+
+		return exist;
 	}
 	
 }
