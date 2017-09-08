@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.file.JFile;
+import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
@@ -62,7 +63,7 @@ public class FileUploadAction extends Action {
 				int module = Integer.parseInt((String)data.get("module"));
 				int upuid = Integer.parseInt((String)data.get("upuid"));
 				int origin = Integer.parseInt((String)data.get("origin"));
-				String desc = (String)data.get("desc");
+				String descs = (String)data.get("desc");
 				String teacher = (String)data.get("teacher");
 				int course = Integer.parseInt((String)data.get("course"));
 				
@@ -76,10 +77,10 @@ public class FileUploadAction extends Action {
 				file.setUptime(new Date());
 				file.setUpuid(upuid);
 				file.setOrigin(origin);
-				file.setDesc(desc);
+				file.setDescs(descs);
 				
 				//依据后缀名判断
-				String fileExtName = (String)data.get("FileExtName");
+				String fileExtName = (String)data.get("fileExtName");
 				if(fileExtName.matches("doc(x)?")){
 					file.setDocformat(JFile.TYPE_DOC);
 				}else{
@@ -97,6 +98,10 @@ public class FileUploadAction extends Action {
 				file.setFileformat(fileExtName);
 				
 				if(file.save()){
+					//设置文件的上传者上传量加一！
+					User u = User.findByUid(upuid);
+					u.setUpcnt(u.getUpcnt() + 1);
+					u.modify();
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
 				}else{

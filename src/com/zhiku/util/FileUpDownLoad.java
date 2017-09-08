@@ -15,6 +15,8 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.zhiku.file.JFile;
+
 public class FileUpDownLoad {
 	
 	private static final int BUFFER_SIZE = 1024*100;	//缓存大小为100KB
@@ -105,8 +107,6 @@ public class FileUpDownLoad {
 	    	   InputStream in = item.getInputStream();
 	    	   //得到文件保存的名称
 	    	   String saveFilename = makeFileName(filename);
-	    	   //获得文件的摘要信息
-	    	   String sha256 = DigestUtils.sha256Hex(in);
 	    	   //得到文件的保存目录
 	    	   String realSavePath = makePath(saveFilename, savePath);
 	    	   //创建一个文件输出流
@@ -120,6 +120,8 @@ public class FileUpDownLoad {
 	    		   //使用FileOutputStream输出流将缓冲区的数据写入到指定的目录(savePath + "\\" + filename)当中
 	    		   out.write(buffer, 0, len);
 	    	   }
+	    	   //获得文件的摘要信息
+	    	   String sha256 = DigestUtils.sha256Hex(item.getInputStream());
 	    	   //关闭输入流
 	    	   in.close();
 	    	   //关闭输出流
@@ -130,9 +132,14 @@ public class FileUpDownLoad {
 	    	   
 	    	   data.put("filename", filename);
 	    	   data.put("fileExtName",fileExtName);
-	    	   data.put("savePath", realSavePath);
+	    	   data.put("savePath", realSavePath + "\\" + saveFilename);
 	    	   data.put("sha256",sha256);
-	    	   data.put("message", "OK");
+	    	   if(JFile.isExist("sha", sha256)){
+	    		   result = FAIL;
+	    		   data.put("message", "file is exist");
+	    	   }else{
+	    		   data.put("message", "OK");
+	    	   }
 	       	}
 	      }
 	     }catch (SizeLimitExceededException e) {

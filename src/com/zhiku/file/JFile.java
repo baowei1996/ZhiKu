@@ -41,7 +41,7 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	
 	private int dncnt;
 	private int colcnt;
-	private String desc;
+	private String descs;
 	private int origin;
 	private int status;
 	
@@ -118,6 +118,16 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public static List<JFile> advancedSearch(String key){
 		String sql = "from JFile where name like " + key + "%";
 		return FileDAO.search(sql);
+	}
+	
+	/**
+	 * 判断JFile中col中是否存在value属性的元组
+	 * @param col 属性
+	 * @param value 值
+	 * @return 如果存在返回真，反之返回假
+	 */
+	public static boolean isExist(String col , String value){
+		return FileDAO.isExist(col, value);
 	}
 	
 	
@@ -202,11 +212,11 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public void setColcnt(int colcnt) {
 		this.colcnt = colcnt;
 	}
-	public String getDesc() {
-		return desc;
+	public String getDescs() {
+		return descs;
 	}
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescs(String descs) {
+		this.descs = descs;
 	}
 	public int getOrigin() {
 		return origin;
