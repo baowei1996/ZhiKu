@@ -48,12 +48,12 @@ public class MailCheckAction extends Action {
 		PrintWriter out = null;
 		
 		try{
-			out = response.getWriter();
 			
 			String username = request.getParameter("usr");
 			int key = Integer.parseInt(request.getParameter("key"));
 			User u = User.findByUsr(username);
 			
+			int state = 0;
 			//如果用户不存在，或者用户的验证码不正确，则返回错误链接
 			if(u == null || key != u.hashCode()){
 				rmsg.setStatus(300);
@@ -67,23 +67,23 @@ public class MailCheckAction extends Action {
 				}else{
 					//一切正常,将用户状态改为正常并更新
 					u.setStatus(User.NORMAL);
-					u.modify();
+					if(u.modify()){
+						state = 1;
+						return mapping.findForward("success");
+					}
 					
-					rmsg.setStatus(200);
-					rmsg.setMessage("OK");
 				}
 			}
 			
-			out.write(RMessage.getJson(rmsg));
-			
+			if(state == 0){
+				out = response.getWriter();
+				out.write(RMessage.getJson(rmsg));
+				out.flush();
+				out.close();
+			}
 		}catch(Exception e){
 			e.printStackTrace();
-		}finally{
-			out.flush();
-			out.close();
 		}
-		
-		
 		
 		return null;
 	}

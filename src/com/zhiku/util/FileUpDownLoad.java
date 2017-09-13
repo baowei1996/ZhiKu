@@ -1,13 +1,18 @@
 package com.zhiku.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
@@ -100,9 +105,8 @@ public class FileUpDownLoad {
 	    	   //处理获取到的上传文件的文件名的路径部分，只保留文件名部分
 	    	   filename = filename.substring(filename.lastIndexOf("\\")+1);
 	    	   //得到上传文件的扩展名
-	    	   String fileExtName = filename.substring(filename.lastIndexOf(".")+1);
 	    	   //如果需要限制上传的文件类型，那么可以通过文件的扩展名来判断上传的文件类型是否合法
-	    	   System.out.println("上传的文件的扩展名是："+fileExtName);
+	    	   String fileExtName = filename.substring(filename.lastIndexOf(".")+1);
 	    	   //获取item中的上传文件的输入流
 	    	   InputStream in = item.getInputStream();
 	    	   //得到文件保存的名称
@@ -144,7 +148,7 @@ public class FileUpDownLoad {
 	      }
 	     }catch (SizeLimitExceededException e) {
 	      e.printStackTrace();
-	      data.put("message", "文件超出最大值！！！");
+	      data.put("message", "文件超出最大值100M！！！");
 	     }catch (Exception e) {
 	      result = FAIL;
 	      e.printStackTrace();
@@ -190,7 +194,39 @@ public class FileUpDownLoad {
 	   return dir;
 	}
 	
-	public void download(){
-		//download file
+	public void download(HttpServlet servlet , HttpServletRequest request,HttpServletResponse response ,JFile f)
+			throws  IOException{
+		String path = f.getPath();
+		
+		//得到要下载的文件
+		File file = new File(path);
+		//如果文件不存在
+		if(!file.exists()){
+			request.setAttribute("message", "您要下载的资源已被删除！！");
+			return;
+		}
+		//处理文件名
+		String realname = f.getName();
+		//设置响应头，控制浏览器下载该文件
+		response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(realname, "UTF-8"));
+		//读取要下载的文件，保存到文件输入流
+		FileInputStream in = new FileInputStream(path);
+		//创建输出流，注意这里使用的是response创建的输出流
+		OutputStream out = response.getOutputStream();
+		//创建缓冲区
+		byte buffer[] = new byte[1024];
+		int len = 0;
+		//循环将输入流中的内容读取到缓冲区当中
+		while((len=in.read(buffer))>0){
+			//输出缓冲区的内容到浏览器，实现文件下载
+			out.write(buffer, 0, len);
+		}
+		//关闭文件输入流
+		in.close();
+		//关闭输出流
+		out.flush();
+		out.close();
 	}
+
 }
+

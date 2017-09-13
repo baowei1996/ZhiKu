@@ -16,13 +16,13 @@ public class XMCService {
 	 * @param mid 专业编号
 	 * @return 返回对应的课程的课号集合
 	 */
-	public static List<Integer> findCoursesInXM(int xid , int mid){
+	public static List<Integer> findCoursesInMtoc(int mid){
 		Session session = null;
 		List<Integer> courses = null;
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "select cid from Mtoc where xid = " + xid + "and mid = " + mid;
+			String sql = "select cid from Mtoc where mid = " + mid;
 			courses = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -115,10 +115,8 @@ public class XMCService {
 		try{
 			session = HibernateSessionFactory.getSession();
 			//因为一个学院一个专业下有多个课程，所以其中应该包含重复的专业数据，使用distinct去重
-			String sql = "select distinct mid from Mtoc where xid = " + xid;
-			List<Integer> mids = session.createQuery(sql).list();
-			String searchMajor = "from Major where mid in " + mids.toString().replace('[', '(').replace(']', ')');
-			majors = session.createQuery(searchMajor).list();
+			String sql = "from Major where xid = " + xid;
+			majors = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

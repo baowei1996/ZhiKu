@@ -5,11 +5,9 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -17,18 +15,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.file.JFile;
-import com.zhiku.file.operation.FileOP;
-import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
 
 /** 
  * MyEclipse Struts
- * Creation date: 09-03-2017
+ * Creation date: 09-10-2017
  * 
  * XDoclet definition:
  * @struts.action validate="true"
  */
-public class FileDownloadAction extends Action {
+public class DeleteFileAction extends Action {
 	/*
 	 * Generated Methods
 	 */
@@ -43,43 +39,40 @@ public class FileDownloadAction extends Action {
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
+		response.setContentType("application/json;charset=utf-8");
+		response.setHeader("pragme", "no-cache");
 		PrintWriter out = null;
 		
 		RMessage rmsg = new RMessage();
 		try{
+			out = response.getWriter();
 			
 			String url = request.getRequestURL().toString();
 			//根据URL获取fid
 			int fid = Integer.parseInt(url.substring(url.lastIndexOf("/")+1, url.lastIndexOf(".")));
-			//根据fid找到对应文件的信息
+			//根据fid找到文件
 			JFile f = JFile.findByFid(fid);
 			
-			FileUpDownLoad filedownload = new FileUpDownLoad();
-			filedownload.download(this.getServlet(), request, response, f);
-			//更改文件下载量信息
-			f.setDncnt(f.getDncnt() + 1);
-			f.save();
-			//记录下载操作
-			FileOP fp = new FileOP();
-			fp.setFid(fid);
-			HttpSession session = request.getSession();
-			int uid = (Integer) session.getAttribute("uid");
-			fp.setUid(uid);
-			fp.setType(FileOP.DOWNLOAD);
-			fp.setOptime(new Date());
-			String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
-			fp.setOpip(opip);
-			//设置返回信息
-			out = response.getWriter();
-			rmsg.setStatus(200);
-			rmsg.setMessage("OK");
+			if(f != null){
+				f.setStatus(JFile.LOCKED);
+				if(f.modify()){
+					rmsg.setStatus(200);
+					rmsg.setMessage("OK");
+				}
+			}else{
+				rmsg.setStatus(300);
+				rmsg.setMessage("file not exist!");
+			}
+			
 			out.write(RMessage.getJson(rmsg));
-		}catch(NumberFormatException ne){
-			//如果uid出现问题，则捕获这个异常
+			
+		}catch(NumberFormatException nfe){
 			rmsg.setStatus(300);
-			rmsg.setMessage("Wrong fid");
-			out.write(RMessage.getJson(rmsg));
-		}catch(Exception e){
+			rmsg.setMessage("Wrong file");
+			RMessage.getJson(rmsg);
+			nfe.printStackTrace();
+		}
+		catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			out.flush();

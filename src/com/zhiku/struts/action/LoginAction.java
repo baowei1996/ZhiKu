@@ -51,7 +51,6 @@ public class LoginAction extends Action {
 			
 			String usr = request.getParameter("username");
 			String pwd = DigestUtils.md5Hex(request.getParameter("password"));
-			System.out.println("pwd" + pwd);
 			
 			if(User.check(usr, pwd)){
 				User u = User.findByUsr(usr);

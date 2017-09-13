@@ -17,23 +17,23 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.file.FileView;
+import com.zhiku.file.operation.FileOP;
+import com.zhiku.file.operation.FileOPService;
+import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
-import com.zhiku.xmc.XMCService;
 
 /** 
  * MyEclipse Struts
- * Creation date: 08-26-2017
- * 处理关键字搜索文件的action
+ * Creation date: 09-10-2017
+ * 
  * XDoclet definition:
  * @struts.action validate="true"
  */
-public class SearchDocumentAction extends Action {
+public class GetDownloadAction extends Action {
 	/*
 	 * Generated Methods
 	 */
-	public static final int COURSE_SEARCH = 1;
-	public static final int MAJOR_SEARCH = 2;
 
 	/** 
 	 * Method execute
@@ -50,50 +50,33 @@ public class SearchDocumentAction extends Action {
 		PrintWriter out = null;
 		
 		RMessage rmsg = new RMessage();
+		
 		try{
 			out = response.getWriter();
-			int method, mid,cid,page;
-			try {
-				method = Integer.parseInt(request.getParameter("method"));
-				mid = Integer.parseInt(request.getParameter("major"));
-				cid = Integer.parseInt(request.getParameter("course"));
+			
+			String username = request.getParameter("username");
+			User u = User.findByUsr(username);
+			if(u == null){
+				rmsg.setStatus(300);
+				rmsg.setMessage("no such user!");
+				out.write(RMessage.getJson(rmsg));
+			}
+			int page ;
+			try{
 				page = Integer.parseInt(request.getParameter("page"));
-			} catch (NumberFormatException nfe) {
-				method = 1;
-				cid = 1;
-				mid = 1001;
+			}catch(NumberFormatException nfe){
 				page = 1;
 				nfe.printStackTrace();
 			}
 			
-			if(method == MAJOR_SEARCH && !XMCService.isExist("Major", "mid", mid)){	//如果不存在则返回非法专业
-				rmsg.setStatus(300);
-				rmsg.setMessage("Invalid major");
-				out.write(RMessage.getJson(rmsg));
-				return null;
-			}
-			
-			if(method == COURSE_SEARCH && !XMCService.isExist("Course", "cid", cid)){	//如果课程不存在则返回非法课程
-				rmsg.setStatus(300);
-				rmsg.setMessage("Invalid course");
-				out.write(RMessage.getJson(rmsg));
-				return null;
-			}
-			
-			List<FileView> filelist = null;
-			
-			//根据不同的搜索方式，给filelist赋值
-			if(method == COURSE_SEARCH){	//关键字搜索
-				filelist = FileView.findByCid(cid,page);
-			}else if(method == MAJOR_SEARCH){  	//学院专业搜索
-				filelist = FileView.findByCids(XMCService.findCoursesInMtoc(mid),page);
-			}
-			
+			List<FileOP> opList = FileOPService.getOperation(u.getUid(), page, FileOP.DOWNLOAD);
 			
 			//设置返回的data信息
 			List<Data> data = new ArrayList<Data>();
+			FileView f = null;
 			Data d = null;
-			for(FileView f : filelist){
+			for(FileOP op : opList){
+				f = FileView.findByFid(op.getFid());
 				d = new Data();
 				d.put("fid", f.getFid());
 				d.put("upuid", f.getUid());
@@ -108,12 +91,6 @@ public class SearchDocumentAction extends Action {
 				fileinfo.put("desc", f.getDescs());
 				d.put("fileinfo", fileinfo);
 				
-				Data upperinfo = new Data();
-				upperinfo.put("nickname", f.getNick());
-				upperinfo.put("xname", f.getXname());
-				upperinfo.put("mname", f.getMname());
-				d.put("upperinfo", upperinfo);
-				
 				data.add(d);
 			}
 			
@@ -121,8 +98,10 @@ public class SearchDocumentAction extends Action {
 			rmsg.setMessage("OK");
 			rmsg.setData(data);
 			out.write(RMessage.getJson(rmsg));
-			
 		}catch(Exception e){
+			rmsg.setStatus(300);
+			rmsg.setMessage(e.getCause().toString());
+			out.write(RMessage.getJson(rmsg));
 			e.printStackTrace();
 		}finally{
 			out.flush();

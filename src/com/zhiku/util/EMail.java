@@ -34,7 +34,7 @@ public class EMail {
         //发送邮件服务器exmail.qq.com
         props.put("mail.smtp.host", "smtp.exmail.qq.com");
         //发送端口-995
-        props.put("mail.smtp.port", "995");
+        props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         Session session = Session.getInstance(props, new Authenticator(){  
   
@@ -57,7 +57,7 @@ public class EMail {
             //设置邮件主题  
             message.setSubject("来自吉鹏智库的激活邮件");  
             //设置邮件正文  
-            message.setContent("<h1>吉鹏智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://localhost:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"'>http://localhost:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"</a></h3>","text/html;charset=UTF-8");  
+            message.setContent("<h1>吉鹏智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"'>http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"</a></h3>","text/html;charset=UTF-8");  
           
             //3.发送邮件  
             Transport.send(message);  

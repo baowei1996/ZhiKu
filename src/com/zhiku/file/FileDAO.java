@@ -9,6 +9,8 @@ import com.zhiku.hibernate.HibernateSessionFactory;
 
 public class FileDAO {
 	
+	public static final int PAGE_SIZE = 5;
+	
 	/**
 	 * 保存文件到数据库中
 	 * @param f 文件对象
@@ -48,6 +50,24 @@ public class FileDAO {
 		try{
 			session = HibernateSessionFactory.getSession();
 			f = (JFile)session.get(JFile.class, fid);
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			HibernateSessionFactory.closeSession();
+		}
+		
+		return f;
+	}
+	
+	public static JFile findBySha(String sha){
+		JFile f = null;
+		Session session = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			String sql = "from JFile where sha = \'" + sha + "\'";
+			f = (JFile)session.createQuery(sql).uniqueResult();
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -134,21 +154,44 @@ public class FileDAO {
 		return filelist;
 	}
 	
+	public static FileView findFileViewByFid(int fid ){
+		Session session = null;
+		FileView file = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			String sql = "from FileView where fid = " + fid ;
+			file = (FileView) session.createQuery(sql).uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			HibernateSessionFactory.closeSession();
+		}
+		
+		return file;
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	/**
 	 * 找出对应课程下的所有文件
 	 * @param cid 课程
 	 * @return 返回对应课程下的所有文件视图对象
 	 */
-	public static List<FileView> findByCid(int cid){
+	public static List<FileView> findByCid(int cid ,int page){
 		Session session = null;
 		List<FileView> filelist = null;
 		
 		try{
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
-			String sql = "from FileView where cid = " + cid;
-			filelist = session.createQuery(sql).list();
+			String sql = "from FileView where status = 1 and cid = " + cid + " order by fid";
+			Query q = session.createQuery(sql);
+			q.setFirstResult((page-1)*PAGE_SIZE);	//偏移量
+			q.setMaxResults(PAGE_SIZE);		//每页最大值
+			filelist = q.list();
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -190,7 +233,7 @@ public class FileDAO {
 	 * @param cids 多个课程的课号
 	 * @return 课程对应的文件
 	 */
-	public static List<FileView> findByCids(List<Integer> cids){
+	public static List<FileView> findByCids(List<Integer> cids ,int page){
 		Session session = null;
 		List<FileView> filelist = null;
 		
@@ -198,8 +241,11 @@ public class FileDAO {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			String sql = "from FileView where cid in" + cids.toString().replace('[', '(').replace(']', ')');
-			filelist = session.createQuery(sql).list();
+			String sql = "from FileView where status = 1 and cid in" + cids.toString().replace('[', '(').replace(']', ')') + " order by fid";
+			Query q = session.createQuery(sql);
+			q.setFirstResult((page-1)*PAGE_SIZE);
+			q.setMaxResults(PAGE_SIZE);
+			filelist = q.list();
 			
 					
 		}catch(Exception e){

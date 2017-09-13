@@ -17,7 +17,9 @@
     <action
       path="/mailcheck"
       type="com.zhiku.struts.action.MailCheckAction"
-      cancellable="true" />
+      cancellable="true" >
+       <forward name="success" path = "/index.jsp"/>
+     </action>
     <action
       path="/upload"
       type="com.zhiku.struts.action.FileUploadAction"
@@ -53,6 +55,18 @@
     <action
       path="/logout"
       type="com.zhiku.struts.action.LogoutAction"
+      cancellable="true" />
+    <action
+      path="/getupld"
+      type="com.zhiku.struts.action.GetUploadAction"
+      cancellable="true" />
+    <action
+      path="/getdld"
+      type="com.zhiku.struts.action.GetDownloadAction"
+      cancellable="true" />
+    <action
+      path="/del/*"
+      type="com.zhiku.struts.action.DeleteFileAction"
       cancellable="true" />
 
   </action-mappings>

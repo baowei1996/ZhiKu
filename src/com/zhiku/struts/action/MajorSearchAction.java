@@ -50,7 +50,22 @@ public class MajorSearchAction extends Action {
 		
 		RMessage rmsg = new RMessage();
 		try{
-			int xid = Integer.parseInt(request.getParameter("xid"));
+			out = response.getWriter();
+			
+			int xid;
+			try {
+				xid = Integer.parseInt(request.getParameter("xid"));
+			} catch (Exception e) {
+				xid = 1;
+				e.printStackTrace();
+			}
+			
+			if(!XMCService.isExist("College", "xid", xid)){	//如果不存在则返回非法学院
+				rmsg.setStatus(300);
+				rmsg.setMessage("Invalid college!");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
 			
 			List<Major> majors = XMCService.findMajorByXid(xid);
 			
@@ -76,7 +91,6 @@ public class MajorSearchAction extends Action {
 				rmsg.setMessage("No Result");
 			}
 			
-			out = response.getWriter();
 			out.write(RMessage.getJson(rmsg));
 		}catch(Exception e){
 			e.printStackTrace();
