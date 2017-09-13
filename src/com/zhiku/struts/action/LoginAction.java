@@ -6,6 +6,7 @@ package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,6 +28,9 @@ import com.zhiku.util.RMessage;
  * @struts.action validate="true"
  */
 public class LoginAction extends Action {
+	
+	public static final int OVER_TIME  = 30*60;
+	
 	/*
 	 * Generated Methods
 	 */
@@ -59,7 +63,12 @@ public class LoginAction extends Action {
 					rmsg.setMessage("OK");
 					//将uid的值放到session中
 					HttpSession session = request.getSession();
+					session.setMaxInactiveInterval(OVER_TIME);	//设置session的有效时间为30min
 					session.setAttribute("uid", u.getUid());
+					Cookie cookie = new Cookie("username",u.getUsr());
+					cookie.setMaxAge(OVER_TIME);
+					cookie.setPath(request.getContextPath());
+					response.addCookie(cookie);
 				}else if(u.getStatus() == User.UNACTIVE){
 					rmsg.setStatus(300);
 					rmsg.setMessage("Sorry ,your e-mail doesn't check!");
