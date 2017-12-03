@@ -16,14 +16,7 @@
   <StrutsActivity path="/getdld.do" location="50,1250" dimension="291,104" />
   <StrutsActivity path="/del/*.do" location="650,1250" dimension="268,104" />
   <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
-  <StrutsTransition id="/upload.do,success,/index.jsp,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="50,302" />
-      <AbsolutePoint location="-25,302" />
-      <AbsolutePoint location="-25,1476" />
-      <AbsolutePoint location="50,1476" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
+  <StrutsActivity path="/userinfo/*.do" />
   <StrutsTransition id="/mailcheck.do,success,/index.jsp,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1086,102" />

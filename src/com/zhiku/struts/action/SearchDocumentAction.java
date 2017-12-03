@@ -5,6 +5,7 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,19 +53,39 @@ public class SearchDocumentAction extends Action {
 		RMessage rmsg = new RMessage();
 		try{
 			out = response.getWriter();
-			int method, mid,cid,page;
+			int method, mid=0,cid=0,page;
+			//设置method
 			try {
 				method = Integer.parseInt(request.getParameter("method"));
-				mid = Integer.parseInt(request.getParameter("major"));
-				cid = Integer.parseInt(request.getParameter("course"));
-				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {
 				method = 1;
-				cid = 1;
-				mid = 1001;
+				nfe.printStackTrace();
+			}
+			//设置cid和mid
+			if(method == COURSE_SEARCH){
+				try {
+					cid = Integer.parseInt(request.getParameter("course"));
+				} catch (NumberFormatException nfe) {
+					cid = -1;
+					nfe.printStackTrace();
+				}
+			}else if(method == MAJOR_SEARCH){
+				try {
+					mid = Integer.parseInt(request.getParameter("major"));
+				} catch (NumberFormatException nfe) {
+					mid = -1;
+					nfe.printStackTrace();
+				}
+			}
+			
+			//设置page的值
+			try {
+				page = request.getParameter("page")==null?1:Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException nfe) {
 				page = 1;
 				nfe.printStackTrace();
 			}
+			
 			
 			if(method == MAJOR_SEARCH && !XMCService.isExist("Major", "mid", mid)){	//如果不存在则返回非法专业
 				rmsg.setStatus(300);
@@ -104,7 +125,7 @@ public class SearchDocumentAction extends Action {
 				fileinfo.put("course", f.getCname());
 				fileinfo.put("docformat", f.getDocformat());
 				fileinfo.put("origin", f.getOrigin());
-				fileinfo.put("uptime", f.getUptime());
+				fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
 				fileinfo.put("desc", f.getDescs());
 				d.put("fileinfo", fileinfo);
 				

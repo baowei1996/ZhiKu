@@ -67,7 +67,7 @@ public class LoginAction extends Action {
 					session.setAttribute("uid", u.getUid());
 					Cookie cookie = new Cookie("username",u.getUsr());
 					cookie.setMaxAge(OVER_TIME);
-					cookie.setPath(request.getContextPath());
+					cookie.setPath("/");
 					response.addCookie(cookie);
 				}else if(u.getStatus() == User.UNACTIVE){
 					rmsg.setStatus(300);

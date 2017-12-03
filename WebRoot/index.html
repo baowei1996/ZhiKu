@@ -1,0 +1,370 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>吉鹏智库</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">       
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/toast.css">    
+     <script src="js/jquery-1.12.3.min.js"></script>
+     <script src="js/bootstrap.min.js"></script>
+     <script src="http://cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
+     <script src="js/API.js"></script>
+     <script src="js/jquery.cookie.js"></script>
+     <script src="js/toastDom.js"></script>
+     
+     
+
+ </head>
+ <body>
+     <nav class="navbar navbar-default navbar-fixed-top" id="navBar">
+         <div class="container-fluid">
+             <!-- Brand and toggle get grouped for better mobile display -->
+             <div class="navbar-header nav-img">
+                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                 </button>
+
+
+             </div>
+             <a class="brand" href="#">
+                 <img alt="Brand" src="imgs/logo.png" style="width: 3rem;height: 3rem;">
+             </a>
+             <!-- Collect the nav links, forms, and other content for toggling -->
+             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                 <ul class="nav navbar-nav">
+                     <li class="ind"><a href="javascript:void(0)">主页 <span class="sr-only">(current)</span></a></li>
+                     <li class="resour"><a href="javascript:navToSR()">资源检索</a></li>
+                     <li class="act"><a href="javascript:void(0)">动态</a></li>
+                     <li class="orig"><a href="javascript:navToSR()">智库原创</a></li>
+                     <li class="grou"><a href="javascript:void(0)">团队建设</a></li>
+                     <!-- <li><a href="#" data-toggle="modal" data-target="#myModal">意见反馈</a></li> -->
+                     <li id="loginOption">
+                         <a href="#"  data-toggle="modal" data-target="#login">登录/注册</a>
+                         
+                     </li>
+                     
+                    
+                     <li class="about"><a href="javascript:void(0)">关于我们</a></li>
+
+                 </ul>
+
+
+             </div><!-- /.navbar-collapse -->
+         </div><!-- /.container-fluid -->
+     </nav>
+    <div class="" id="index">
+        <div class="big-box container">
+            <div class="big-font">
+                让知识回归平凡
+            </div>
+            <div class="big-text">
+                山东大学软件学院学术资源共享平台
+            </div>
+            <div class="search" onclick="navToSR()" title="点击搜索校内外学习资源">
+                资源搜索
+            </div>
+        </div>
+    </div>
+     <div id="inner">
+         <!--<div class="wrap" id="resourse">-->
+             <!--<div class="container" >-->
+                 <!--<div class="title"><div class="line"></div> 资源检索 <div class="line"></div></div>-->
+                 <!--<div class="row" style="text-align: center">-->
+                     <!--<div class="col-sm-6 col-xs-12">-->
+                         <!--<div class="box-item">-->
+                             <!--<h3>课内资源模块</h3>-->
+                             <!--<div class="btn btn-primary entry-btn" onclick="navToResource(1)">进入</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-6 col-xs-12">-->
+                         <!--<div class="box-item">-->
+                             <!--<h3>课外资源模块</h3>-->
+                             <!--<div class="btn btn-primary entry-btn" onclick="navToResource(2)">进入</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                 <!--</div>-->
+             <!--</div>-->
+         <!--</div>-->
+         <!--<div class="wrap" id="origin">-->
+             <!--<div class="container" >-->
+                 <!--<div class="title"><div class="line"></div> 智库原创 <div class="line"></div></div>-->
+                 <!--<div class="small-tag">软件人自己编写的知识见解</div>-->
+                 <!--<div class="row" style="text-align: center">-->
+                     <!--<div class="col-sm-4 col-xs-6" >-->
+                         <!--<div class="or-item">-->
+                             <!--<h3>数据结构</h3>-->
+                             <!--<div class="btn btn-primary entry-btn">下载</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-4 col-xs-6">-->
+                         <!--<div class="or-item">-->
+                             <!--<h3>离散数学</h3>-->
+                             <!--<div class="btn btn-primary entry-btn">下载</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-4 col-xs-6">-->
+                         <!--<div class="or-item">-->
+                             <!--<h3>离散数学</h3>-->
+                             <!--<div class="btn btn-primary entry-btn">下载</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-4 col-xs-6">-->
+                         <!--<div class="or-item">-->
+                             <!--<h3>离散数学</h3>-->
+                             <!--<div class="btn btn-primary entry-btn">下载</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-4 col-xs-6">-->
+                         <!--<div class="or-item">-->
+                             <!--<h3>离散数学</h3>-->
+                             <!--<div class="btn btn-primary entry-btn">下载</div>-->
+                         <!--</div>-->
+                     <!--</div>-->
+
+                 <!--</div>-->
+             <!--</div>-->
+         <!--</div>-->
+         <div class="wrap">
+             <div class="container" id="activity">
+                 <div class="title"><div class="line"></div> 动态 <div class="line"></div></div>
+                 <div class="small-tag">记录我们的点点滴滴</div>
+                 <div class="row row-line">
+                     <div class="col-xs-12 col-sm-6" >
+                        <h3>Python101 线下女性编程活动</h3>
+                         <small class="that-blue">2017年8月6日</small>
+                     </div>
+                     <div class="col-xs-12 col-sm-6">
+                         <img src="imgs/133.jpg" alt="" style="width: 80%;height: auto;">
+                     </div>
+                 </div>
+                 <div class="row row-line">
+                     <div class="col-xs-12 col-sm-6" >
+                         <h3>Python101 线下女性编程活动</h3>
+                         <small class="that-blue">2017年8月6日</small>
+                     </div>
+                     <div class="col-xs-12 col-sm-6">
+                         <img src="imgs/133.jpg" alt="" style="width: 80%;height: auto;">
+                     </div>
+                 </div>
+
+             </div>
+         </div>
+         <div class="wrap">
+             <div class="container" id="group">
+                 <div class="title"><div class="line"></div> 团队建设 <div class="line"></div></div>
+
+                 <div class="row row-line" >
+                     <div class="col-sm-1"></div><div class="col-sm-1"></div>
+                     <div class="col-xs-12 col-sm-3">
+                         <img src="imgs/133.jpg" alt="" style="width: 100%;height: 100%;">
+                     </div>
+                     <div class="col-xs-12 col-sm-6" >
+                         <h3>组织概况</h3>
+                         <small class="that-blue"> We spare no expense to make sure everything runs smoothly.</small>
+                     </div>
+
+                 </div>
+                 <div class="row row-line">
+                     <div class="col-sm-1"></div>
+                     <div class="col-sm-1"></div>
+                     <div class="col-xs-12 col-sm-3">
+                         <img src="imgs/133.jpg" alt="" style="width: 100%;height: 100%;">
+                     </div>
+                     <div class="col-xs-12 col-sm-6" onclick="navTomember()" style="cursor: pointer">
+                         <h3>成员介绍</h3>
+                         <small class="that-blue"> We spare no expense to make sure everything runs smoothly.</small>
+                     </div>
+                 </div>
+                 <!--<div class="row row-line">-->
+                     <!--<div class="col-sm-1"></div>-->
+                     <!--<div class="col-sm-1"></div>-->
+                     <!--<div class="col-xs-12 col-sm-3">-->
+                         <!--<img src="imgs/133.jpg" alt="" style="width: 100%;height: 100%;">-->
+                     <!--</div>-->
+                     <!--<div class="col-xs-12 col-sm-6" >-->
+                         <!--<h3>关注我们</h3>-->
+                         <!--<small class="that-blue"> We spare no expense to make sure everything runs smoothly.</small>-->
+                     <!--</div>-->
+                 <!--</div>-->
+
+             </div>
+         </div>
+         <div class="wrap" id="about-us">
+             <div class="container" >
+                 <div class="title"><div class="line"></div> 关于我们 <div class="line"></div></div>
+                 <div class="row" style="text-align: center">
+                     <div class="col-sm-4 col-xs-6" >
+                         <img class="icon-img" src="imgs/email-icon.png" alt="">
+                         <div>邮箱</div>
+                         <div>JP_idea@163.com</div>
+                     </div>
+                     <div class="col-sm-4 col-xs-6">
+                         <img class="icon-img" src="imgs/wechat-icon.png" alt="">
+                         <div>微信公众平台</div>
+                         <div>吉鹏智库</div>
+                     </div>
+                     <div class="col-sm-4 col-xs-12">
+                         <img class="icon-img" src="imgs/qq-icon.png" alt="">
+                         <div>QQ</div>
+                     </div>
+                 </div>
+                 <h6 style="margin-top: 5vh">© 吉鹏智库2017</h6>
+             </div>
+         </div>
+
+     </div>
+
+
+
+
+
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title" id="myModalLabel">意见反馈</h4>
+                 </div>
+                 <div class="modal-body">
+                     <div class="mb-inner">
+                         <div class="input-group input-group-lg">
+                             <input type="text" class="form-control" placeholder="用户名" aria-describedby="sizing-addon1">
+                         </div>
+                         <div class="input-group input-group-lg">
+                             <input type="email" class="form-control" placeholder="邮箱" aria-describedby="sizing-addon1">
+                         </div>
+                         <textarea placeholder="意见反馈"></textarea>
+
+                     </div>
+
+                 </div>
+                 <div class="modal-footer" style="text-align: center">
+                     <button type="button" class="btn btn-primary">submit</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" id="closeLogin" data-dismiss="modal" aria-hidden="true">
+                         &times;
+                     </button>
+                     <h4 class="modal-title">
+                         登录
+                     </h4>
+                 </div>
+                 <div class="modal-body" id="loginbody">
+                     <form class="form-horizontal" role="form">
+                         <div class="form-group" style="margin-top: 3rem">
+                             <label class="col-sm-3 control-label"></label>
+                             <div class="col-sm-6">
+                                 <input id="userInput" type="text" class="form-control"
+                                        placeholder="请输入账号">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label  class="col-sm-3 control-label"></label>
+                             <div class="col-sm-6">
+                                 <input id="passwordInput" type="password" class="form-control"
+                                        placeholder="请输入密码">
+                             </div>
+                         </div>
+
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal"  data-toggle="modal"  data-target="#regist">点击注册
+                     </button>
+                     <button type="button" class="btn btn-primary" id="login-btn">
+                         点击登录
+                     </button>
+                 </div>
+             </div><!-- /.modal-content -->
+         </div><!-- /.modal -->
+     </div>
+     <div class="modal fade" id="regist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" id="closeRegister" class="close" data-dismiss="modal" aria-hidden="true">
+                         &times;
+                     </button>
+                     <h4 class="modal-title">
+                         注册
+                     </h4>
+                 </div>
+                 <div class="modal-body" id="registbody">
+                     <form class="form-horizontal" role="form">
+                         <div class="form-group" >
+                             <label class="col-sm-3 control-label"></label>
+                             <div class="col-sm-6">
+                                 <input id="r-user" type="text" class="form-control"
+                                        placeholder="请输入账号">
+                             </div>
+                             <div class="col-sm-6 col-sm-offset-3">
+                                 <input id="r-email" type="text" class="form-control"
+                                        placeholder="请输入邮箱">
+                             </div>
+                             <div class="col-sm-6 col-sm-offset-3">
+                                 <input id="r-phone" type="text" class="form-control"
+                                        placeholder="请输入手机号">
+                             </div>
+                             <div class="col-sm-6 col-sm-offset-3">
+                                 <input id="r-pw" type="password" class="form-control"
+                                        placeholder="请输入密码">
+                             </div>
+                         </div>
+
+
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+
+                     <button type="button" id="register-btn" class="btn btn-primary">
+                         点击注册
+                     </button>
+                 </div>
+             </div><!-- /.modal-content -->
+         </div><!-- /.modal -->
+     </div>
+
+ </body>
+ <script type="text/javascript">
+     var ch = window.innerHeight;
+//     console.log(ch);
+     var h =document.getElementById("navBar").clientHeight;
+//     console.log(h);
+     document.getElementById("index").style.height = ch-h+'px';
+    function navToSR() {
+         window.location.href='searchResourse.html';
+     }
+     function navTomember() {
+         window.location.href='member.html';
+     }
+     function ScrollTo(click,position,duration) {
+
+         $(click).click(function () {
+             $.scrollTo(position,duration);
+         })
+     }
+     $(function(){
+         ScrollTo('.ind','#index',800);
+         ScrollTo('.resour','#resourse',800)
+         ScrollTo(".act",'#activity',1000);
+         ScrollTo(".orig",'#origin',1000)
+         ScrollTo(".grou",'#group',1200)
+         ScrollTo(".about",'#about-us',1200)
+
+     });
+ </script>
+ <script src="js/ajaxHandler.js"></script>
+ <script src="js/index.js"></script>
+ </html>   

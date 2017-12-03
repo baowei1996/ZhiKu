@@ -41,15 +41,15 @@ public class FileOPService {
 	 * @param type 查询的类型
 	 * @return	返回对应页数的fileOP信息
 	 */
-	public static List<FileOP> getOperation(int uid,int page,int type){
-		List<FileOP> fileOpList = null;
+	public static List<FileOPView> getOperation(int uid,int page,int type){
+		List<FileOPView> fileOpList = null;
 		Session session = null;
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from FileOP where uid = " + uid + " and type = " + type + " order by fid";
+			String sql = "from FileOPView where file_status = 1 and uid = " + uid + " and type = " + type + " order by fid";
 			Query q = session.createQuery(sql);
-			q.setFetchSize((page -1)*PAGE_SIZE);
+			q.setFirstResult((page-1)*PAGE_SIZE);
 			q.setMaxResults(PAGE_SIZE);
 			fileOpList = q.list();
 		}catch(Exception e){

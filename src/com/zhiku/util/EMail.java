@@ -33,7 +33,7 @@ public class EMail {
         Properties props = new Properties(); 
         //发送邮件服务器exmail.qq.com
         props.put("mail.smtp.host", "smtp.exmail.qq.com");
-        //发送端口-995
+        //发送端口-587
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         Session session = Session.getInstance(props, new Authenticator(){  

@@ -197,6 +197,7 @@ public class FileUpDownLoad {
 	public void download(HttpServlet servlet , HttpServletRequest request,HttpServletResponse response ,JFile f)
 			throws  IOException{
 		String path = f.getPath();
+		System.out.println(path);
 		
 		//得到要下载的文件
 		File file = new File(path);

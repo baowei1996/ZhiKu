@@ -68,6 +68,10 @@
       path="/del/*"
       type="com.zhiku.struts.action.DeleteFileAction"
       cancellable="true" />
+    <action
+      path="/userinfo/*"
+      type="com.zhiku.struts.action.GetUserInfoAction"
+      cancellable="true" />
 
   </action-mappings>
 

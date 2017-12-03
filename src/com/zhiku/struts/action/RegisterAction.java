@@ -116,10 +116,10 @@ public class RegisterAction extends Action {
 			u.setMail(mail);
 			u.setPhone(phone);
 //			u.setQq(qq);
-			if(xid == 0){
+			if(xid != 0){
 				u.setXid(xid);
 			}
-			if(mid == 0){
+			if(mid != 0){
 				u.setMid(mid);
 			}
 			u.setRegip(regip);

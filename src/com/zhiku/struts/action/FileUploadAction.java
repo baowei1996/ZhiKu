@@ -69,7 +69,7 @@ public class FileUploadAction extends Action {
 					if(fileExtName.matches("ppt(x)?")){
 						file.setDocformat(JFile.TYPE_PPT);
 					}else{
-						if(fileExtName.matches("xsl(x)?")){
+						if(fileExtName.matches("xls(x)?")){
 							file.setDocformat(JFile.TYPE_XSL);
 						}else{
 							file.setDocformat(-1);
@@ -99,6 +99,7 @@ public class FileUploadAction extends Action {
 				String sha256 = (String)data.get("sha256");
 				
 				file.setName((String)data.get("filename"));
+				System.out.println((String)data.get("filename"));
 				file.setPath((String)data.get("savePath"));
 				file.setSha(sha256);
 //				file.setModule(module);

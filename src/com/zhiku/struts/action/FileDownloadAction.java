@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.file.JFile;
 import com.zhiku.file.operation.FileOP;
+import com.zhiku.file.operation.FileOPService;
 import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
 
@@ -51,6 +52,7 @@ public class FileDownloadAction extends Action {
 			String url = request.getRequestURL().toString();
 			//根据URL获取fid
 			int fid = Integer.parseInt(url.substring(url.lastIndexOf("/")+1, url.lastIndexOf(".")));
+			System.out.println(fid);
 			//根据fid找到对应文件的信息
 			JFile f = JFile.findByFid(fid);
 			
@@ -58,17 +60,28 @@ public class FileDownloadAction extends Action {
 			filedownload.download(this.getServlet(), request, response, f);
 			//更改文件下载量信息
 			f.setDncnt(f.getDncnt() + 1);
-			f.save();
+			f.modify();
 			//记录下载操作
 			FileOP fp = new FileOP();
 			fp.setFid(fid);
 			HttpSession session = request.getSession();
-			int uid = (Integer) session.getAttribute("uid");
+			int uid;
+			try {
+				uid = (Integer) session.getAttribute("uid");
+			} catch (Exception e) {
+				out = response.getWriter();
+				rmsg.setStatus(300);
+				rmsg.setMessage("you haven't login!");
+				out.write(RMessage.getJson(rmsg));
+				e.printStackTrace();
+				return null;
+			}
 			fp.setUid(uid);
 			fp.setType(FileOP.DOWNLOAD);
 			fp.setOptime(new Date());
 			String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			fp.setOpip(opip);
+			FileOPService.save(fp);
 			//设置返回信息
 			out = response.getWriter();
 			rmsg.setStatus(200);

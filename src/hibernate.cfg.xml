@@ -6,11 +6,17 @@
 <hibernate-configuration>
 
 <session-factory>
-	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-	<property name="connection.url">jdbc:mysql://719daze.me:3306/zhiku</property>
+	<property name="dialect">
+		org.hibernate.dialect.MySQLDialect
+	</property>
+	<property name="connection.url">
+		jdbc:mysql://719daze.me:3306/zhiku?useUnicode=true&amp;characterEncoding=UTF-8
+	</property>
 	<property name="connection.username">jpidea</property>
 	<property name="connection.password">jp</property>
-	<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+	<property name="connection.driver_class">
+		com.mysql.jdbc.Driver
+	</property>
 	<property name="myeclipse.connection.profile">JPidea</property>
 	<mapping class="com.zhiku.xmc.College" />
 	<mapping class="com.zhiku.xmc.Course" />
@@ -20,6 +26,9 @@
 	<mapping class="com.zhiku.file.JFile" />
 	<mapping class="com.zhiku.xmc.Mtoc" />
 	<mapping class="com.zhiku.file.operation.FileOP" />
+	<mapping class="com.zhiku.user.UserView" />
+	<mapping class="com.zhiku.file.operation.FileOPView" />
+
 </session-factory>
 
 </hibernate-configuration>

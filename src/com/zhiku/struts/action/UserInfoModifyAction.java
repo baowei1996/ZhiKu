@@ -64,7 +64,7 @@ public class UserInfoModifyAction extends Action {
 			if(u.getPwd().equals(DigestUtils.md5Hex(oldpwd))){	//如果密码验证正确，继续信息修改的操作
 				//获取剩下的信息
 				String nickname = request.getParameter("nickname");
-				String newpwd = request.getParameter("newpwd");
+				String newpwd = request.getParameter("newpwd") == null?oldpwd:request.getParameter("newpwd");
 //				String avator = request.getParameter("avator");
 				String phone = request.getParameter("phone");
 				String qq = request.getParameter("qq");

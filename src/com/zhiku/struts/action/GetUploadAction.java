@@ -5,6 +5,7 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import com.zhiku.file.FileView;
 import com.zhiku.file.operation.FileOP;
 import com.zhiku.file.operation.FileOPService;
+import com.zhiku.file.operation.FileOPView;
 import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
@@ -69,13 +71,13 @@ public class GetUploadAction extends Action {
 				nfe.printStackTrace();
 			}
 			
-			List<FileOP> opList = FileOPService.getOperation(u.getUid(), page, FileOP.UPLOAD);
+			List<FileOPView> opList = FileOPService.getOperation(u.getUid(), page, FileOP.UPLOAD);
 			
 			//设置返回的data信息
 			List<Data> data = new ArrayList<Data>();
 			FileView f = null;
 			Data d = null;
-			for(FileOP op : opList){
+			for(FileOPView op : opList){
 				f = FileView.findByFid(op.getFid());
 				d = new Data();
 				d.put("fid", f.getFid());
@@ -87,7 +89,7 @@ public class GetUploadAction extends Action {
 				fileinfo.put("course", f.getCname());
 				fileinfo.put("docformat", f.getDocformat());
 				fileinfo.put("origin", f.getOrigin());
-				fileinfo.put("uptime", f.getUptime());
+				fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
 				fileinfo.put("desc", f.getDescs());
 				d.put("fileinfo", fileinfo);
 				
