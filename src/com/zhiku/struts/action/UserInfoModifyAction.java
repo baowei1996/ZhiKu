@@ -49,16 +49,22 @@ public class UserInfoModifyAction extends Action {
 			out = response.getWriter();
 			
 			String url = request.getRequestURL().toString();
-			//根据URL获取uid
-			int uid = Integer.parseInt(url.substring(url.lastIndexOf("/")+1, url.lastIndexOf(".")));
-			//根据uid找到当前用户的信息
-			User u = User.findByUid(uid);
+			//根据URL获取username
+			String username = url.substring(url.lastIndexOf("/")+1, url.lastIndexOf("."));
+			//根据username找到当前用户的信息
+			User u = User.findByUsr(username);
+			if(u == null){
+				rmsg.setStatus(300);
+				rmsg.setMessage("no such user!");
+				out.write(RMessage.getJson(rmsg));
+			}
+			
 			//获取前端的信息
 			String oldpwd = request.getParameter("oldpwd");
 			if(u.getPwd().equals(DigestUtils.md5Hex(oldpwd))){	//如果密码验证正确，继续信息修改的操作
 				//获取剩下的信息
 				String nickname = request.getParameter("nickname");
-				String newpwd = request.getParameter("newpwd");
+				String newpwd = request.getParameter("newpwd") == null?oldpwd:request.getParameter("newpwd");
 //				String avator = request.getParameter("avator");
 				String phone = request.getParameter("phone");
 				String qq = request.getParameter("qq");
@@ -83,10 +89,10 @@ public class UserInfoModifyAction extends Action {
 //				if(avator != null){
 //				u.setAvator(avator);
 //				}
-				if(phone !=  null){
+				if(phone !=  null && phone.matches("\\d+")){
 					u.setPhone(phone);
 				}
-				if(qq != null){
+				if(qq != null && qq.matches("\\d+")){
 					u.setQq(qq);
 				}
 				if(xid != -1 && mid != -1){
@@ -109,11 +115,11 @@ public class UserInfoModifyAction extends Action {
 			
 			out.write(RMessage.getJson(rmsg));
 			
-		}catch(NumberFormatException ne){
-			//如果uid出现问题，则捕获这个异常
-			rmsg.setStatus(300);
-			rmsg.setMessage("Wrong uid");
-			out.write(RMessage.getJson(rmsg));
+//		}catch(NumberFormatException ne){
+//			//如果uid出现问题，则捕获这个异常
+//			rmsg.setStatus(300);
+//			rmsg.setMessage("Wrong uid");
+//			out.write(RMessage.getJson(rmsg));
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

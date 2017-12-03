@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "file_info")
+@Table(name = "zhiku.file_info")
 public class JFile {	//为了不和java.io.File混淆，使用JFile
 
 	@Id
@@ -81,6 +81,10 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	 */
 	public static JFile findByFid(int fid){
 		return FileDAO.findByFid(fid);
+	}
+	
+	public static JFile findBySha(String sha){
+		return FileDAO.findBySha(sha);
 	}
 	
 	/**

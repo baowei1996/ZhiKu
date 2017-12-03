@@ -8,21 +8,13 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mtoc")
+@Table(name = "zhiku.mtoc")
 @IdClass(MtocKey.class)
 public class Mtoc {
-	@Id
-	private int xid;
 	@Id
 	private int mid;
 	@Id
 	private int cid;
-	public int getXid() {
-		return xid;
-	}
-	public void setXid(int xid) {
-		this.xid = xid;
-	}
 	public int getMid() {
 		return mid;
 	}
@@ -41,25 +33,15 @@ public class Mtoc {
 
 @SuppressWarnings("serial")
 class MtocKey implements Serializable{
-	private int xid;
 	private int mid;
 	private int cid;
 	
 	public MtocKey(){}
 
-	public MtocKey(int xid, int mid, int cid) {
+	public MtocKey(int mid, int cid) {
 		super();
-		this.xid = xid;
 		this.mid = mid;
 		this.cid = cid;
-	}
-
-	public int getXid() {
-		return xid;
-	}
-
-	public void setXid(int xid) {
-		this.xid = xid;
 	}
 
 	public int getMid() {
@@ -84,7 +66,6 @@ class MtocKey implements Serializable{
 		int result = 1;
 		result = prime * result + cid;
 		result = prime * result + mid;
-		result = prime * result + xid;
 		return result;
 	}
 
@@ -101,10 +82,10 @@ class MtocKey implements Serializable{
 			return false;
 		if (mid != other.mid)
 			return false;
-		if (xid != other.xid)
-			return false;
 		return true;
 	}
+
+	
 	
 	
 }

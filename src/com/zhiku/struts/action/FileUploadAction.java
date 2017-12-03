@@ -16,6 +16,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.file.JFile;
+import com.zhiku.file.operation.FileOP;
+import com.zhiku.file.operation.FileOPService;
 import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.FileUpDownLoad;
@@ -59,18 +61,48 @@ public class FileUploadAction extends Action {
 			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){
 				JFile file = new JFile();
 				
+				//依据后缀名判断是否符合要求
+				String fileExtName = (String)data.get("fileExtName");
+				if(fileExtName.matches("doc(x)?")){
+					file.setDocformat(JFile.TYPE_DOC);
+				}else{
+					if(fileExtName.matches("ppt(x)?")){
+						file.setDocformat(JFile.TYPE_PPT);
+					}else{
+						if(fileExtName.matches("xls(x)?")){
+							file.setDocformat(JFile.TYPE_XSL);
+						}else{
+							file.setDocformat(-1);
+							rmsg.setStatus(300);
+							rmsg.setMessage("sorry , just accept doc(x) or xsl(x) or ppt(x) now!");
+							out.write(RMessage.getJson(rmsg));
+							return null;
+						}
+					}
+				}
+				
 				//获取文件的相关属性
-				int module = Integer.parseInt((String)data.get("module"));
-				int upuid = Integer.parseInt((String)data.get("upuid"));
+//				int module = Integer.parseInt((String)data.get("module"));
+				String username = (String)data.get("upusername");
+				User u = User.findByUsr(username);
+				if(u == null || u.getStatus() == User.LOCKED){
+					rmsg.setStatus(300);
+					rmsg.setMessage("user not find or locked!");
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}
+				int upuid = u.getUid();
 				int origin = Integer.parseInt((String)data.get("origin"));
 				String descs = (String)data.get("desc");
 				String teacher = (String)data.get("teacher");
 				int course = Integer.parseInt((String)data.get("course"));
+				String sha256 = (String)data.get("sha256");
 				
 				file.setName((String)data.get("filename"));
+				System.out.println((String)data.get("filename"));
 				file.setPath((String)data.get("savePath"));
-				file.setSha((String)data.get("sha256"));
-				file.setModule(module);
+				file.setSha(sha256);
+//				file.setModule(module);
 				file.setCourse(course);
 				file.setTeacher(teacher);
 				file.setStatus(JFile.NORMAL);	//暂时统一规定文件为normal状态，之后添加验证时再修改
@@ -79,34 +111,31 @@ public class FileUploadAction extends Action {
 				file.setOrigin(origin);
 				file.setDescs(descs);
 				
-				//依据后缀名判断
-				String fileExtName = (String)data.get("fileExtName");
-				if(fileExtName.matches("doc(x)?")){
-					file.setDocformat(JFile.TYPE_DOC);
-				}else{
-					if(fileExtName.matches("ppt(x)?")){
-						file.setDocformat(JFile.TYPE_PPT);
-					}else{
-						if(fileExtName.matches("xsl(x)?")){
-							file.setDocformat(JFile.TYPE_XSL);
-						}else{
-							file.setDocformat(-1);
-						}
-					}
-				}
 				
 				file.setFileformat(fileExtName);
 				
 				if(file.save()){
 					//设置文件的上传者上传量加一！
-					User u = User.findByUid(upuid);
 					u.setUpcnt(u.getUpcnt() + 1);
 					u.modify();
-					rmsg.setStatus(200);
-					rmsg.setMessage("OK");
+					//记录上传信息
+					FileOP fp = new FileOP();
+					file = JFile.findBySha(sha256);
+					System.out.println(file == null);
+					fp.setFid(file.getFid());
+					fp.setUid(u.getUid());
+					fp.setOptime(new Date());
+					String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
+					fp.setOpip(opip);
+					fp.setType(FileOP.UPLOAD);
+					if(FileOPService.save(fp)){
+						//设置返回信息
+						rmsg.setStatus(200);
+						rmsg.setMessage("OK");
+					}
 				}else{
 					rmsg.setStatus(300);
-					rmsg.setMessage("fail ,please try again");
+					rmsg.setMessage("fail ,maybe some information wrong ! please check it!");
 				}
 			}else{
 				rmsg.setStatus(300);

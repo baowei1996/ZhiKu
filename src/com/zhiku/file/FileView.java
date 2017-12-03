@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "file_view")
+@Table(name = "zhiku.file_view")
 public class FileView {
 	@Id
 	private int fid;
@@ -33,17 +33,20 @@ public class FileView {
 	private String descs;
 	
 	
+	public static FileView findByFid(int fid){
+		return FileDAO.findFileViewByFid(fid);
+	}
 	
-	public static List<FileView> findByCid(int cid){
-		return FileDAO.findByCid(cid);
+	public static List<FileView> findByCid(int cid,int page){
+		return FileDAO.findByCid(cid,page);
 	}
 	
 	public static List<FileView> findByCname(String cname){
 		return FileDAO.findByCname(cname);
 	}
 	
-	public static List<FileView> findByCids(List<Integer> cids){
-		return FileDAO.findByCids(cids);
+	public static List<FileView> findByCids(List<Integer> cids,int page){
+		return FileDAO.findByCids(cids,page);
 	}
 	
 	

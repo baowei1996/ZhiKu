@@ -38,7 +38,7 @@ CREATE TABLE `user` (
   `pwd` varchar(32) NOT NULL,
   `avator` varchar(50) DEFAULT NULL,
   `sign` varchar(200) DEFAULT NULL,
-  `coin` int(11) DEFAULT ''0'',
+  `coin` int(11) DEFAULT '0',
   `mail` varchar(50) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `qq` varchar(15) DEFAULT NULL,
@@ -52,9 +52,9 @@ CREATE TABLE `user` (
   `lasttime` datetime DEFAULT NULL,
   `mailtime` datetime DEFAULT NULL,
   `unlktime` datetime DEFAULT NULL,
-  `upcnt` int(11) DEFAULT ''0'',
-  `dncnt` int(11) DEFAULT ''0'',
-  `colcnt` int(11) DEFAULT ''0'',
+  `upcnt` int(11) DEFAULT '0',
+  `dncnt` int(11) DEFAULT '0',
+  `colcnt` int(11) DEFAULT '0',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `usr_UNIQUE` (`usr`),
   UNIQUE KEY `mail_UNIQUE` (`mail`),
@@ -78,7 +78,7 @@ CREATE TABLE `file_info` (
   `uptime` datetime DEFAULT NULL,
   `dncnt` int(11) DEFAULT NULL,
   `colcnt` int(11) DEFAULT NULL,
-  `desc` varchar(200) DEFAULT NULL,
+  `descs` varchar(200) DEFAULT NULL,
   `origin` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`fid`),
@@ -94,7 +94,7 @@ CREATE TABLE `file_op` (
   `optime` datetime NOT NULL,
   `opip` varchar(16) DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
-  `desc` varchar(200) DEFAULT NULL,
+  `descs` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`fid`,`uid`,`optime`),
   KEY `fk_uid_idx` (`uid`),
   CONSTRAINT `fk_fid` FOREIGN KEY (`fid`) REFERENCES `file_info` (`fid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -106,7 +106,7 @@ CREATE TABLE `activity` (
   `img` varchar(200) DEFAULT NULL,
   `pubtime` datetime DEFAULT NULL,
   `linkweb` varchar(200) DEFAULT NULL,
-  `desc` varchar(200) DEFAULT NULL,
+  `descs` varchar(200) DEFAULT NULL,
   `scancnt` int(11) DEFAULT NULL,
   PRIMARY KEY (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -129,7 +129,7 @@ select `user`.`uid` AS `uid`,
 		`file_info`.`dncnt` AS `dncnt`,
 		`file_info`.`colcnt` AS `colcnt`,
 		`file_info`.`origin` AS `origin`,
-		`file_info`.`desc` AS `desc` 
+		`file_info`.`descs` AS `descs` 
 from ((((`user` join `file_info`) 
 				join `college`) 
 				join `major`) 

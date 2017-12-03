@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.swing.ImageIcon;
@@ -16,7 +17,7 @@ import javax.swing.ImageIcon;
 
 
 @Entity
-//@Table(name = "user")		//懵逼，将这一行注释掉就可以用了！
+@Table(name = "zhiku.user")		//懵逼，将这一行注释掉就可以用了！
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

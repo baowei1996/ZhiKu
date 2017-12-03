@@ -233,4 +233,25 @@ public class UserDAO {
 		return userList;
 	}
 
+	/**
+	 * 根据用户名返回用户的信息视图
+	 * @param username	用户名
+	 * @return	用户对应的信息视图
+	 */
+	public static UserView getUserInfo(String username){
+		Session session = null;
+		UserView uv = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			String sql = "from UserView where usr = \'" + username + "\'";
+			uv = (UserView)session.createQuery(sql).uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			HibernateSessionFactory.closeSession();
+		}
+		
+		return uv;
+	}
 }

@@ -73,6 +73,9 @@ public class CollegeSearchAction extends Action {
 			out.write(RMessage.getJson(rmsg));
 			
 		}catch(Exception e){
+			rmsg.setStatus(300);
+			rmsg.setMessage(e.getCause().toString());
+			out.write(RMessage.getJson(rmsg));
 			e.printStackTrace();
 		}finally{
 			out.flush();

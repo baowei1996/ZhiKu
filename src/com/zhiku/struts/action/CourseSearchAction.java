@@ -63,8 +63,8 @@ public class CourseSearchAction extends Action {
 				while(it.hasNext()){
 					d = new Data();
 					c = it.next();
-					d.put("mid", c.getCid());
-					d.put("mname", c.getCname());
+					d.put("cid", c.getCid());
+					d.put("cname", c.getCname());
 					data.add(d);
 				}
 				

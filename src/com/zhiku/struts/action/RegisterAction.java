@@ -66,6 +66,14 @@ public class RegisterAction extends Action {
 			
 			String mail = request.getParameter("mail");
 			
+			//验证邮箱格式
+			if(!mail.matches("\\w+@\\w+.\\w+")){
+				rmsg.setStatus(300);
+				rmsg.setMessage("mail format error!");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
+			
 			if(User.isExist("mail", mail)){
 				rmsg.setStatus(300);
 				rmsg.setMessage("Mail has been used");
@@ -73,12 +81,29 @@ public class RegisterAction extends Action {
 				return null;
 			}
 			
-			String nickname = request.getParameter("nickname");
+			String nickname = request.getParameter("nickname")==null?username:request.getParameter("nickname");
 			String password = request.getParameter("password");
-			String phone = request.getParameter("phone");
-			String qq = request.getParameter("qq");
-			int xid = Integer.parseInt(request.getParameter("xid"));
-			int mid = Integer.parseInt(request.getParameter("mid"));
+			//获取手机号并验证
+			String phone = request.getParameter("phone")== null?"":request.getParameter("phone");
+			if(!phone.matches("\\d+")){
+				phone = null;
+			}
+//			//获取qq号并验证
+//			String qq = request.getParameter("qq")== null?"":request.getParameter("qq");
+//			if(!qq.matches("\\d+")){
+//				qq = null;
+//			}
+			//如果xid和mid出错，默认为1
+			int xid;
+			int mid;
+			try {
+				xid = Integer.parseInt(request.getParameter("xid"));
+				mid = Integer.parseInt(request.getParameter("mid"));
+			} catch (NumberFormatException nfe) {
+				xid = 0;
+				mid = 0;
+				nfe.printStackTrace();
+			}
 			String regip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			
 			String passwordMd5 = DigestUtils.md5Hex(password);
@@ -90,9 +115,13 @@ public class RegisterAction extends Action {
 			u.setPwd(passwordMd5);
 			u.setMail(mail);
 			u.setPhone(phone);
-			u.setQq(qq);
-			u.setXid(xid);
-			u.setMid(mid);
+//			u.setQq(qq);
+			if(xid != 0){
+				u.setXid(xid);
+			}
+			if(mid != 0){
+				u.setMid(mid);
+			}
 			u.setRegip(regip);
 			Date current_time = new Date();
 			u.setRegtime(current_time);
@@ -106,11 +135,14 @@ public class RegisterAction extends Action {
 			if(u.save()){
 				rmsg.setStatus(200);
 				rmsg.setMessage("OK");
-				out.write(RMessage.getJson(rmsg));
+				//给用户的邮箱发送一个激活邮件,激活使用用户编号！
+				EMail.sendMail(u.getUsr(), u.getMail(), u.hashCode()+"");
+			}else{
+				rmsg.setStatus(300);
+				rmsg.setMessage("Sorry! you register fail , please try again!");
 			}
+			out.write(RMessage.getJson(rmsg));
 			
-			//给用户的邮箱发送一个激活邮件,激活使用用户编号！
-			EMail.sendMail(u.getUsr(), u.getMail(), u.hashCode()+"");
 			
 		} catch (Exception e) {
 			

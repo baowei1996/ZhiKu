@@ -7,12 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "major")
+@Table(name = "zhiku.major")
 public class Major {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int mid;
 	private String mname;
+	private int xid;
 	
 	public Major(){}
 	public Major(String mname){
@@ -33,6 +34,11 @@ public class Major {
 	public void setMname(String mname) {
 		this.mname = mname;
 	}
-	
+	public int getXid(){
+		return xid;
+	}
+	public void setXid(int xid){
+		this.setXid(xid);
+	}
 	
 }

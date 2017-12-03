@@ -1,6 +1,15 @@
 package com.zhiku.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+import com.zhiku.user.User;
 
 
 public class test {
@@ -17,12 +26,26 @@ public class test {
 			fileinfo = new Data();
 			fileinfo.put("name", "bw");
 			fileinfo.put("module", i);
+			fileinfo.put("time",new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
 			d.put("fileinfo", fileinfo);
 			data.add(d);
 		}
 		
 		message.setData(data);
 		System.out.println(RMessage.getJson(message));
+		System.out.println(DigestUtils.md5Hex("12345"));
+//		try {
+//			User u = new User();
+//			u.setUsr("12345");
+//			u.setMail("143256@qq.com");
+//			EMail.sendMail("12345", "1368183370@qq.com", u.hashCode()+"");
+//		} catch (AddressException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (MessagingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 //		输出结果如下：
 //		{
 //			"status":200,
