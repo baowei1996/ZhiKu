@@ -56,10 +56,18 @@ public class RegisterAction extends Action {
 			//从request中获取相关信息
 			String username = request.getParameter("username");
 			
+			//用户名长度不超过20
+			//用户名只能是由字母数字下划线组成，不能以数字开头
+			if(!(username != null && username.length() <20 && username.matches("[a-zA-Z_][a-zA-Z0-9_]*"))){
+				rmsg.setStatus(300);
+				rmsg.setMessage("用户名的格式不正确，请检查!");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
 			//如果用户名存在则返回
 			if(User.isExist("usr", username)){
 				rmsg.setStatus(300);
-				rmsg.setMessage("Username has been used");
+				rmsg.setMessage("用户名已经被占用，请重试!");
 				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
@@ -67,26 +75,36 @@ public class RegisterAction extends Action {
 			String mail = request.getParameter("mail");
 			
 			//验证邮箱格式
-			if(!mail.matches("\\w+@\\w+.\\w+")){
+			if(!mail.matches("\\w+@\\w+\\.\\w+")){
 				rmsg.setStatus(300);
-				rmsg.setMessage("mail format error!");
+				rmsg.setMessage("邮箱格式错误，请重试!");
 				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
 			
 			if(User.isExist("mail", mail)){
 				rmsg.setStatus(300);
-				rmsg.setMessage("Mail has been used");
+				rmsg.setMessage("邮箱已经被占用，请重试!");
 				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
 			
 			String nickname = request.getParameter("nickname")==null?username:request.getParameter("nickname");
 			String password = request.getParameter("password");
+			//检查密码的合法性
+			if(!(password!=null && password.length()>5 && password.length()<19)){
+				rmsg.setStatus(300);
+				rmsg.setMessage("密码不符合要求！要求密码长度6到18位。");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
 			//获取手机号并验证
 			String phone = request.getParameter("phone")== null?"":request.getParameter("phone");
-			if(!phone.matches("\\d+")){
-				phone = null;
+			if(!(phone.length() == 11 && phone.matches("\\d+"))){
+				rmsg.setStatus(300);
+				rmsg.setMessage("手机号格式错误!");
+				out.write(RMessage.getJson(rmsg));
+				return null;
 			}
 //			//获取qq号并验证
 //			String qq = request.getParameter("qq")== null?"":request.getParameter("qq");
@@ -94,16 +112,16 @@ public class RegisterAction extends Action {
 //				qq = null;
 //			}
 			//如果xid和mid出错，默认为1
-			int xid;
-			int mid;
-			try {
-				xid = Integer.parseInt(request.getParameter("xid"));
-				mid = Integer.parseInt(request.getParameter("mid"));
-			} catch (NumberFormatException nfe) {
-				xid = 0;
-				mid = 0;
-				nfe.printStackTrace();
-			}
+//			int xid;
+//			int mid;
+//			try {
+//				xid = Integer.parseInt(request.getParameter("xid"));
+//				mid = Integer.parseInt(request.getParameter("mid"));
+//			} catch (NumberFormatException nfe) {
+//				xid = 0;
+//				mid = 0;
+//				nfe.printStackTrace();
+//			}
 			String regip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			
 			String passwordMd5 = DigestUtils.md5Hex(password);
@@ -116,12 +134,12 @@ public class RegisterAction extends Action {
 			u.setMail(mail);
 			u.setPhone(phone);
 //			u.setQq(qq);
-			if(xid != 0){
-				u.setXid(xid);
-			}
-			if(mid != 0){
-				u.setMid(mid);
-			}
+//			if(xid != 0){
+//				u.setXid(xid);
+//			}
+//			if(mid != 0){
+//				u.setMid(mid);
+//			}
 			u.setRegip(regip);
 			Date current_time = new Date();
 			u.setRegtime(current_time);
@@ -139,7 +157,7 @@ public class RegisterAction extends Action {
 				EMail.sendMail(u.getUsr(), u.getMail(), u.hashCode()+"");
 			}else{
 				rmsg.setStatus(300);
-				rmsg.setMessage("Sorry! you register fail , please try again!");
+				rmsg.setMessage("抱歉!注册失败，请重试!");
 			}
 			out.write(RMessage.getJson(rmsg));
 			
