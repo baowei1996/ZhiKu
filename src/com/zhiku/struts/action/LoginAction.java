@@ -71,14 +71,14 @@ public class LoginAction extends Action {
 					response.addCookie(cookie);
 				}else if(u.getStatus() == User.UNACTIVE){
 					rmsg.setStatus(300);
-					rmsg.setMessage("Sorry ,your e-mail doesn't check!");
+					rmsg.setMessage("抱歉，邮箱未激活!");
 				}else {
 					rmsg.setStatus(300);
-					rmsg.setMessage("Sorry ,you have been locked!");
+					rmsg.setMessage("抱歉，你的用户已经被禁，请联系管理员!");
 				}
 			}else{
 				rmsg.setStatus(300);
-				rmsg.setMessage("Username or password wrong");
+				rmsg.setMessage("用户名或密码不正确!");
 			}
 			
 			out.write(RMessage.getJson(rmsg));

@@ -57,14 +57,14 @@ public class LogoutAction extends Action {
 			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
 			if(uid == -1){
 				rmsg.setStatus(300);
-				rmsg.setMessage("you haven't login!");
+				rmsg.setMessage("请先登录!");
 				out.write(RMessage.getJson(rmsg));;
 				return null;
 			}
 			User u = User.findByUid(uid);
 			if(u == null){
 				rmsg.setStatus(300);
-				rmsg.setMessage("Wrong user!");
+				rmsg.setMessage("未知用户!");
 				out.write(RMessage.getJson(rmsg));;
 				return null;
 			}
