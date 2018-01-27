@@ -15,8 +15,9 @@
   <StrutsActivity path="/getupld.do" location="650,1050" dimension="275,104" />
   <StrutsActivity path="/getdld.do" location="50,1250" dimension="291,104" />
   <StrutsActivity path="/del/*.do" location="650,1250" dimension="268,104" />
+  <StrutsActivity path="/userinfo/*.do" location="350,1450" dimension="282,104" />
   <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
-  <StrutsActivity path="/userinfo/*.do" />
+  <StrutsActivity path="/reactive.do" />
   <StrutsTransition id="/mailcheck.do,success,/index.jsp,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1086,102" />

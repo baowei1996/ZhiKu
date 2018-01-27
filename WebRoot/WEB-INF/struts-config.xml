@@ -72,6 +72,10 @@
       path="/userinfo/*"
       type="com.zhiku.struts.action.GetUserInfoAction"
       cancellable="true" />
+    <action
+      path="/reactive"
+      type="com.zhiku.struts.action.ReactiveAction"
+      cancellable="true" />
 
   </action-mappings>
 

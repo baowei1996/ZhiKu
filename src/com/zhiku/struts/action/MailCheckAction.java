@@ -57,21 +57,27 @@ public class MailCheckAction extends Action {
 			//如果用户不存在，或者用户的验证码不正确，则返回错误链接
 			if(u == null || key != u.hashCode()){
 				rmsg.setStatus(300);
-				rmsg.setMessage("Invalid mailcheck link");
+				rmsg.setMessage("无效的邮件链接!");
 			}else {
-				Date current = new Date();
-				//如果激活时间过期，则返回注册过期
-				if(current.compareTo(u.getMailtime()) > 0){
+				//如果用户已经激活过
+				if(u.getStatus() != 0){
 					rmsg.setStatus(300);
-					rmsg.setMessage("MailCheck link time out");
+					rmsg.setMessage("你的邮箱已激活!请勿重复激活!");
 				}else{
-					//一切正常,将用户状态改为正常并更新
-					u.setStatus(User.NORMAL);
-					if(u.modify()){
-						state = 1;
-						return mapping.findForward("success");
+					Date current = new Date();
+					//如果激活时间过期，则返回注册过期
+					if(current.compareTo(u.getMailtime()) > 0){
+						rmsg.setStatus(300);
+						rmsg.setMessage("激活邮件超期失效，请尝试重新请求激活邮件!");
+					}else{
+						//一切正常,将用户状态改为正常并更新
+						u.setStatus(User.NORMAL);
+						if(u.modify()){
+							state = 1;
+							return mapping.findForward("success");
+						}
+						
 					}
-					
 				}
 			}
 			

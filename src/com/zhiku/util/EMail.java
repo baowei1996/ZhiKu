@@ -57,7 +57,8 @@ public class EMail {
             //设置邮件主题  
             message.setSubject("来自山软智库的激活邮件");  
             //设置邮件正文  
-            message.setContent("<h1>山软智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"'>http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"</a></h3>","text/html;charset=UTF-8");  
+            message.setContent("<h1>山软智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"'>http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"</a></h3>"
+            		+ "<a href = 'http://719daze.me:8080/JPidea/reactive.do?usr="+usr+"'>重新发送激活邮件</a>","text/html;charset=UTF-8");  
           
             //3.发送邮件  
             Transport.send(message);  
