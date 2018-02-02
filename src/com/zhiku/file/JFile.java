@@ -65,7 +65,6 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public static final int TYPE_PPT = 2;
 	public static final int TYPE_PDF = 3;
 	
-	private static FileDAO dao = new FileDAO();
 	
 	public JFile(){	}
 	
@@ -104,7 +103,7 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	 * @return 是否修改成功
 	 */
 	public boolean modify(){
-		return dao.modify(this);
+		return Transaction.modifyFileInfo(this);
 	}
 	
 	/**

@@ -91,24 +91,8 @@ public class FileDAO {
 	 * @param f 文件
 	 * @return 是否修改成功
 	 */
-	public boolean modify(JFile f){
-		boolean modified = true;
-		Session session = null;
-		
-		try{
-			session = HibernateSessionFactory.getSession();
-			session.beginTransaction();
-			session.update(f);
-			session.getTransaction().commit();
-		}catch(Exception e){
-			modified = false;
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		}finally{
-			HibernateSessionFactory.closeSession();
-		}
-		
-		return modified;
+	public static void modify(JFile f,Session session){
+		session.update(f);
 	}
 	
 	

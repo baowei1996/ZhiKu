@@ -5,7 +5,6 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.DB.Transaction;
 import com.zhiku.file.JFile;
-import com.zhiku.file.operation.FileOP;
-import com.zhiku.file.operation.FileOPService;
+import com.zhiku.user.User;
 import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
 
@@ -50,49 +48,59 @@ public class FileDownloadAction extends Action {
 		RMessage rmsg = new RMessage();
 		try{
 			
+			//获取用户的session，判断用户的登录状态
+			HttpSession session = request.getSession();
+			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			User u = User.findByUid(uid);
+			
+			if (uid == -1 || u == null){
+				rmsg.setStatus(300);
+				rmsg.setMessage("需要登录才可下载文件!");
+				response.setContentType("application/json;charset=utf-8");
+				response.setHeader("pragme", "no-cache");
+				out = response.getWriter();
+				out.write(RMessage.getJson(rmsg));;
+				return null;
+			}
+			
+			//检查fid是否正确
 			String url = request.getRequestURL().toString();
-			//根据URL获取fid
-			int fid = Integer.parseInt(url.substring(url.lastIndexOf("/")+1, url.lastIndexOf(".")));
-			System.out.println(fid);
+			int fid = -1;
+			try{
+				//根据URL获取fid
+				fid = Integer.parseInt(url.substring(url.lastIndexOf("/")+1, url.lastIndexOf(".")));
+			}catch(NumberFormatException ne){
+				fid = -1;
+			}
 			//根据fid找到对应文件的信息
 			JFile f = JFile.findByFid(fid);
+			if(fid == -1 || f == null){
+				rmsg.setStatus(300);
+				rmsg.setMessage("无法找到对应文件!");
+				response.setContentType("application/json;charset=utf-8");
+				response.setHeader("pragme", "no-cache");
+				out = response.getWriter();
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
 			
 			FileUpDownLoad filedownload = new FileUpDownLoad();
 			filedownload.download(this.getServlet(), request, response, f);
-			//更改文件下载量信息
-			f.setDncnt(f.getDncnt() + 1);
-			f.modify();
-			//记录下载操作
-			FileOP fp = new FileOP();
-			fp.setFid(fid);
-			HttpSession session = request.getSession();
-			int uid;
-			try {
-				uid = (Integer) session.getAttribute("uid");
-			} catch (Exception e) {
-				out = response.getWriter();
-				rmsg.setStatus(300);
-				rmsg.setMessage("you haven't login!");
-				out.write(RMessage.getJson(rmsg));
-				e.printStackTrace();
-				return null;
-			}
-			fp.setUid(uid);
-			fp.setType(FileOP.DOWNLOAD);
-			fp.setOptime(new Date());
-			String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
-			fp.setOpip(opip);
-			Transaction.saveFileOP(fp);
+
 			//设置返回信息
+			response.setContentType("application/json;charset=utf-8");
+			response.setHeader("pragme", "no-cache");
+			String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
+			if(Transaction.saveDownloadInfo(f, u, opip)){
+				rmsg.setStatus(200);
+				rmsg.setMessage("OK");
+			}else{
+				rmsg.setStatus(300);
+				rmsg.setMessage("发生一个预期以外的错误，请重试!");
+			}
 			out = response.getWriter();
-			rmsg.setStatus(200);
-			rmsg.setMessage("OK");
 			out.write(RMessage.getJson(rmsg));
-		}catch(NumberFormatException ne){
-			//如果uid出现问题，则捕获这个异常
-			rmsg.setStatus(300);
-			rmsg.setMessage("Wrong fid");
-			out.write(RMessage.getJson(rmsg));
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

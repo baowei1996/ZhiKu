@@ -58,16 +58,40 @@ public class Transaction {
 	 * 文件下载的事务
 	 * @return	如果事务处理成功返回true
 	 */
-	public static boolean saveDownloadInfo(){
+	public static boolean saveDownloadInfo(JFile f, User u, String opip){
 		boolean isDone = true;
+		Session session = null;
 		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			
+			f.setDncnt(f.getDncnt() + 1);
+			FileDAO.modify(f,session);
+			//记录下载操作
+			FileOP fp = new FileOP();
+			fp.setFid(f.getFid());
+			fp.setUid(u.getUid());
+			fp.setType(FileOP.DOWNLOAD);
+			fp.setOptime(new Date());
+			fp.setOpip(opip);
+			FileOPService.save(fp, session);
+			
+			session.getTransaction().commit();
+		}catch(Exception e){
+			isDone = false;
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		}finally{
+			HibernateSessionFactory.closeSession();
+		}
 		
 		
 		return isDone;
 	}
 	
 	
-	public static boolean modifyUserinfo(User u){
+	public static boolean modifyUserInfo(User u){
 		boolean isDone = true;
 		Session session = null;
 
@@ -76,6 +100,30 @@ public class Transaction {
 			session.beginTransaction();
 			
 			UserDAO.modify(u, session);
+			
+			session.getTransaction().commit();
+
+		} catch (Exception e) {
+			isDone = false;
+			session.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			HibernateSessionFactory.closeSession();
+		}
+		
+		
+		return isDone;
+	}
+	
+	public static boolean modifyFileInfo(JFile f){
+		boolean isDone = true;
+		Session session = null;
+
+		try {
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			
+			FileDAO.modify(f, session);
 			
 			session.getTransaction().commit();
 

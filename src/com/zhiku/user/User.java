@@ -121,7 +121,7 @@ public class User {
 	 * @return是否修改成成功
 	 */
 	public boolean modify(){
-		return Transaction.modifyUserinfo(this);
+		return Transaction.modifyUserInfo(this);
 	}
 	
 	/**
