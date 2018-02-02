@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.zhiku.DB.Transaction;
+
 @Entity
 @Table(name = "zhiku.file_info")
 public class JFile {	//为了不和java.io.File混淆，使用JFile
@@ -61,6 +63,7 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public static final int TYPE_DOC = 0;
 	public static final int TYPE_XSL = 1;
 	public static final int TYPE_PPT = 2;
+	public static final int TYPE_PDF = 3;
 	
 	private static FileDAO dao = new FileDAO();
 	
@@ -71,7 +74,7 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	 * @return 是否保存成功
 	 */
 	public boolean save(){
-		return dao.save(this);
+		return Transaction.saveFile(this);
 	}
 	
 	/**

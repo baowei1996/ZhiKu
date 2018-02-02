@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.swing.ImageIcon;
 
+import com.zhiku.DB.Transaction;
+
 
 
 
@@ -119,7 +121,7 @@ public class User {
 	 * @return是否修改成成功
 	 */
 	public boolean modify(){
-		return dao.modify(this);
+		return Transaction.modifyUserinfo(this);
 	}
 	
 	/**

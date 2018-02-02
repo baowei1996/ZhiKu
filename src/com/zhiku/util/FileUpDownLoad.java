@@ -36,11 +36,10 @@ public class FileUpDownLoad {
 	 */
 	public Data upload( HttpServlet servlet ,HttpServletRequest request){
 		//得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-	     String savePath = servlet.getServletContext().getRealPath("/zhiku/upload");
+	     String savePath = servlet.getServletContext().getRealPath("/WEB-INF/upload");
 	     //上传时生成的临时文件保存目录
-	     String tempPath = servlet.getServletContext().getRealPath("/zhiku/temp");
-		System.out.println(savePath);
-		System.out.println(tempPath);
+	     String tempPath = servlet.getServletContext().getRealPath("/WEB-INF/temp");
+		
 	     File tmpFile = new File(tempPath);
 	     if (!tmpFile.exists()) {
 	      //创建临时目录
@@ -115,7 +114,7 @@ public class FileUpDownLoad {
 	    	   //得到文件的保存目录
 	    	   String realSavePath = makePath(saveFilename, savePath);
 	    	   //创建一个文件输出流
-	    	   FileOutputStream out = new FileOutputStream(realSavePath + "\\" + saveFilename);
+	    	   FileOutputStream out = new FileOutputStream(realSavePath + File.separator + saveFilename);
 	    	   //创建一个缓冲区
 	    	   byte buffer[] = new byte[1024];
 	    	   //判断输入流中的数据是否已经读完的标识        
@@ -184,7 +183,7 @@ public class FileUpDownLoad {
 	   int dir1 = hashcode&0xf; //0--15
 	   int dir2 = (hashcode&0xf0)>>4; //0-15
 	   //构造新的保存目录
-	   String dir = savePath + "\\" + dir1 + "\\" + dir2; //upload\2\3 upload\3\5
+	   String dir = savePath + File.separator + dir1 + File.separator + dir2; //upload\2\3 upload\3\5
 	   //File既可以代表文件也可以代表目录  
 	   File file = new File(dir);
 	  //如果目录不存在

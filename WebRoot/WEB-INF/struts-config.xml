@@ -18,7 +18,7 @@
       path="/mailcheck"
       type="com.zhiku.struts.action.MailCheckAction"
       cancellable="true" >
-       <forward name="success" path = "/index.jsp"/>
+       <forward name="success" path = "/index.html"/>
      </action>
     <action
       path="/upload"

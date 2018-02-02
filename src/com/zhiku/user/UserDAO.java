@@ -162,24 +162,8 @@ public class UserDAO {
 	 *            修改后的用户对象
 	 * @return 是否修改成功
 	 */
-	public boolean modify(User u) {
-		boolean modified = true;
-		Session session = null;
-
-		try {
-			session = HibernateSessionFactory.getSession();
-			session.beginTransaction();
-			session.update(u);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			modified = false;
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			HibernateSessionFactory.closeSession();
-		}
-
-		return modified;
+	public static void modify(User u,Session session) {
+		session.update(u);
 	}
 
 	/**

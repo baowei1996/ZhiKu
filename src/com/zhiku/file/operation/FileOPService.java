@@ -11,26 +11,8 @@ public class FileOPService {
 	
 	public static final int PAGE_SIZE = 5;
 	
-	public static boolean save(FileOP fp){
-		boolean isDone = true;
-		Session session = null;
-		
-		try{
-			session = HibernateSessionFactory.getSession();
-			session.beginTransaction();
-			
-			session.persist(fp);
-			
-			session.getTransaction().commit();
-		}catch(Exception e){
-			isDone = false;
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		}finally{
-			HibernateSessionFactory.closeSession();
-		}
-		
-		return isDone;
+	public static void save(FileOP fp,Session session){
+		session.persist(fp);
 	}
 	
 	@SuppressWarnings("unchecked")

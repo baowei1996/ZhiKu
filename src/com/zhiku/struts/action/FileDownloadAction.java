@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.zhiku.DB.Transaction;
 import com.zhiku.file.JFile;
 import com.zhiku.file.operation.FileOP;
 import com.zhiku.file.operation.FileOPService;
@@ -81,7 +82,7 @@ public class FileDownloadAction extends Action {
 			fp.setOptime(new Date());
 			String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
 			fp.setOpip(opip);
-			FileOPService.save(fp);
+			Transaction.saveFileOP(fp);
 			//设置返回信息
 			out = response.getWriter();
 			rmsg.setStatus(200);
