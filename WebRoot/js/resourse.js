@@ -43,7 +43,10 @@ window.onload = function () {
     var param = url.substring(i+1,i+2);
     console.log(param);
     switchSourse(param);
-    getCollegeList();
+    if(url.substr(-19)!='searchResourse.html'){
+        getCollegeList();
+        
+    }
 }
 
 function getCollegeList() {
@@ -63,42 +66,48 @@ function getCollegeList() {
 }
 var keyData ;//存放搜索框数据
 var docList ;//存放搜索到的文档列表
-
+var keycname ;
 
 var user = new AjaxHandler();
-document.getElementById('dropdownMenu5').oninput= function(){
-    var key = document.getElementById('dropdownMenu5').value;
-    user.courseSearch(key,function(data,state){
-        if(data.status == 200){
-            var innerList ='';
-            keyData = data.data;
-            // console.log(keyData);
-            
-            data.data.map((item,index)=>{
+if(document.getElementById('dropdownMenu5')){
+    document.getElementById('dropdownMenu5').oninput= function(){
+        var key = document.getElementById('dropdownMenu5').value;
+        user.courseSearch(key,function(data,state){
+            if(data.status == 200){
+                var innerList ='';
+                keyData = data.data;
+                // console.log(keyData);
                 
-                innerList +=`<li><a href="javascript:void(0)" class="topOption" onclick='searchAll(1,${item.cid})'>${item.cname}</a></li>`
-            })
-            document.getElementById('dropdown5').innerHTML = innerList;
-        
-        }else if(data.status == 300){
-            new Toast().showMsg("没有该课程",1000);
+                data.data.map((item,index)=>{
+                    
+                    innerList +=`<li><a href="javascript:void(0)" class="topOption" onclick='searchAll(1,${item.cid},"${item.cname}")'>${item.cname}</a></li>`
+                })
+                document.getElementById('dropdown5').innerHTML = innerList;
+            
+            }else if(data.status == 300){
+                new Toast().showMsg("没有该课程",1000);
+            }
+        },function(data,state){
+            new Toast().showMsg("网络连接异常",1000);
+        })
+    }
+    document.getElementById('searchBtn').onclick = function(){
+        if(document.getElementById('dropdownMenu5').value.trim()==''){
+            new Toast().showMsg("请输入课程",1000);
+        }else{
+            searchAll(1);        
         }
-    },function(data,state){
-        new Toast().showMsg("网络连接异常",1000);
-    })
-}
-document.getElementById('searchBtn').onclick = function(){
-    if(document.getElementById('dropdownMenu5').value.trim()==''){
-        new Toast().showMsg("请输入课程",1000);
-    }else{
-        searchAll(1);        
     }
 }
 
-function searchAll(meth,cid){
+
+
+function searchAll(meth,cid,kcnm){
     console.log(meth);
     if(meth==1){
-        document.getElementById('dropdownMenu5').text= document.getElementById('dropdownMenu5').value
+        console.log(kcnm)
+        document.getElementById('dropdownMenu5').value= kcnm
+        console.log(document.getElementById('dropdownMenu5').value);
     }
     if(cid==undefined){
         for(var i =0;i<keyData.length;i++){
@@ -174,14 +183,14 @@ function showList(){
         list +=`<div class="panel panel-default mt leftblue">
 
             <div class="panel-body">
-                <div class="row firstLine">
-                    <div class="col-xs-4 bluefont">${item.fileinfo.name}</div>
-                    <div class="col-xs-5 small date">${item.upperinfo.nickname} 上传于 ${item.fileinfo.uptime}</div>
-                    <div class="col-xs-3">课件</div>
+                <div class=" firstLine">
+                    <div class="col-xs-12 col-ms-4 bluefont">${item.fileinfo.name}</div>
+                    <div class="col-xs-12 col-ms-5 small date">${item.upperinfo.nickname} 上传于 ${item.fileinfo.uptime}</div>
+                    <div class="col-xs-12 col-ms-3">课件</div>
                 </div>
-                <div class="row firstLine">
+                <div class=" firstLine">
                     <div class="col-xs-9 date small">${item.fileinfo.desc}</div>
-                    <button type="button" onclick='downloadfile(${item.fid})' class="btn btn-success col-xs-1">下载 </button>
+                    <button type="button" onclick='downloadfile(${item.fid})' class="btn btn-success">下载 </button>
                 </div>
             </div>
         </div>`

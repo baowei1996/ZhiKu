@@ -8,13 +8,16 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.zhiku.DB.Transaction;
 import com.zhiku.file.JFile;
+import com.zhiku.user.User;
 import com.zhiku.util.RMessage;
 
 /** 
@@ -23,6 +26,8 @@ import com.zhiku.util.RMessage;
  * 
  * XDoclet definition:
  * @struts.action validate="true"
+ * @author Bao Wei
+ * 处理文件的删除请求，删除前应该检查登录状态
  */
 public class DeleteFileAction extends Action {
 	/*
@@ -47,29 +52,48 @@ public class DeleteFileAction extends Action {
 		try{
 			out = response.getWriter();
 			
+			//获取用户的session，判断用户的登录状态
+			HttpSession session = request.getSession();
+			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			User u = User.findByUid(uid);
+			
+			if (uid == -1 && u == null){
+				rmsg.setStatus(300);
+				rmsg.setMessage("请先登录!");
+				out.write(RMessage.getJson(rmsg));;
+				return null;
+			}
+			
 			String url = request.getRequestURL().toString();
 			//根据URL获取fid
 			int fid = Integer.parseInt(url.substring(url.lastIndexOf("/")+1, url.lastIndexOf(".")));
 			//根据fid找到文件
 			JFile f = JFile.findByFid(fid);
 			
-			if(f != null){
-				f.setStatus(JFile.LOCKED);
-				if(f.modify()){
-					rmsg.setStatus(200);
-					rmsg.setMessage("OK");
+			if(f != null){	//文件存在
+				if(f.getUpuid() == u.getUid()){	//文件是该用户上传
+					if(Transaction.deleteFile(f, u)){	//删除操作完成
+						rmsg.setStatus(200);
+						rmsg.setMessage("OK");
+					}else{
+						rmsg.setStatus(300);
+						rmsg.setMessage("发生了一个意料之外的错误!");
+					}
+				}else{
+					rmsg.setStatus(300);
+					rmsg.setMessage("你没有权限,需要帮助请联系管理员!");
 				}
 			}else{
 				rmsg.setStatus(300);
-				rmsg.setMessage("file not exist!");
+				rmsg.setMessage("文件不存在!");
 			}
 			
 			out.write(RMessage.getJson(rmsg));
 			
 		}catch(NumberFormatException nfe){
 			rmsg.setStatus(300);
-			rmsg.setMessage("Wrong file");
-			RMessage.getJson(rmsg);
+			rmsg.setMessage("文件出错!");
+			out.write(RMessage.getJson(rmsg));;
 			nfe.printStackTrace();
 		}
 		catch(Exception e){

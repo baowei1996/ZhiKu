@@ -72,34 +72,56 @@ var username=$.cookie('username');
 
 document.getElementById('saveInfo').onclick=function () {
 
-        var nickname='default';
+        var nickname=document.getElementsByTagName('input')[0].value;
         var newpwd='';
-        var avator='default';
-        var qq='default';
-        var xid='default';
-        var mid='default';
-        var email=document.getElementsByTagName('input')[0].value;
-        var phoneNumber=document.getElementsByTagName('input')[1].value;
-        var oldpwd=document.getElementsByTagName('input')[2].value;
+        var avator='';
+        var qq=document.getElementsByTagName('input')[3].value;
+        var xid='';
+        var mid='';
+        var email=document.getElementsByTagName('input')[1].value;
+        var phoneNumber=document.getElementsByTagName('input')[2].value;
+        var oldpwd=document.getElementsByTagName('input')[4].value;
 
 
         var user =new AjaxHandler();
-
-        user.modifyUserInfo(username,{nickname,oldpwd,newpwd,avator,email,phoneNumber,qq,xid,mid},function (data,state) {
-
-            console.log(data);
-            if(data.status==200){
-                new Toast().showMsg('修改信息成功',1000);
-            }else if(data.status==300){
-                new Toast().showMsg('密码输出错误',1000);
-            }
-
-        },function (data,state) {
-            new Toast().showMsg('网络连接异常',1000);
-
-        })
+        if(oldpwd.toString().trim!=''){
+            user.modifyUserInfo(username,{nickname,oldpwd,newpwd,avator,email,phoneNumber,qq,xid,mid},function (data,state) {
+                
+                            console.log(data);
+                            if(data.status==200){
+                                new Toast().showMsg('修改信息成功',1000);
+                            }else if(data.status==300){
+                                new Toast().showMsg('密码输出错误',1000);
+                            }
+                
+                        },function (data,state) {
+                            new Toast().showMsg('网络连接异常',1000);
+                
+                        })
+        }else{
+            new Toast().showMsg('请输入密码再修改信息',1000);
+        }
+        
 }
 
+function getInfo (){
+    var user = new AjaxHandler();
+    user.getUserInfo(username,function(data){
+        if(data.status==200){
+            var info = data.data;
+            document.getElementsByTagName('input')[0].placeholder = info.nickname;
+            document.getElementsByTagName('input')[1].placeholder = info.mail;
+            document.getElementsByTagName('input')[2].placeholder = info.phone;
+            document.getElementsByTagName('input')[3].placeholder = info.qq;
+
+        }else if(data.status==300){
+            new Toast().showMsg('获取个人信息失败',1000);
+        }
+    },function(data){
+        new Toast().showMsg('网络连接异常',1000);
+    })
+}
+getInfo();
 function getUpLoadList() {
     var upload=new AjaxHandler();
 
@@ -112,30 +134,16 @@ function getUpLoadList() {
             uploadDIv++;
             upContent+=`<div class="panel panel-default mt leftblue">
                                         <div class="panel-body">
-                                            <div class="row firstLine">
-                                                <div class="col-xs-4 bluefont">${data.data[i].fileinfo.course}</div>
-                                                <div class="col-xs-5 small date">${data.data[i].upuid} 上传于 ${data.data[i].fileinfo.uptime}</div>
-                                                <div class="col-xs-3">课件${data.data[i].fid}</div>
+                                            <div class=" firstLine">
+                                                <div class="col-xs-12 col-ms-4 bluefont">${data.data[i].fileinfo.course}</div>
+                                                <div class="col-xs-12 col-ms-5 small date">${data.data[i].upuid} 上传于 ${data.data[i].fileinfo.uptime}</div>
+                                                <div class="col-xs-12 col-ms-3">课件${data.data[i].fid}</div>
                                             </div>
-                                            <div class="row firstLine">
+                                            <div class=" firstLine">
                                                 <div class="col-xs-9 date small">${data.data[i].fileinfo.name}</div>
-                                                <button type="button" onclick="deleteDoc(this)" class="btn btn-danger col-xs-1">删除 </button>
+                                                <button type="button" onclick="deleteDoc(this)" class="btn btn-danger ">删除 </button>
                                             </div>
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">教师：吴彦祖</div>
-                                            </div>
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">下载量：999</div>
-                                            </div>
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">需要积分：999</div>
-                                            </div>
-                            
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">
-                                                    0 0
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div>`
         }
@@ -156,30 +164,16 @@ function getDownLoadList() {
         for(var i=0;i<data.data.length;i++){
             downContent+=`<div class="panel panel-default mt leftblue">
                                         <div class="panel-body">
-                                            <div class="row firstLine">
-                                                <div class="col-xs-4 bluefont">${data.data[i].fileinfo.name}</div>
-                                                <div class="col-xs-5 small date">${data.data[i].upuid} 上传于 ${data.data[i].fileinfo.uptime}</div>
-                                                <div class="col-xs-3">课件</div>
+                                            <div class=" firstLine">
+                                                <div class="col-xs-12 col-ms-4 bluefont">${data.data[i].fileinfo.name}</div>
+                                                <div class="col-xs-12 col-ms-5 small date">${data.data[i].upuid} 上传于 ${data.data[i].fileinfo.uptime}</div>
+                                                <div class="col-xs-12 col-ms-3">课件</div>
                                             </div>
-                                            <div class="row firstLine">
+                                            <div class=" firstLine">
                                                 <div class="col-xs-9 date small">${data.data[i].fileinfo.course}</div>
-                                                <button type="button" onclick='downloadfile(${data.data[i].fid})' class="btn btn-success col-xs-1">下载 </button>
+                                                <button type="button" onclick='downloadfile(${data.data[i].fid})' class="btn btn-success">下载 </button>
                                             </div>
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">教师：吴彦祖</div>
-                                            </div>
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">下载量：999</div>
-                                            </div>
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">需要积分：999</div>
-                                            </div>
-                            
-                                            <div class="row blackline">
-                                                <div class="col-xs-12">
-                                                    0 0
-                                                </div>
-                                            </div>
+                                          
                                         </div>
                                     </div>`
         }
@@ -213,6 +207,8 @@ for(var i=0;i<option.length;i++){
                     document.getElementById("download").style.display="none";
                     upContent='';
                     downContent='';
+                    uploadPage=1;
+                    downloadPage=1;
                     getUpLoadList();
 
 
@@ -225,6 +221,8 @@ for(var i=0;i<option.length;i++){
                     document.getElementById("download").style.display="block";
                     upContent='';
                     downContent='';
+                    uploadPage=1;
+                    downloadPage=1;
                     getDownLoadList();
 
                     break;
@@ -243,7 +241,8 @@ function deleteDoc(e) {
         console.log(data)
         if(data.status==200){
             new Toast().showMsg('删除成功',1000);
-            e.innerText='已删除'
+            e.innerText='已删除';
+
         }else if(data.status==300){
             new Toast().showMsg('文件不存在或已删除',1000)
         }

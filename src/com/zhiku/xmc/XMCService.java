@@ -44,7 +44,7 @@ public class XMCService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from College";
+			String sql = "from College where xid <> 0";
 			colleges = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();

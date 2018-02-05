@@ -68,13 +68,7 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	
 	public JFile(){	}
 	
-	/**
-	 * 将自身保存到数据库中
-	 * @return 是否保存成功
-	 */
-	public boolean save(){
-		return Transaction.saveFile(this);
-	}
+	
 	
 	/**
 	 * 依据文件编号找到对应文件
@@ -90,13 +84,15 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	}
 	
 	/**
-	 * 删除指定文件编号的文件
+	 * 删除指定文件编号的文件,彻底删除
 	 * @param fid 文件编号
 	 * @return 是否删除成功
 	 */
-	public static boolean delete(int fid){
+	public static boolean C_delete(int fid){
 		return FileDAO.delete(fid);
 	}
+	
+	
 	
 	/**
 	 *修改文件信息并提交 

@@ -12,11 +12,18 @@ import com.zhiku.hibernate.HibernateSessionFactory;
 import com.zhiku.user.User;
 import com.zhiku.user.UserDAO;
 
+
+/**
+ * 用于处理一些涉及回滚的事务
+ * @author Bao Wei
+ *
+ */
 public class Transaction {
 	/**
 	 * 文件上传信息的事务
 	 * @param file 上传文件的相关信息
 	 * @param user 上传用户的相关信息
+	 * @param opip 上传用户的ip地址
 	 * @return 事务处理成功则返回true
 	 */
 	public static boolean saveUploadInfo(JFile file,User user,String opip){
@@ -56,6 +63,9 @@ public class Transaction {
 	
 	/**
 	 * 文件下载的事务
+	 * @param f 下载文件
+	 * @param u 下载用户
+	 * @param opip 下载操作的ip地址
 	 * @return	如果事务处理成功返回true
 	 */
 	public static boolean saveDownloadInfo(JFile f, User u, String opip){
@@ -94,7 +104,11 @@ public class Transaction {
 		return isDone;
 	}
 	
-	
+	/**
+	 * 用户信息修改的事务
+	 * @param u 被修改用户
+	 * @return 修改成功返回true
+	 */
 	public static boolean modifyUserInfo(User u){
 		boolean isDone = true;
 		Session session = null;
@@ -119,6 +133,12 @@ public class Transaction {
 		return isDone;
 	}
 	
+	
+	/**
+	 * 修改文件的事务，主要是用来修改文件的状态
+	 * @param f	被修改文件
+	 * @return 修改成功返回true
+	 */
 	public static boolean modifyFileInfo(JFile f){
 		boolean isDone = true;
 		Session session = null;
@@ -143,7 +163,8 @@ public class Transaction {
 		return isDone;
 	}
 	
-	public static boolean saveFile(JFile f){
+	
+	public static boolean deleteFile(JFile f, User u){
 		boolean isDone = true;
 		Session session = null;
 
@@ -151,7 +172,10 @@ public class Transaction {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			FileDAO.save(f, session);
+			f.setStatus(JFile.LOCKED);
+			u.setUpcnt(u.getUpcnt() -1);
+			FileDAO.modify(f, session);
+			UserDAO.modify(u, session);
 			
 			session.getTransaction().commit();
 
@@ -166,28 +190,5 @@ public class Transaction {
 		
 		return isDone;
 	}
-
-	public static boolean saveFileOP(FileOP fp){
-		boolean isDone = true;
-		Session session = null;
-
-		try {
-			session = HibernateSessionFactory.getSession();
-			session.beginTransaction();
-			
-			FileOPService.save(fp, session);
-			
-			session.getTransaction().commit();
-
-		} catch (Exception e) {
-			isDone = false;
-			session.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			HibernateSessionFactory.closeSession();
-		}
-		
-		
-		return isDone;
-	}
+	
 }

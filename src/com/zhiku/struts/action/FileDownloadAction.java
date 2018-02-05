@@ -74,7 +74,7 @@ public class FileDownloadAction extends Action {
 			}
 			//根据fid找到对应文件的信息
 			JFile f = JFile.findByFid(fid);
-			if(fid == -1 || f == null){
+			if(fid == -1 || f == null || f.getStatus() != JFile.NORMAL){
 				rmsg.setStatus(300);
 				rmsg.setMessage("无法找到对应文件!");
 				response.setContentType("application/json;charset=utf-8");

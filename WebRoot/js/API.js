@@ -1,6 +1,6 @@
 
 
-var baseUrl = 'http://localhost:8080/JPidea';
+var baseUrl = 'http://719daze.me:8080/JPidea';
 var API = {
 
     //common
@@ -24,4 +24,5 @@ var API = {
     getDownloadList:`${baseUrl}/getdld.do`,
     getUploadList:`${baseUrl}/getupld.do`,
     deleteDocument:`${baseUrl}/del/{fid}`,
+    gerUserInfo:`${baseUrl}/userinfo/{fid}`
 }
