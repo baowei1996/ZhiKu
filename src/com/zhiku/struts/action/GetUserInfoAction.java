@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -48,14 +49,25 @@ public class GetUserInfoAction extends Action {
 		try{
 			out = response.getWriter();
 			
+			//获取用户的session，判断用户的登录状态
+			HttpSession session = request.getSession();
+			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			
+			if (uid == -1){
+				rmsg.setStatus(300);
+				rmsg.setMessage("请先登录!");
+				out.write(RMessage.getJson(rmsg));;
+				return null;
+			}
+			
 			//根据URL获取username
 			String url = request.getRequestURL().toString();
 			String username = url.substring(url.lastIndexOf("/")+1, url.lastIndexOf("."));
 			UserView uv = UserView.getUserInfo(username);
 			//如果用户不存在
-			if(uv == null){
+			if(uv == null || uv.getUid() != uid){
 				rmsg.setStatus(300);
-				rmsg.setMessage("用户不存在！");
+				rmsg.setMessage("用户不存在!");
 				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
@@ -72,7 +84,7 @@ public class GetUserInfoAction extends Action {
 			data.put("phone", uv.getPhone());
 			data.put("qq", uv.getQq());
 			data.put("xname", uv.getXname());
-			data.put("mnam", uv.getMname());
+			data.put("mname", uv.getMname());
 			data.put("auth", uv.getAuth());
 			data.put("status", uv.getStatus());
 			data.put("uploadcount", uv.getUpcnt());

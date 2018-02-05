@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
@@ -48,15 +49,27 @@ public class UserInfoModifyAction extends Action {
 		try{
 			out = response.getWriter();
 			
+			//获取用户的session，判断用户的登录状态
+			HttpSession session = request.getSession();
+			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			
+			if (uid == -1){
+				rmsg.setStatus(300);
+				rmsg.setMessage("请先登录!");
+				out.write(RMessage.getJson(rmsg));;
+				return null;
+			}
+			
 			String url = request.getRequestURL().toString();
 			//根据URL获取username
 			String username = url.substring(url.lastIndexOf("/")+1, url.lastIndexOf("."));
 			//根据username找到当前用户的信息
 			User u = User.findByUsr(username);
-			if(u == null){
+			if(u == null || u.getUid() != uid){
 				rmsg.setStatus(300);
 				rmsg.setMessage("no such user!");
 				out.write(RMessage.getJson(rmsg));
+				return null;
 			}
 			
 			//获取前端的信息
@@ -84,12 +97,19 @@ public class UserInfoModifyAction extends Action {
 					u.setNick(nickname);
 				}
 				if(newpwd != null){
-					u.setPwd(DigestUtils.md5Hex(newpwd));
+					if(newpwd.length()>5 && newpwd.length() <19){
+						u.setPwd(DigestUtils.md5Hex(newpwd));
+					}else{
+						rmsg.setStatus(300);
+						rmsg.setMessage("密码长度要求6到18位!");
+						out.write(RMessage.getJson(rmsg));
+						return null;
+					}
 				}
 //				if(avator != null){
 //				u.setAvator(avator);
 //				}
-				if(phone !=  null && phone.matches("\\d+")){
+				if(phone !=  null && phone.matches("\\d{11}")){
 					u.setPhone(phone);
 				}
 				if(qq != null && qq.matches("\\d+")){
@@ -105,21 +125,16 @@ public class UserInfoModifyAction extends Action {
 					rmsg.setMessage("OK");
 				}else{
 					rmsg.setStatus(300);
-					rmsg.setMessage("Fail,some information wrong ,please try again!");
+					rmsg.setMessage("发生了一个意料之外的错误，请重试!");
 				}
 				
 			}else{
 				rmsg.setStatus(300);
-				rmsg.setMessage("Wrong password");
+				rmsg.setMessage("用户密码不正确!");
 			}
 			
 			out.write(RMessage.getJson(rmsg));
 			
-//		}catch(NumberFormatException ne){
-//			//如果uid出现问题，则捕获这个异常
-//			rmsg.setStatus(300);
-//			rmsg.setMessage("Wrong uid");
-//			out.write(RMessage.getJson(rmsg));
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

@@ -66,8 +66,12 @@ public class Transaction {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
+			//文件下载量加一
 			f.setDncnt(f.getDncnt() + 1);
 			FileDAO.modify(f,session);
+			//用户下载量加一
+			u.setDncnt(u.getDncnt() + 1);
+			UserDAO.modify(u, session);
 			//记录下载操作
 			FileOP fp = new FileOP();
 			fp.setFid(f.getFid());

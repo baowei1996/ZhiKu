@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -56,13 +57,26 @@ public class GetUploadAction extends Action {
 		try{
 			out = response.getWriter();
 			
+			//获取用户的session，判断用户的登录状态
+			HttpSession session = request.getSession();
+			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			
+			if (uid == -1){
+				rmsg.setStatus(300);
+				rmsg.setMessage("请先登录!");
+				out.write(RMessage.getJson(rmsg));;
+				return null;
+			}
+			
 			String username = request.getParameter("username");
 			User u = User.findByUsr(username);
-			if(u == null){
+			if(u == null || u.getUid() != uid){
 				rmsg.setStatus(300);
-				rmsg.setMessage("no such user!");
+				rmsg.setMessage("用户不存在!");
 				out.write(RMessage.getJson(rmsg));
+				return null;
 			}
+			
 			int page ;
 			try{
 				page = Integer.parseInt(request.getParameter("page"));
@@ -73,38 +87,40 @@ public class GetUploadAction extends Action {
 			
 			List<FileOPView> opList = FileOPService.getOperation(u.getUid(), page, FileOP.UPLOAD);
 			
-			//设置返回的data信息
-			List<Data> data = new ArrayList<Data>();
-			FileView f = null;
-			Data d = null;
-			for(FileOPView op : opList){
-				f = FileView.findByFid(op.getFid());
-				d = new Data();
-				d.put("fid", f.getFid());
-				d.put("upuid", f.getUid());
-				
-				Data fileinfo = new Data();
-				fileinfo.put("name", f.getName());
-				fileinfo.put("module", f.getModule());
-				fileinfo.put("course", f.getCname());
-				fileinfo.put("docformat", f.getDocformat());
-				fileinfo.put("origin", f.getOrigin());
-				fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
-				fileinfo.put("desc", f.getDescs());
-				d.put("fileinfo", fileinfo);
-				
-				Data upperinfo = new Data();
-				upperinfo.put("nickname", f.getNick());
-				upperinfo.put("xname", f.getXname());
-				upperinfo.put("mname", f.getMname());
-				d.put("upperinfo", upperinfo);
-				
-				data.add(d);
+			if (opList != null){
+				//设置返回的data信息
+				List<Data> data = new ArrayList<Data>();
+				FileView f = null;
+				Data d = null;
+				for(FileOPView op : opList){
+					f = FileView.findByFid(op.getFid());
+					d = new Data();
+					d.put("fid", f.getFid());
+					d.put("upuid", f.getUid());
+					
+					Data fileinfo = new Data();
+					fileinfo.put("name", f.getName());
+					fileinfo.put("module", f.getModule());
+					fileinfo.put("course", f.getCname());
+					fileinfo.put("docformat", f.getDocformat());
+					fileinfo.put("origin", f.getOrigin());
+					fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
+					fileinfo.put("desc", f.getDescs());
+					d.put("fileinfo", fileinfo);
+					
+					Data upperinfo = new Data();
+					upperinfo.put("nickname", f.getNick());
+					upperinfo.put("xname", f.getXname());
+					upperinfo.put("mname", f.getMname());
+					d.put("upperinfo", upperinfo);
+					
+					data.add(d);
+				}
+				rmsg.setData(data);
 			}
 			
 			rmsg.setStatus(200);
 			rmsg.setMessage("OK");
-			rmsg.setData(data);
 			out.write(RMessage.getJson(rmsg));
 		}catch(Exception e){
 			rmsg.setStatus(300);
