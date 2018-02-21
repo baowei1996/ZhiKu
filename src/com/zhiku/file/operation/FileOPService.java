@@ -29,7 +29,7 @@ public class FileOPService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from FileOPView where file_status = 1 and uid = " + uid + " and type = " + type + " order by fid";
+			String sql = "from FileOPView where file_status = 1 and uid = " + uid + " and type = " + type + " order by optime desc";
 			Query q = session.createQuery(sql);
 			q.setFirstResult((page-1)*PAGE_SIZE);
 			q.setMaxResults(PAGE_SIZE);

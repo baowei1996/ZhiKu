@@ -153,7 +153,7 @@ public class FileDAO {
 		try{
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
-			String sql = "from FileView where status = 1 and cid = " + cid + " order by fid";
+			String sql = "from FileView where status = 1 and cid = " + cid + " order by fid desc";
 			Query q = session.createQuery(sql);
 			q.setFirstResult((page-1)*PAGE_SIZE);	//偏移量
 			q.setMaxResults(PAGE_SIZE);		//每页最大值
