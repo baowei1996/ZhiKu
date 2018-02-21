@@ -47,7 +47,7 @@ public class FileDAO {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from JFile where sha = \'" + sha + "\'";
+			String sql = "from JFile where sha = \'" + sha + "\' and status = " + JFile.NORMAL;
 			f = (JFile)session.createQuery(sql).uniqueResult();
 			
 		}catch(Exception e){
@@ -207,7 +207,7 @@ public class FileDAO {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			String sql = "from FileView where status = 1 and cid in" + cids.toString().replace('[', '(').replace(']', ')') + " order by fid";
+			String sql = "from FileView where status = 1 and cid in" + cids.toString().replace('[', '(').replace(']', ')') + " order by fid desc";
 			Query q = session.createQuery(sql);
 			q.setFirstResult((page-1)*PAGE_SIZE);
 			q.setMaxResults(PAGE_SIZE);
@@ -237,7 +237,7 @@ public class FileDAO {
 		try {
 			session = HibernateSessionFactory.getSession();
 			String sql = "select count(*) from  JFile where " + col + " = \'"
-					+ value + "\'";
+					+ value + "\' and status = " + JFile.NORMAL;
 			Query q = session.createQuery(sql);
 			long result = (Long) q.uniqueResult();
 			if (result != 0) {

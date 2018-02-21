@@ -106,6 +106,7 @@ public class GetUploadAction extends Action {
 					fileinfo.put("origin", f.getOrigin());
 					fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
 					fileinfo.put("desc", f.getDescs());
+					fileinfo.put("dncnt", f.getDncnt());
 					d.put("fileinfo", fileinfo);
 					
 					Data upperinfo = new Data();
