@@ -85,18 +85,28 @@ public class FileDownloadAction extends Action {
 			}
 			
 			FileUpDownLoad filedownload = new FileUpDownLoad();
-			filedownload.download(this.getServlet(), request, response, f);
+			boolean ex = filedownload.download(this.getServlet(), request, response, f);
+			
 
+			
 			//设置返回信息
 			response.setContentType("application/json;charset=utf-8");
 			response.setHeader("pragme", "no-cache");
-			String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
-			if(Transaction.saveDownloadInfo(f, u, opip)){
-				rmsg.setStatus(200);
-				rmsg.setMessage("OK");
-			}else{
+			
+			//文件不存在信息提示
+			if(!ex){
+				JFile.C_delete(fid);
 				rmsg.setStatus(300);
-				rmsg.setMessage("发生一个预期以外的错误，请重试!");
+				rmsg.setMessage("文件不存在！");
+			}else{
+				String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
+				if(Transaction.saveDownloadInfo(f, u, opip)){
+					rmsg.setStatus(200);
+					rmsg.setMessage("OK");
+				}else{
+					rmsg.setStatus(300);
+					rmsg.setMessage("发生一个预期以外的错误，请重试!");
+				}
 			}
 			out = response.getWriter();
 			out.write(RMessage.getJson(rmsg));

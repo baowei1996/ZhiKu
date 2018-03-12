@@ -194,7 +194,7 @@ public class FileUpDownLoad {
 	   return dir;
 	}
 	
-	public void download(HttpServlet servlet , HttpServletRequest request,HttpServletResponse response ,JFile f)
+	public boolean download(HttpServlet servlet , HttpServletRequest request,HttpServletResponse response ,JFile f)
 			throws  IOException{
 		String path = f.getPath();
 		
@@ -202,8 +202,8 @@ public class FileUpDownLoad {
 		File file = new File(path);
 		//如果文件不存在
 		if(!file.exists()){
-			request.setAttribute("message", "您要下载的资源已被删除！！");
-			return;
+			request.setAttribute("Rmessage", "false");
+			return false;
 		}
 		//处理文件名
 		String realname = f.getName();
@@ -226,6 +226,9 @@ public class FileUpDownLoad {
 		//关闭输出流
 		out.flush();
 		out.close();
+		
+		request.setAttribute("Rmessage", "true");
+		return true;
 	}
 
 }

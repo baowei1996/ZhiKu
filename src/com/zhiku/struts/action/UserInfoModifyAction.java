@@ -56,7 +56,7 @@ public class UserInfoModifyAction extends Action {
 			if (uid == -1){
 				rmsg.setStatus(300);
 				rmsg.setMessage("请先登录!");
-				out.write(RMessage.getJson(rmsg));;
+				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
 			
@@ -76,11 +76,11 @@ public class UserInfoModifyAction extends Action {
 			String oldpwd = request.getParameter("oldpwd");
 			if(u.getPwd().equals(DigestUtils.md5Hex(oldpwd))){	//如果密码验证正确，继续信息修改的操作
 				//获取剩下的信息
-				String nickname = request.getParameter("nickname");
+				String nickname = request.getParameter("nickname") == null?"":request.getParameter("nickname");
 				String newpwd = request.getParameter("newpwd") == null?oldpwd:request.getParameter("newpwd");
 //				String avator = request.getParameter("avator");
-				String phone = request.getParameter("phone");
-				String qq = request.getParameter("qq");
+				String phone = request.getParameter("phone") == null?"":request.getParameter("phone");
+				String qq = request.getParameter("qq") == null?"":request.getParameter("qq");
 				int xid;
 				int mid;
 				try {
@@ -93,7 +93,7 @@ public class UserInfoModifyAction extends Action {
 				}
 				
 				//设置这些信息
-				if(nickname != null){
+				if(!("".equals(nickname))){
 					u.setNick(nickname);
 				}
 				if(newpwd != null){

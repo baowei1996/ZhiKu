@@ -72,8 +72,8 @@ public class FileDAO {
 		try{
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
-			JFile f = (JFile)session.get(JFile.class, fid);
-			session.delete(f);
+			String sql = "delete from JFile where fid = \'" + fid + "\'";
+			session.createQuery(sql).executeUpdate();
 			session.getTransaction().commit();
 			
 		}catch(Exception e){
