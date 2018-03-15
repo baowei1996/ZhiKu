@@ -138,7 +138,7 @@ public class FileUpDownLoad {
 	    	   
 	    	   data.put("filename", filename);
 	    	   data.put("fileExtName",fileExtName);
-	    	   data.put("savePath", realSavePath + "\\" + saveFilename);
+	    	   data.put("savePath", realSavePath + File.separator + saveFilename);
 	    	   data.put("sha256",sha256);
 	    	   if(JFile.isExist("sha", sha256)){
 	    		   result = FAIL;
