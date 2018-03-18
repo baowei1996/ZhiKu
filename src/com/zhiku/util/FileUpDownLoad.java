@@ -142,7 +142,7 @@ public class FileUpDownLoad {
 	    	   data.put("sha256",sha256);
 	    	   if(JFile.isExist("sha", sha256)){
 	    		   result = FAIL;
-	    		   data.put("message", "file is exist");
+	    		   data.put("message", "文件已存在!");
 	    	   }else{
 	    		   data.put("message", "OK");
 	    	   }
@@ -210,6 +210,7 @@ public class FileUpDownLoad {
 		//处理文件名
 		String realname = f.getName();
 		//设置响应头，控制浏览器下载该文件
+		response.setContentType("application/x-download");
 		response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(realname, "UTF-8"));
 		//读取要下载的文件，保存到文件输入流
 		FileInputStream in = new FileInputStream(path);

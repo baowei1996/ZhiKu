@@ -62,7 +62,7 @@ public class MajorSearchAction extends Action {
 			
 			if(!XMCService.isExist("College", "xid", xid)){	//如果不存在则返回非法学院
 				rmsg.setStatus(300);
-				rmsg.setMessage("Invalid college!");
+				rmsg.setMessage("无效学院!");
 				out.write(RMessage.getJson(rmsg));
 				return null;
 			}

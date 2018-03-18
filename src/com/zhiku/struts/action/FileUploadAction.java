@@ -91,7 +91,7 @@ public class FileUploadAction extends Action {
 							}else{
 								file.setDocformat(-1);
 								rmsg.setStatus(300);
-								rmsg.setMessage("sorry , just accept doc(x) or xsl(x) or ppt(x) or pdf now!");
+								rmsg.setMessage("抱歉 , 目前仅接受 doc(x),xsl(x),ppt(x),pdf 类型文件!");
 								out.write(RMessage.getJson(rmsg));
 								return null;
 							}
