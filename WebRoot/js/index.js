@@ -41,7 +41,7 @@ function login(){
                 </ul>
               `;
 
-                $.cookie('username', username,{path:"/"});
+               // $.cookie('username', username,{path:"/"});
 
             }else{
                 new Toast().showMsg(data.message,1000);

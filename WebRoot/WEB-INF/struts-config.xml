@@ -76,6 +76,14 @@
       path="/reactive"
       type="com.zhiku.struts.action.ReactiveAction"
       cancellable="true" />
+    <action
+      path="/news"
+      type="com.zhiku.struts.action.GetNewsAction"
+      cancellable="true" />
+    <action
+      path="/addnews"
+      type="com.zhiku.struts.action.AddNewsAction"
+      cancellable="true" />
 
   </action-mappings>
 

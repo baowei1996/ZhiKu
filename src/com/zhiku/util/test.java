@@ -14,26 +14,29 @@ import com.zhiku.user.User;
 
 public class test {
 	public static void main(String[] args) {
-		RMessage message = new RMessage(200,"OK");
-		ArrayList<Data> data = new ArrayList<Data>();
 		
-		Data d = null;
-		Data fileinfo = null;
-		for(int i = 0; i<2 ;i++){
-			d = new Data();
-			d.put("fid", 0);
-			d.put("upuid", 0);
-			fileinfo = new Data();
-			fileinfo.put("name", "bw");
-			fileinfo.put("module", i);
-			fileinfo.put("time",new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
-			d.put("fileinfo", fileinfo);
-			data.add(d);
-		}
-		
-		message.setData(data);
-		System.out.println(RMessage.getJson(message));
-		System.out.println(DigestUtils.md5Hex("12345"));
+		Date d = new Date("2018-03-15");
+		System.out.println(new SimpleDateFormat("YYYY-MM-DD").format(d));
+//		RMessage message = new RMessage(200,"OK");
+//		ArrayList<Data> data = new ArrayList<Data>();
+//		
+//		Data d = null;
+//		Data fileinfo = null;
+//		for(int i = 0; i<2 ;i++){
+//			d = new Data();
+//			d.put("fid", 0);
+//			d.put("upuid", 0);
+//			fileinfo = new Data();
+//			fileinfo.put("name", "bw");
+//			fileinfo.put("module", i);
+//			fileinfo.put("time",new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+//			d.put("fileinfo", fileinfo);
+//			data.add(d);
+//		}
+//		
+//		message.setData(data);
+//		System.out.println(RMessage.getJson(message));
+//		System.out.println(DigestUtils.md5Hex("12345"));
 //		try {
 //			User u = new User();
 //			u.setUsr("12345");

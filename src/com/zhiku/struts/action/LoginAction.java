@@ -58,6 +58,9 @@ public class LoginAction extends Action {
 			
 			if(User.check(usr, pwd)){
 				User u = User.findByUsr(usr);
+				if (u == null){
+					u = User.findByMail(usr);
+				}
 				if(u.getStatus() == User.NORMAL){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");

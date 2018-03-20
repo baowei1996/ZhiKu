@@ -69,7 +69,7 @@ public class FileUploadAction extends Action {
 			}
 			
 			FileUpDownLoad fileUpload = new FileUpDownLoad();
-			Data data = fileUpload.upload(this.getServlet(), request);
+			Data data = fileUpload.upload(this.getServlet(), request,FileUpDownLoad.FILE_UPLOAD_PATH);
 			
 			
 			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){

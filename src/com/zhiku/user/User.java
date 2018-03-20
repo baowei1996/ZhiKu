@@ -96,14 +96,17 @@ public class User {
 		return UserDAO.findByUsr(usr);
 	}
 	
+	public static User findByMail(String mail){
+		return UserDAO.findByMail(mail);
+	}
 	/**
 	 * 检查登录信息
-	 * @param usr 用户名
+	 * @param col 用户名或邮箱
 	 * @param pwd 登录密码
 	 * @return是否登录成功
 	 */
-	public static boolean check(String usr , String pwd){
-		return UserDAO.check(usr , pwd);
+	public static boolean check(String col , String pwd){
+		return UserDAO.check(col , pwd);
 	}
 	
 	/**

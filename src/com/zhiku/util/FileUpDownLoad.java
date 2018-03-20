@@ -28,16 +28,18 @@ public class FileUpDownLoad {
 	private static final int MAX_SIZE = 100*1024*1024;	//最大上传文件为100MB
 	public static final int FAIL = 0;
 	public static final int SUCCESS = 1;
+	public static String FILE_UPLOAD_PATH = "/zhiku/upload";
+	public static String IMAGE_UPLOAD_PATH = "/zhiku/img";
 	
 	/**
 	 * 将上传的文件保存到指定目录下
 	 * @param servlet	处理上传操作的servlet
 	 * @param request	处理上传操作的request
 	 */
-	public Data upload( HttpServlet servlet ,HttpServletRequest request){
+	public Data upload( HttpServlet servlet ,HttpServletRequest request,String uploadPath){
 		//得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
 //	     String savePath = servlet.getServletContext().getRealPath("/WEB-INF/upload");
-		String savePath = "/zhiku/upload";
+		String savePath = uploadPath;
 	     //上传时生成的临时文件保存目录
 //	     String tempPath = servlet.getServletContext().getRealPath("/WEB-INF/temp");
 		String tempPath = "/zhiku/temp";
@@ -80,6 +82,7 @@ public class FileUpDownLoad {
 	      //3、判断提交上来的数据是否是上传表单的数据
 	      if(!ServletFileUpload.isMultipartContent(request)){
 	       //按照传统方式获取数据
+	    	  System.out.println("不包含文件!");
 	       return null;
 	      }
 	       

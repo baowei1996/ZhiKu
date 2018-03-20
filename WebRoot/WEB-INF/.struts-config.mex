@@ -17,18 +17,14 @@
   <StrutsActivity path="/del/*.do" location="650,1250" dimension="268,104" />
   <StrutsActivity path="/userinfo/*.do" location="350,1450" dimension="282,104" />
   <StrutsActivity path="/reactive.do" location="950,1450" dimension="260,104" />
+  <StrutsActivity path="/news.do" location="350,1650" dimension="264,104" />
+  <StrutsActivity path="/index.html" location="50,1650" dimension="96,53" />
   <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
-  <StrutsActivity path="/index.html" />
+  <StrutsActivity path="/addnews.do" />
   <StrutsTransition id="/mailcheck.do,success,/index.html,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1086,102" />
       <AbsolutePoint location="0,0" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/mailcheck.do,success,/index.jsp,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="1086,102" />
-      <AbsolutePoint location="94,1476" />
     </AutomaticBendpoints>
   </StrutsTransition>
 </FlowViewLayout>

@@ -87,6 +87,29 @@ public class UserDAO {
 
 		return u;
 	}
+	
+	/**
+	 * 通过用户名找到用户
+	 * @param mail	邮箱
+	 * @return	存在邮箱对应的用户则返回对应用户
+	 */
+	public static User findByMail(String mail){
+		User u = null;
+		Session session = null;
+		try {
+			session = HibernateSessionFactory.getSession();
+			String sql = "from User where mail = \'" + mail + "\'"; // 省略了select *
+																	// ,之前加上试过总是不能识别*，所以把省略了
+			Query q = session.createQuery(sql);
+			u = (User) q.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			HibernateSessionFactory.closeSession();
+		}
+
+		return u;
+	}
 
 	/**
 	 * 判断USER表中是否存在col属性值为value的元素
@@ -133,14 +156,18 @@ public class UserDAO {
 	 * @return 是否正确
 	 */
 	@SuppressWarnings("unused")
-	public static boolean check(String usr, String pwd) {
+	public static boolean check(String col, String pwd) {
 
 		boolean isCorrect = true;
 		Session session = null;
 		User u = null;
 		try {
 			session = HibernateSessionFactory.getSession();
-			u = User.findByUsr(usr);
+			//检查一遍用户名和邮箱
+			u = User.findByUsr(col);
+			if (u == null){
+				u = User.findByMail(col);
+			}
 
 			if (u == null || !pwd.equals(u.getPwd())) {
 				isCorrect = false;
