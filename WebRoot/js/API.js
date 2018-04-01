@@ -12,7 +12,8 @@ var API = {
     register:`${baseUrl}/register.do`,//
     mailcheck:`${baseUrl}/mailcheck.do`,//
 
-
+    news:`${baseUrl}/news`,
+    pushNews:`${baseUrl}/pushNews`,
     //需要权限
     uploadFile:`${baseUrl}/upload.do`,//
     downloadFile:`${baseUrl}/getdld.do`,//
