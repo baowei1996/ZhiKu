@@ -30,6 +30,7 @@ public class FileModifyAction extends Action {
 	 */
 
 	/** 
+	 * 暂时弃用这个借口，默认文件的信息不能修改
 	 * Method execute
 	 * @param mapping
 	 * @param form

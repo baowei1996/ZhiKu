@@ -44,6 +44,7 @@ public class LogoutAction extends Action {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		PrintWriter out = null;
 		
 		//获取当前的ip和时间，并设置

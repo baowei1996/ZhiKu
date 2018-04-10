@@ -54,10 +54,11 @@ public class JFile {	//为了不和java.io.File混淆，使用JFile
 	public static final int JP_ORIGIN = 1;
 	public static final int USER_ORIGIN = 2;
 	
-	//定义用户状态常量
+	//定义文件状态常量
 	public static final int LOCKED = 0;
 	public static final int NORMAL = 1;
 	public static final int CHECKING = 2;
+	public static final int DELETED = 3;
 	
 	//定义文件后缀的常量
 	public static final int TYPE_DOC = 0;

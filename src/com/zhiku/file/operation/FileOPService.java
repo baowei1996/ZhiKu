@@ -29,7 +29,8 @@ public class FileOPService {
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from FileOPView where file_status = 1 and uid = " + uid + " and type = " + type + " group by fid order by optime desc";
+			String sql = "from FileOPView where file_status = 1 and uid = " + uid + " and type = " + type +
+					" and (fid,optime) in(select fid ,max(optime) from FileOPView where type = " + type + " group by fid)";
 			Query q = session.createQuery(sql);
 			q.setFirstResult((page-1)*PAGE_SIZE);
 			q.setMaxResults(PAGE_SIZE);

@@ -64,7 +64,7 @@ public class AddNewsAction extends Action {
 				String url = (String)data.get("savePath");
 				String title = (String)data.get("title");
 				String details = (String)data.get("details");
-				String date = (String)data.get("date");
+//				String date = (String)data.get("date");
 				
 				Activity act = new Activity();
 				act.setImg(url);

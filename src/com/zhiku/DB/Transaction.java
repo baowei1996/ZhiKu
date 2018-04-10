@@ -163,7 +163,12 @@ public class Transaction {
 		return isDone;
 	}
 	
-	
+	/**
+	 * 用户删除自己上传的文件
+	 * @param f
+	 * @param u
+	 * @return
+	 */
 	public static boolean deleteFile(JFile f, User u){
 		boolean isDone = true;
 		Session session = null;
@@ -172,7 +177,7 @@ public class Transaction {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			f.setStatus(JFile.LOCKED);
+			f.setStatus(JFile.DELETED);
 			u.setUpcnt(u.getUpcnt() -1);
 			FileDAO.modify(f, session);
 			UserDAO.modify(u, session);

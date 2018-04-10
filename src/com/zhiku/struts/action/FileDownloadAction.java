@@ -58,6 +58,7 @@ public class FileDownloadAction extends Action {
 				rmsg.setMessage("需要登录才可下载文件!");
 				response.setContentType("application/json;charset=utf-8");
 				response.setHeader("pragme", "no-cache");
+				response.setHeader("Access-Control-Allow-Credentials", "true");
 				out = response.getWriter();
 				out.write(RMessage.getJson(rmsg));;
 				return null;
@@ -79,6 +80,7 @@ public class FileDownloadAction extends Action {
 				rmsg.setMessage("无法找到对应文件!");
 				response.setContentType("application/json;charset=utf-8");
 				response.setHeader("pragme", "no-cache");
+				response.setHeader("Access-Control-Allow-Credentials", "true");
 				out = response.getWriter();
 				out.write(RMessage.getJson(rmsg));
 				return null;
@@ -92,6 +94,7 @@ public class FileDownloadAction extends Action {
 			//设置返回信息
 			response.setContentType("application/json;charset=utf-8");
 			response.setHeader("pragme", "no-cache");
+			response.setHeader("Access-Control-Allow-Credentials", "true");
 			
 			//文件不存在信息提示
 			if(!ex){

@@ -84,6 +84,24 @@
       path="/addnews"
       type="com.zhiku.struts.action.AddNewsAction"
       cancellable="true" />
+    <action
+      path="/forgetpwd"
+      type="com.zhiku.action.mail.ForgetPwdAction"
+      cancellable="true" />
+    <action
+      path="/mail"
+      type="com.zhiku.action.mail.MailServiceAction"
+      cancellable="true" />
+    <action
+      path="/findpwd"
+      type="com.zhiku.action.mail.FindPwdAction"
+      cancellable="true" >
+      <forward name="resetpwd" path = "/ResetPwd.html"/>
+    </action>
+    <action
+      path="/resetpwd"
+      type="com.zhiku.action.mail.ResetPwdAction"
+      cancellable="true" />
 
   </action-mappings>
 

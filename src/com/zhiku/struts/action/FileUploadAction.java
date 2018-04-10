@@ -51,6 +51,7 @@ public class FileUploadAction extends Action {
 		
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		RMessage rmsg = new RMessage();
 		PrintWriter out = null;
 		

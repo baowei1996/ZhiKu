@@ -46,6 +46,7 @@ public class RegisterAction extends Action {
 		
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		
 		//设置返回信息
 		RMessage rmsg = new RMessage();
@@ -154,7 +155,8 @@ public class RegisterAction extends Action {
 				rmsg.setStatus(200);
 				rmsg.setMessage("OK");
 				//给用户的邮箱发送一个激活邮件,激活使用用户编号！
-				EMail.sendMail(u.getUsr(), u.getMail(), u.hashCode()+"");
+				EMail.sendMail("请激活你的邮箱","activate",u.getUsr(), u.getMail(), u.hashCode()+u.getMailtime().getTime()+"",
+						"<a href = 'http://719daze.me:8080/JPidea/mail.do?act=reactivate&usr="+u.getUsr()+"'>重新发送激活邮件</a>");
 			}else{
 				rmsg.setStatus(300);
 				rmsg.setMessage("抱歉!注册失败，请重试!");

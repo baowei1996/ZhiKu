@@ -47,6 +47,7 @@ public class LoginAction extends Action {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		PrintWriter out = null;
 		
 		RMessage rmsg = new RMessage();

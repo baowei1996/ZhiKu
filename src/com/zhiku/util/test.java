@@ -2,6 +2,7 @@ package com.zhiku.util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.mail.MessagingException;
@@ -15,8 +16,17 @@ import com.zhiku.user.User;
 public class test {
 	public static void main(String[] args) {
 		
-		Date d = new Date("2018-03-15");
-		System.out.println(new SimpleDateFormat("YYYY-MM-DD").format(d));
+		Date d = new Date(1523365105361L);
+		Calendar c = Calendar.getInstance();
+		c.set(2000, 0, 1);
+		System.out.println(c.getTime());
+		User u = new User();
+		u.setMail("2@a.cn");
+		u.setUsr("baowei");
+		u.setMailtime(d);
+		System.out.println(u.hashCode());
+		System.out.println(u.hashCode()+d.getTime()+"");
+		
 //		RMessage message = new RMessage(200,"OK");
 //		ArrayList<Data> data = new ArrayList<Data>();
 //		

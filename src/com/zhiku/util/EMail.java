@@ -16,14 +16,16 @@ import javax.mail.internet.MimeMessage;
 public class EMail {
 	
 	/**
-	 * 
+	 * @param head 邮件的标题
+	 * @param act 邮件的动作行为
 	 * @param usr 发送给哪个用户
 	 * @param to 用户的邮箱
 	 * @param code 用户的激活码
+	 * @param extra 附加内容
 	 * @throws AddressException
 	 * @throws MessagingException
 	 */
-	public static void sendMail(String usr ,String to,String code) throws AddressException, MessagingException{  
+	public static void sendMail(String head,String act ,String usr ,String to,String code,String extra) throws AddressException, MessagingException{  
         /** 
          * 1.获得一个Session对象 
          * 2.创建一个代表邮件的对象 Message 
@@ -57,8 +59,8 @@ public class EMail {
             //设置邮件主题  
             message.setSubject("来自山软智库的激活邮件");  
             //设置邮件正文  
-            message.setContent("<h1>山软智库激活邮件！点下面连接完成激活操作</h1><h3><a href='http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"'>http://719daze.me:8080/JPidea/mailcheck.do?usr="+usr+"&key="+code+"</a></h3>"
-            		+ "<a href = 'http://719daze.me:8080/JPidea/reactive.do?usr="+usr+"'>重新发送激活邮件</a>","text/html;charset=UTF-8");  
+            message.setContent("<h1>"+head+"</h1><h3><a href='http://719daze.me:8080/JPidea/mail.do?act="+act+"&usr="+usr+"&key="+code+"'>http://719daze.me:8080/JPidea/mail.do?act="+act+"&usr="+usr+"&key="+code+"</a></h3>"
+                        		+ extra,"text/html;charset=UTF-8");  
           
             //3.发送邮件  
             Transport.send(message);  
@@ -72,7 +74,7 @@ public class EMail {
 	
 	public static void main(String[] args) {
 		try {
-			EMail.sendMail("baowei", "1368183370@qq.com", "asdfghjkl");
+			EMail.sendMail("激活邮件","activate","baowei", "1368183370@qq.com", "asdfghjkl","");
 		} catch (AddressException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
