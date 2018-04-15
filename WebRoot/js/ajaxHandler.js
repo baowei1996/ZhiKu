@@ -14,6 +14,9 @@ function AjaxHandler(){
             type:'POST',
             data:{username,password},
             dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -134,8 +137,8 @@ function AjaxHandler(){
             desc:filedesc,
             course,
         };
-        console.log(document.getElementById(`${fileElelmentID}`).files[0]);
-        console.log(sendData)
+        // console.log(document.getElementById(`${fileElelmentID}`).files[0]);
+        // console.log(sendData)
         $.ajax({
             url:API.uploadFile,
             type:'POST',
@@ -158,6 +161,47 @@ function AjaxHandler(){
             type:'GET',
             data:{},
             dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
+            success:function(data,state){
+                success(data,state)},
+            error:function(data,state){
+                failed(data,state)}
+        })
+
+    }
+    ajaxHandler.prototype.getNotification = function(userName,success,failed){
+        success = typeof success ==='function'?success:new Function();
+        failed = typeof failed ==='function'?failed:new Function();
+        console.log(userName)
+        $.ajax({
+            url:matchword(API.getNotification,userName),
+            type:'GET',
+            data:{},
+            dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
+            success:function(data,state){
+                success(data,state)},
+            error:function(data,state){
+                failed(data,state)}
+        })
+
+    }
+    ajaxHandler.prototype.readNotification = function(userName,nid,success,failed){
+        success = typeof success ==='function'?success:new Function();
+        failed = typeof failed ==='function'?failed:new Function();
+
+        $.ajax({
+            url:matchword(API.readNotification,userName),
+            type:'GET',
+            data:{"noticeId":nid},
+            dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -329,6 +373,9 @@ function AjaxHandler(){
             type:'GET',
             data:{username,page},
             dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -345,6 +392,9 @@ function AjaxHandler(){
             type:'GET',
             data:{username,page},
             dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -361,6 +411,9 @@ function AjaxHandler(){
             type:'GET',
             data:{},
             dataType:"JSON",
+            xhrFields: {
+                withCredentials: true
+             },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){

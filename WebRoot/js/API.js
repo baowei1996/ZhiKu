@@ -1,5 +1,5 @@
 
-var baseUrl = 'http://localhost:8080/JPidea';
+var baseUrl = 'http://localhost:8080/Jpidea';
 //var baseUrl = 'http://719daze.me:8080/JPidea';
 var prefix =
          '';
@@ -13,7 +13,7 @@ var API = {
     mailcheck:`${baseUrl}/mailcheck.do`,//
 
     news:`${baseUrl}/news.do`,
-    pushNews:`${baseUrl}/pushNews`,
+    pushNews:`${baseUrl}/pushNews.do`,
     //需要权限
     uploadFile:`${baseUrl}/upload.do`,//
     downloadFile:`${baseUrl}/getdld.do`,//
@@ -28,5 +28,9 @@ var API = {
     getDownloadList:`${baseUrl}/getdld.do`,
     getUploadList:`${baseUrl}/getupld.do`,
     deleteDocument:`${baseUrl}/del/{fid}`,
-    gerUserInfo:`${baseUrl}/userinfo/{fid}`
+    gerUserInfo:`${baseUrl}/userinfo/{fid}`,
+    getNotification:`getNotification/{userid}.do`,
+    readNotification:`readNotification/{userid}.do`,
+    forgetPwd:`${baseUrl}/forgetpwd.do`
+    
 }

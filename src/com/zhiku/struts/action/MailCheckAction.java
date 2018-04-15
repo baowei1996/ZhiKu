@@ -46,6 +46,7 @@ public class MailCheckAction extends Action {
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 		RMessage rmsg = new RMessage();
 		PrintWriter out = null;
 		

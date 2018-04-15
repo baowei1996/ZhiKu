@@ -11,7 +11,7 @@ window.onload=function(){
         var username=$.cookie('username');
         document.getElementById("loginOption").className = 'dropdown';
         document.getElementById("loginOption").innerHTML=`
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">hi,${username} <span class="caret"></span></a>
         <ul class="dropdown-menu" style="z-index:1111">
             <li><a href="personalCenter.html" >个人中心</a></li>
             <li><a href="javascript:logout()" >退出登录</a></li>
@@ -30,19 +30,21 @@ function login(){
         user.login(username,pw,function(data,state){
             console.log(data);
             if(data.status==200){
+                
                 new Toast().showMsg("登录成功",1000);
+                $.cookie('username', username,{path:"/"});
                 document.getElementById("closeLogin").click();
                 document.getElementById("loginOption").className = 'dropdown';
                 document.getElementById("loginOption").innerHTML=`
                 
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">hi,${$.cookie('username')} <span class="caret"></span></a>
                 <ul class="dropdown-menu" style="z-index:1111">
                     <li><a href="personalCenter.html" >个人中心</a></li>
                     <li><a href="javascript:logout()" >退出登录</a></li>
                 </ul>
               `;
 
-                //$.cookie('username', username,{path:"/"});
+                
 
             }else{
                 new Toast().showMsg(data.message,1000);
@@ -114,7 +116,7 @@ function register(){
                 new Toast().showMsg("注册成功", 2000);
                 document.getElementById("closeRegister").click();
                 setTimeout(function () {
-                    document.getElementsByTagName('body')[0].style.paddingRight = 0
+                    document.getElementsByTagName('body')[0].style.paddingRight = 0;
                 }, 400)
 
 
@@ -157,6 +159,37 @@ document.getElementById("closeRegister").onclick=function(){
 document.getElementById('return-login').onclick=function(){
     document.getElementById("closeRegister").click();
 }
+document.getElementById('findPassword').onclick=function () {
+    document.getElementById("closeRegister").click();
+}
+
+document.getElementById('findBtn').onclick=function () {
+    let email=document.getElementById('findEmail').value;
+    if(email==''){
+        new Toast('输入不能为空',1000)
+        document.getElementById('findEmail').focus();
+        return;
+    }
+    const reg =/\w+@\w+\.\w+/;
+    if(!reg.test(email)){
+        new Toast('邮箱格式有误',1000)
+        document.getElementById('findEmail').focus();
+        return;
+    }
+    fetch(API.forgetPwd,{
+        method:'POST',
+        data:{mail:email}
+    }).then(data=>{
+        if(data.status==300){
+            new Toast('输入邮箱有误',1000)
+            return;
+        }
+        new Toast('请前往个人邮箱查看',1000)
+    }).catch(err=>{
+        new Toast('找回失败',1000);
+        console.log(err)
+    })
+}
 
 // document.getElementById("loginOption").onmouseover=function(){
 
@@ -178,6 +211,9 @@ function loadNews(){
     var dom = document.getElementById('activity');
       AjaxHandler().news(3,function(data,state){
         if(data.status==200){
+            if(data.data===null){
+                return;
+            }
             data.data.map(function(item,index){
                 var div = document.createElement('div');
                 div.innerHTML=`<div class="row row-line">

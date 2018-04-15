@@ -52,6 +52,7 @@ public class FileUploadAction extends Action {
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("pragme", "no-cache");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 		RMessage rmsg = new RMessage();
 		PrintWriter out = null;
 		
@@ -72,9 +73,26 @@ public class FileUploadAction extends Action {
 			FileUpDownLoad fileUpload = new FileUpDownLoad();
 			Data data = fileUpload.upload(this.getServlet(), request,FileUpDownLoad.FILE_UPLOAD_PATH);
 			
-			
-			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){
-				JFile file = new JFile();
+			int result = (Integer)data.get("result");
+			if(result != FileUpDownLoad.FAIL){
+				JFile file = null;
+				if(result == FileUpDownLoad.SUCCESS){
+					file = new JFile();
+				}else{
+					file = JFile.findBySha((String)data.get("sha256"));
+					if(file.getStatus() == JFile.LOCKED){
+						rmsg.setStatus(300);
+						rmsg.setMessage("文件被禁止上传!");
+						out.write(RMessage.getJson(rmsg));
+						return null;
+					}
+					if(file.getStatus() == JFile.NORMAL){
+						rmsg.setStatus(300);
+						rmsg.setMessage("文件内容已存在!(同你的文件名不一定相同)");
+						out.write(RMessage.getJson(rmsg));
+						return null;
+					}
+				}
 				
 				//依据后缀名判断是否符合要求
 				String fileExtName = (String)data.get("fileExtName");
@@ -132,7 +150,7 @@ public class FileUploadAction extends Action {
 				
 				
 				String opip = request.getHeader("x-forwarded-for") == null? request.getRemoteAddr():request.getHeader("x-forwarded-for");
-				if(Transaction.saveUploadInfo(file, u, opip)){
+				if(Transaction.saveUploadInfo(file, u, opip,result)){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
 				}else{

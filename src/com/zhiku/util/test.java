@@ -1,5 +1,7 @@
 package com.zhiku.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,18 +16,15 @@ import com.zhiku.user.User;
 
 
 public class test {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
-		Date d = new Date(1523365105361L);
-		Calendar c = Calendar.getInstance();
-		c.set(2000, 0, 1);
-		System.out.println(c.getTime());
-		User u = new User();
-		u.setMail("2@a.cn");
-		u.setUsr("baowei");
-		u.setMailtime(d);
-		System.out.println(u.hashCode());
-		System.out.println(u.hashCode()+d.getTime()+"");
+		
+		//sha256只针对内容进行哈希，所有文件名的修改不影响sha256的值
+		FileInputStream fi1 = new FileInputStream(new File("E:") + File.separator + "config.txt");
+		FileInputStream fi2 = new FileInputStream(new File("E:") + File.separator + "config1.doc");
+		
+		System.out.println(DigestUtils.sha256Hex(fi1));
+		System.out.println(DigestUtils.sha256Hex(fi2));
 		
 //		RMessage message = new RMessage(200,"OK");
 //		ArrayList<Data> data = new ArrayList<Data>();

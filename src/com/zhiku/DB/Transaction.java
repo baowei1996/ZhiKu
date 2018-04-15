@@ -26,7 +26,7 @@ public class Transaction {
 	 * @param opip 上传用户的ip地址
 	 * @return 事务处理成功则返回true
 	 */
-	public static boolean saveUploadInfo(JFile file,User user,String opip){
+	public static boolean saveUploadInfo(JFile file,User user,String opip,int status){
 		boolean isDone = true;
 		Session session = null;
 
@@ -34,7 +34,11 @@ public class Transaction {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			FileDAO.save(file,session);
+			if(status == JFile.DELETED){
+				FileDAO.modify(file, session);
+			}else{
+				FileDAO.save(file,session);
+			}
 			//设置文件的上传者上传量加一！
 			user.setUpcnt(user.getUpcnt() + 1);
 			UserDAO.modify(user,session);
@@ -44,7 +48,7 @@ public class Transaction {
 			file = JFile.findBySha(file.getSha());
 			fp.setFid(file.getFid());
 			fp.setUid(user.getUid());
-			fp.setOptime(new Date());
+			fp.setOptime(file.getUptime());
 			fp.setOpip(opip);
 			fp.setType(FileOP.UPLOAD);
 			FileOPService.save(fp,session);

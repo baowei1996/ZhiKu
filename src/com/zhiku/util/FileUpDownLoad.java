@@ -28,6 +28,7 @@ public class FileUpDownLoad {
 	private static final int MAX_SIZE = 100*1024*1024;	//最大上传文件为100MB
 	public static final int FAIL = 0;
 	public static final int SUCCESS = 1;
+	public static final int REUP = 2;
 	public static String FILE_UPLOAD_PATH = "/zhiku/upload";
 	public static String IMAGE_UPLOAD_PATH = "/zhiku/img";
 	
@@ -144,8 +145,8 @@ public class FileUpDownLoad {
 	    	   data.put("savePath", realSavePath + File.separator + saveFilename);
 	    	   data.put("sha256",sha256);
 	    	   if(JFile.isExist("sha", sha256)){
-	    		   result = FAIL;
-	    		   data.put("message", "文件已存在!");
+	    		   result = REUP;
+	    		   data.put("message", "重新上传!");
 	    	   }else{
 	    		   data.put("message", "OK");
 	    	   }
