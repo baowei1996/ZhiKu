@@ -32,7 +32,7 @@ function login(){
             if(data.status==200){
                 
                 new Toast().showMsg("登录成功",1000);
-                $.cookie('username', username,{path:"/"});
+                //$.cookie('username', username,{path:"/"});
                 document.getElementById("closeLogin").click();
                 document.getElementById("loginOption").className = 'dropdown';
                 document.getElementById("loginOption").innerHTML=`
@@ -176,9 +176,14 @@ document.getElementById('findBtn').onclick=function () {
         document.getElementById('findEmail').focus();
         return;
     }
+	let formData = new FormData();  
+formData.append("mail",email);  
     fetch(API.forgetPwd,{
         method:'POST',
-        data:{mail:email}
+        body:formData,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
     }).then(data=>{
         if(data.status==300){
             new Toast('输入邮箱有误',1000)
@@ -189,6 +194,7 @@ document.getElementById('findBtn').onclick=function () {
         new Toast('找回失败',1000);
         console.log(err)
     })
+
 }
 
 // document.getElementById("loginOption").onmouseover=function(){
