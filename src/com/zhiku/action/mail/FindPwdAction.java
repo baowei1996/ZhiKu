@@ -67,7 +67,7 @@ public class FindPwdAction extends Action {
 					rmsg.setMessage("激活邮件超期失效，请尝试重新请求激活邮件!");
 				}else{
 					//一切正常,转发到修改页面
-					return mapping.findForward("success");
+					return mapping.findForward("resetpwd");
 				}
 			}
 			

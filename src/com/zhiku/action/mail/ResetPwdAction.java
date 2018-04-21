@@ -11,6 +11,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -54,6 +55,13 @@ public class ResetPwdAction extends Action {
 			String username = request.getParameter("usr");
 			long key = Long.parseLong(request.getParameter("key"));
 			String newpwd = request.getParameter("newpwd");
+			//检查密码格式
+			if(!(newpwd!=null && newpwd.length()>5 && newpwd.length()<19)){
+				rmsg.setStatus(300);
+				rmsg.setMessage("密码不符合要求！要求密码长度6到18位。");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
 			User u = User.findByUsr(username);
 			
 			//如果用户不存在，或者用户的验证码不正确，则返回错误链接
@@ -69,7 +77,7 @@ public class ResetPwdAction extends Action {
 					rmsg.setMessage("激活邮件超期失效，请尝试重新请求激活邮件!");
 				}else{
 					//一切正常,修改用户密码并更新
-					u.setPwd(newpwd);
+					u.setPwd(DigestUtils.md5Hex(newpwd));
 					//将邮件激活时间设为一个之前的数
 					Calendar c = Calendar.getInstance();
 					c.set(2000, 0, 1);

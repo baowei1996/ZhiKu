@@ -74,6 +74,7 @@ public class FileUploadAction extends Action {
 			Data data = fileUpload.upload(this.getServlet(), request,FileUpDownLoad.FILE_UPLOAD_PATH);
 			
 			int result = (Integer)data.get("result");
+			System.out.println(result);
 			if(result != FileUpDownLoad.FAIL){
 				JFile file = null;
 				if(result == FileUpDownLoad.SUCCESS){

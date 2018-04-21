@@ -91,12 +91,15 @@
     <action
       path="/mail"
       type="com.zhiku.action.mail.MailServiceAction"
-      cancellable="true" />
+      cancellable="true" >
+      <forward name="success" path = "/index.html"></forward>
+      <forward name="resetpwd" path = "/ResetPassword.html"></forward>
+     </action>
     <action
       path="/findpwd"
       type="com.zhiku.action.mail.FindPwdAction"
       cancellable="true" >
-      <forward name="resetpwd" path = "/ResetPwd.html"/>
+      <forward name="resetpwd" path = "/ResetPassword.html"/>
     </action>
     <action
       path="/resetpwd"

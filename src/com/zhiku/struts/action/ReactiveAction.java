@@ -66,6 +66,7 @@ public class ReactiveAction extends Action {
 			if(u.getStatus() == 0 && u.modify()){
 				rmsg.setStatus(200);
 				rmsg.setMessage("OK");
+				u = User.findByUsr(usr);
 				EMail.sendMail("请激活你的邮箱","activate",u.getUsr(), u.getMail(), u.hashCode()+u.getMailtime().getTime()+"",
 						"<a href = 'http://719daze.me:8080/JPidea/mail.do?act=reactivate&usr="+u.getUsr()+"'>重新发送激活邮件</a>");
 			}else{

@@ -19,12 +19,17 @@ public class test {
 	public static void main(String[] args) throws Exception {
 		
 		
-		//sha256只针对内容进行哈希，所有文件名的修改不影响sha256的值
-		FileInputStream fi1 = new FileInputStream(new File("E:") + File.separator + "config.txt");
-		FileInputStream fi2 = new FileInputStream(new File("E:") + File.separator + "config1.doc");
+		User u = User.findByUsr("baowei");
+		System.out.println(u.hashCode() + u.getMailtime().getTime());
 		
-		System.out.println(DigestUtils.sha256Hex(fi1));
-		System.out.println(DigestUtils.sha256Hex(fi2));
+		//sha256只针对内容进行哈希，所有文件名的修改不影响sha256的值
+//		FileInputStream fi1 = new FileInputStream(new File("E:") + File.separator + "config.txt");
+//		FileInputStream fi2 = new FileInputStream(new File("E:") + File.separator + "config1.doc");
+//		
+		
+		
+//		System.out.println(DigestUtils.sha256Hex(fi1));
+//		System.out.println(DigestUtils.sha256Hex(fi2));
 		
 //		RMessage message = new RMessage(200,"OK");
 //		ArrayList<Data> data = new ArrayList<Data>();

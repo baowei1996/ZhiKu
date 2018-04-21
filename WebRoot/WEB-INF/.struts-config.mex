@@ -21,23 +21,30 @@
   <StrutsActivity path="/addnews.do" location="950,1650" dimension="268,104" />
   <StrutsActivity path="/forgetpwd.do" location="50,1850" dimension="266,104" />
   <StrutsActivity path="/mail.do" location="650,1850" dimension="270,104" />
-  <StrutsActivity path="/index.html" location="50,1650" dimension="96,53" />
-  <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
   <StrutsActivity path="/findpwd.do" location="50,2050" dimension="260,104" />
+  <StrutsActivity path="/resetpwd.do" location="1250,650" dimension="260,104" />
+  <StrutsActivity path="/index.html" location="50,1650" dimension="96,53" />
   <StrutsActivity path="/ResetPwd.html" location="1250,450" dimension="121,53" />
-  <StrutsActivity path="/resetpwd.do" />
+  <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
+  <StrutsActivity path="/ResetPassword.html" />
+  <StrutsTransition id="/mail.do,success,/index.html,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="785,1850" />
+      <AbsolutePoint location="785,1799" />
+      <AbsolutePoint location="98,1799" />
+      <AbsolutePoint location="98,1703" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/mailcheck.do,success,/index.html,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1086,102" />
       <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
-  <StrutsTransition id="/findpwd.do,success,/index.html,1" routingType="0">
+  <StrutsTransition id="/findpwd.do,resetpwd,/ResetPassword.html,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="50,2102" />
-      <AbsolutePoint location="-45,2102" />
-      <AbsolutePoint location="-45,1676" />
-      <AbsolutePoint location="50,1676" />
+      <AbsolutePoint location="180,2102" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/findpwd.do,resetpwd,/ResetPwd.html,1" routingType="0">
@@ -45,6 +52,18 @@
       <AbsolutePoint location="310,2102" />
       <AbsolutePoint location="1310,2102" />
       <AbsolutePoint location="1310,503" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/mail.do,resetpwd,/ResetPwd.html,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="785,1902" />
+      <AbsolutePoint location="1310,476" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/mail.do,resetpwd,/ResetPassword.html,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="785,1902" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
 </FlowViewLayout>

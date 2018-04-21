@@ -70,8 +70,9 @@ public class ForgetPwdAction extends Action {
 				if(u.modify()){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
+					u = User.findByMail(mail);
 					//给用户的邮箱发送一个激活邮件,激活使用用户编号！
-					EMail.sendMail("你的用户名是"+u.getUsr()+",请点击下面的链接找回你的密码","find_password",u.getUsr(), u.getMail(), u.hashCode()+"","");
+					EMail.sendMail("你的用户名是"+u.getUsr()+",请点击下面的链接找回你的密码","find_password",u.getUsr(), u.getMail(), u.hashCode()+u.getMailtime().getTime()+"","");
 				}else{
 					rmsg.setStatus(300);
 					rmsg.setMessage("找回密码出错，请重试");

@@ -40,10 +40,10 @@ public class MailServiceAction extends Action {
 		String action = request.getParameter("act");
 		if("activate".equals(action))
 			return new MailCheckAction().execute(mapping, form, request, response);
-		if("reacitive".equals(action))
+		if("reactivate".equals(action))
 			return new ReactiveAction().execute(mapping, form, request, response);
 		if("find_password".equals(action))
-			return null;
+			return new FindPwdAction().execute(mapping, form, request, response);
 		return null;
 	}
 }
