@@ -54,6 +54,8 @@ public class ForgetPwdAction extends Action {
 			out = response.getWriter();
 			//根据用户的邮箱找到对应用户
 			String mail = request.getParameter("mail");
+			System.out.println(mail);
+			System.out.println(request.toString());
 			User u = User.findByMail(mail);
 			
 			if(u == null){

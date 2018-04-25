@@ -32,7 +32,7 @@ function login(){
             if(data.status==200){
                 
                 new Toast().showMsg("登录成功",1000);
-                //$.cookie('username', username,{path:"/"});
+                // $.cookie('username', username,{path:"/"});
                 document.getElementById("closeLogin").click();
                 document.getElementById("loginOption").className = 'dropdown';
                 document.getElementById("loginOption").innerHTML=`
@@ -64,7 +64,11 @@ function register(){
     var phone = document.getElementById('r-phone').value;
     var email = document.getElementById('r-email').value;
     var pw = document.getElementById('r-pw').value;
-
+    var id = document.getElementById('r-c').value;
+    if(id.length!=12){
+        new Toast().showMsg("学号格式不正确",2000);
+        return;
+    }
     if(username==""||phone==""||email==""||pw==""){
         console.log("输入信息不完全");
         new Toast().showMsg("输入信息不完全",2000);
@@ -166,35 +170,35 @@ document.getElementById('findPassword').onclick=function () {
 document.getElementById('findBtn').onclick=function () {
     let email=document.getElementById('findEmail').value;
     if(email==''){
-        new Toast('输入不能为空',1000)
+        new Toast().showMsg('输入不能为空',1000)
         document.getElementById('findEmail').focus();
         return;
     }
     const reg =/\w+@\w+\.\w+/;
     if(!reg.test(email)){
-        new Toast('邮箱格式有误',1000)
+        new Toast().showMsg('邮箱格式有误',1000)
         document.getElementById('findEmail').focus();
         return;
     }
-	let formData = new FormData();  
-formData.append("mail",email);  
-    fetch(API.forgetPwd,{
-        method:'POST',
-        body:formData,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-    }).then(data=>{
-        if(data.status==300){
-            new Toast('输入邮箱有误',1000)
-            return;
-        }
-        new Toast('请前往个人邮箱查看',1000)
-    }).catch(err=>{
-        new Toast('找回失败',1000);
-        console.log(err)
-    })
+    
+    $.ajax({
+        url:API.forgetPwd,
+        type:'POST',
+        data:{mail:email},
+        dataType:"JSON",
+        success:function(data,state){
+            if(data.status==300){
+                new Toast().showMsg('输入邮箱有误',1000)
+                return;
+            }
+            new Toast().showMsg('请前往个人邮箱查看',1000)
 
+        },
+        error:function(data,state){
+            new Toast().showMsg('找回失败',1000);
+        console.log(data)
+        }
+    })
 }
 
 // document.getElementById("loginOption").onmouseover=function(){

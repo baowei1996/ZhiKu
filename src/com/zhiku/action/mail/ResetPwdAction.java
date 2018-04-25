@@ -52,8 +52,8 @@ public class ResetPwdAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			String username = request.getParameter("usr");
-			long key = Long.parseLong(request.getParameter("key"));
+			String username = request.getParameter("username");
+			long key = Long.parseLong(request.getParameter("code"));
 			String newpwd = request.getParameter("newpwd");
 			//检查密码格式
 			if(!(newpwd!=null && newpwd.length()>5 && newpwd.length()<19)){
