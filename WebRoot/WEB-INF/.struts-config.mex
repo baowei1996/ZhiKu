@@ -23,10 +23,13 @@
   <StrutsActivity path="/mail.do" location="650,1850" dimension="270,104" />
   <StrutsActivity path="/findpwd.do" location="50,2050" dimension="260,104" />
   <StrutsActivity path="/resetpwd.do" location="1250,650" dimension="260,104" />
+  <StrutsActivity path="/readNotification/*.do" location="1250,1050" dimension="271,104" />
+  <StrutsActivity path="/getNotification/*.do" location="1250,1250" dimension="267,104" />
   <StrutsActivity path="/index.html" location="50,1650" dimension="96,53" />
+  <StrutsActivity path="/ResetPassword.html" location="1250,850" dimension="153,53" />
   <StrutsActivity path="/ResetPwd.html" location="1250,450" dimension="121,53" />
   <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
-  <StrutsActivity path="/ResetPassword.html" />
+  <StrutsActivity path="/addNotification/*.do" />
   <StrutsTransition id="/mail.do,success,/index.html,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="785,1850" />
@@ -45,19 +48,6 @@
     <AutomaticBendpoints>
       <AbsolutePoint location="180,2102" />
       <AbsolutePoint location="0,0" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/findpwd.do,resetpwd,/ResetPwd.html,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="310,2102" />
-      <AbsolutePoint location="1310,2102" />
-      <AbsolutePoint location="1310,503" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/mail.do,resetpwd,/ResetPwd.html,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="785,1902" />
-      <AbsolutePoint location="1310,476" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/mail.do,resetpwd,/ResetPassword.html,1" routingType="0">

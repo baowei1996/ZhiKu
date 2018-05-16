@@ -105,6 +105,18 @@
       path="/resetpwd"
       type="com.zhiku.action.mail.ResetPwdAction"
       cancellable="true" />
+    <action
+      path="/readNotification/*"
+      type="com.zhiku.notify.ReadNotificationAction"
+      cancellable="true" />
+    <action
+      path="/getNotification/*"
+      type="com.zhiku.notify.GetNotificationsAction"
+      cancellable="true" />
+    <action
+      path="/addNotification/*"
+      type="com.zhiku.notify.AddNotificationAction"
+      cancellable="true" />
 
   </action-mappings>
 

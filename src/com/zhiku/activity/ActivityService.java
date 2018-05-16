@@ -36,6 +36,7 @@ public class ActivityService {
 			session.persist(act);
 			session.getTransaction().commit();
 		}catch(Exception e){
+			session.getTransaction().rollback();
 			isDone = false;
 		}finally{
 			

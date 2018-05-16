@@ -7,7 +7,7 @@
 
 <session-factory>
 	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-	<property name="connection.url">jdbc:mysql://localhost:3306/zhiku</property>
+	<property name="connection.url">jdbc:mysql://localhost:3306/zhiku??useUnicode=true&amp;amp;characterEncoding=UTF-8</property>
 	<property name="connection.username">root</property>
 	<property name="connection.password">root</property>
 	<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
@@ -23,6 +23,7 @@
 	<mapping class="com.zhiku.user.UserView" />
 	<mapping class="com.zhiku.file.operation.FileOPView" />
 	<mapping class="com.zhiku.activity.Activity" />
+	<mapping class="com.zhiku.notify.Notification" />
 
 </session-factory>
 

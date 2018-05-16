@@ -1,6 +1,6 @@
 
-
-var baseUrl = 'http://719daze.me:8080/JPidea';
+var baseUrl = 'http://localhost:8080/JPidea';
+//var baseUrl = 'http://719daze.me:8080/JPidea';
 var prefix =
          '';
         // '/JPidea';
@@ -13,7 +13,7 @@ var API = {
     mailcheck:`${baseUrl}/mailcheck.do`,//
 
     news:`${baseUrl}/news.do`,
-    pushNews:`${baseUrl}/pushNews`,
+    pushNews:`${baseUrl}/pushNews.do`,
     //需要权限
     uploadFile:`${baseUrl}/upload.do`,//
     downloadFile:`${baseUrl}/getdld.do`,//
