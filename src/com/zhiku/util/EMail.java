@@ -57,7 +57,7 @@ public class EMail {
             // 抄送 CC 暗送 BCC  
               
             //设置邮件主题  
-            message.setSubject("来自山软智库的激活邮件");  
+            message.setSubject("来自山软智库的邮件");  
             //设置邮件正文  
             message.setContent("<h1>"+head+"</h1><h3><a href='http://719daze.me:8080/JPidea/mail.do?act="+act+"&usr="+usr+"&key="+code+"'>http://719daze.me:8080/JPidea/mail.do?act="+act+"&usr="+usr+"&key="+code+"</a></h3>"
                         		+ extra,"text/html;charset=UTF-8");  

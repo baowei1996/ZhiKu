@@ -117,14 +117,29 @@ CREATE TABLE `file_op` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+/* 管理员操作表 */
+CREATE TABLE `admin_user_op` (
+  `opuid` int(11) NOT NULL,
+  `targetuid` int(11) NOT NULL,
+  `optime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `opip` char(16) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `endtime` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`opuid`,`targetuid`,`optime`),
+  KEY `fk_admin_user_op_targetuid_idx` (`targetuid`),
+  CONSTRAINT `fk_admin_user_op_targetuid` FOREIGN KEY (`targetuid`) REFERENCES `user` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_admin_user_op_upuid` FOREIGN KEY (`opuid`) REFERENCES `user` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 /* 活动表 */
 CREATE TABLE `activity` (
   `aid` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(45) NOT NULL,
-  `img` varchar(200) DEFAULT ''null'',
-  `linkweb` varchar(100) DEFAULT ''null'',
+  `img` varchar(200) DEFAULT 'null',
+  `linkweb` varchar(100) DEFAULT 'null',
   `scancnt` int(11) DEFAULT NULL,
-  `descs` varchar(200) DEFAULT ''null'',
+  `descs` varchar(200) DEFAULT 'null',
   `pubtime` datetime DEFAULT NULL,
   PRIMARY KEY (`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -133,7 +148,7 @@ CREATE TABLE `activity` (
 /* 通知表 */
 CREATE TABLE `notification` (
   `nid` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(45) NOT NULL DEFAULT ''系统通知'',
+  `title` varchar(45) NOT NULL DEFAULT '系统通知',
   `fromer` varchar(45) DEFAULT NULL,
   `ntime` datetime DEFAULT NULL,
   `content` varchar(500) DEFAULT NULL,
@@ -240,3 +255,23 @@ from ((`user` join `college`)
 		join `major`) 
 where ((`user`.`xid` = `college`.`xid`) 
 		and (`user`.`mid` = `major`.`mid`));
+		
+
+/* 管理员视图 */
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_user_view` AS 
+select 
+	`admin_user_op`.`opuid` AS `opuid`,
+	`admin_user_op`.`targetuid` AS `targetuid`,
+	`admin_user_op`.`optime` AS `optime`,
+	`admin_user_op`.`opip` AS `opip`,
+	`admin_user_op`.`type` AS `type`,
+	`admin_user_op`.`endtime` AS `endtime`,
+	`a`.`uid` AS `opusr`,
+	`a`.`nick` AS `opnick`,
+	`a`.`auth` AS `auth`,
+	`b`.`uid` AS `targetusr`,
+	`b`.`nick` AS `targetnick` 
+from ((`admin_user_op` join `user` `a`) 
+		join `user` `b`) 
+where ((`admin_user_op`.`opuid` = `a`.`uid`) 
+		and (`admin_user_op`.`targetuid` = `b`.`uid`));

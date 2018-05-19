@@ -14,9 +14,9 @@ function AjaxHandler(){
             type:'POST',
             data:{username,password},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -46,7 +46,7 @@ function AjaxHandler(){
         $.ajax({
             url:API.register,
             type:'POST',
-            data:{username,password,nickname:"111",mail,phone,qq:"1111",avator:"aaa",xid:1,mid:1001},
+            data:{username,password,nickname:null,mail,phone,qq:null,avator:null,xid:null,mid:null},
             dataType:"JSON",
             success:function(data,state){
                 
@@ -161,9 +161,9 @@ function AjaxHandler(){
             type:'GET',
             data:{},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -180,9 +180,9 @@ function AjaxHandler(){
             type:'GET',
             data:{},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -199,9 +199,9 @@ function AjaxHandler(){
             type:'GET',
             data:{"noticeId":nid},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -283,6 +283,7 @@ function AjaxHandler(){
             type:'GET',
             data:{},
             dataType:"JSON",
+            
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -373,9 +374,9 @@ function AjaxHandler(){
             type:'GET',
             data:{username,page},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -392,9 +393,9 @@ function AjaxHandler(){
             type:'GET',
             data:{username,page},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
@@ -411,9 +412,9 @@ function AjaxHandler(){
             type:'GET',
             data:{},
             dataType:"JSON",
-            xhrFields: {
-                withCredentials: true
-             },
+            // xhrFields: {
+            //     withCredentials: true
+            //  },
             success:function(data,state){
                 success(data,state)},
             error:function(data,state){
