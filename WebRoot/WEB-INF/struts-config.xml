@@ -117,6 +117,10 @@
       path="/addNotification/*"
       type="com.zhiku.notify.AddNotificationAction"
       cancellable="true" />
+    <action
+      path="/getFileDetails/*"
+      type="com.zhiku.struts.action.GetFileDetailsAction"
+      cancellable="true" />
 
   </action-mappings>
 

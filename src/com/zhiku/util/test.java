@@ -18,9 +18,14 @@ import com.zhiku.user.User;
 public class test {
 	public static void main(String[] args) throws Exception {
 		
-		
-		User u = User.findByUsr("baowei");
-		System.out.println(u.hashCode() + u.getMailtime().getTime());
+		String inputPath = "/zhiku/upload\\2\\9\\f04b17d2-fd7c-4c44-941f-d128ca506ceb_数据结构与编程.ppt"; 
+		if(Office2PDF.isConvert(inputPath)){
+			if(Office2PDF.openOfficeToPDF(inputPath, Office2PDF.getOutputFilePath(inputPath))){
+				System.out.println("Yes");
+			}else{
+				System.out.println("No");
+			}
+		}
 		
 		//sha256只针对内容进行哈希，所有文件名的修改不影响sha256的值
 //		FileInputStream fi1 = new FileInputStream(new File("E:") + File.separator + "config.txt");

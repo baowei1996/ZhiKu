@@ -28,7 +28,6 @@ public class FileOP {
 	public static final int UPLOAD = 0;
 	public static final int DOWNLOAD = 1;
 	public static final int DELETE = 2;
-	public static final int REPORT = 3;
 	
 	public int getFid() {
 		return fid;
