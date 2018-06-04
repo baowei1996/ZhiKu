@@ -21,9 +21,12 @@ import com.zhiku.util.Data;
 import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
 
+@Deprecated
 /** 
  * MyEclipse Struts
  * Creation date: 03-20-2018
+ * 
+ * 该功能转于后台实现，此接口废弃使用
  * 
  * XDoclet definition:
  * @struts.action validate="true"

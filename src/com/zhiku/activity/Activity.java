@@ -36,6 +36,11 @@ public class Activity {
 	@Column(name = "scancnt")
 	private int scancnt;
 	
+	@Column(name = "username")
+	private String username;
+	
+	//默认的动态加载数
+	public static int ACTIVITY_NUM = 2;
 	
 	//构造方法
 	public Activity(){	}
@@ -98,6 +103,13 @@ public class Activity {
 		this.scancnt = scancnt;
 	}
 	
+	public String getUsername(){
+		return username;
+	}
+	
+	public void setUsername(String username){
+		this.username = username;
+	}
 	
 	
 

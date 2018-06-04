@@ -53,7 +53,7 @@ public class GetNewsAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			int num = request.getParameter("number")==null?2:Integer.parseInt(request.getParameter("number"));
+			int num = request.getParameter("number")==null?Activity.ACTIVITY_NUM:Integer.parseInt(request.getParameter("number"));
 			List<Activity> acts = ActivityService.getNews(num);
 			
 			if(acts != null){
@@ -65,6 +65,9 @@ public class GetNewsAction extends Action {
 					d.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(a.getPubtime()));
 					d.put("details", a.getDescs());
 					d.put("title", a.getTitle());
+					d.put("linkweb", a.getLinkweb());
+					d.put("scancnt", a.getScancnt());
+					d.put("username", a.getUsername());
 					
 					data.add(d);
 				}
