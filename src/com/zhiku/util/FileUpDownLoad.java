@@ -152,11 +152,12 @@ public class FileUpDownLoad {
 	    	   }
 	       	}
 	      }
-	     }catch (SizeLimitExceededException e) {
-	      e.printStackTrace();
+	     }catch (SizeLimitExceededException se) {
+	      se.printStackTrace();
 	      data.put("message", "文件超出最大值100M！！！");
 	     }catch (Exception e) {
 	      result = FAIL;
+	      data.put("message", e.toString());
 	      e.printStackTrace();
 	     }
 	     

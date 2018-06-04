@@ -78,11 +78,8 @@ public class GetFileDetailsAction extends Action {
 				if(Office2PDF.isConvert(file.getPath())){
 					String outputFilePath = Office2PDF.getOutputFilePath(file.getPath());
 					if(Office2PDF.openOfficeToPDF(file.getPath(), outputFilePath)){
-//						rmsg.setStatus(200);
-//						rmsg.setMessage("OK");
-//						Data data = new Data();
-//						data.put("path", outputFilePath);
-//						rmsg.setData(data);
+						
+						Office2PDF.closeConnection();
 						
 						response.setContentType("application/pdf;charset=utf-8");
 						response.setHeader("pragme", "no-cache");
@@ -113,7 +110,7 @@ public class GetFileDetailsAction extends Action {
 			response.setContentType("application/json;charset=utf-8");
 			response.setHeader("pragme", "no-cache");
 			rmsg.setStatus(300);
-			rmsg.setMessage("发生了一个未知错误，请重试！");
+			rmsg.setMessage("发生了一个未知错误，请重试！\\n" + e.toString());
 			try {
 				out = response.getWriter();
 			} catch (IOException e1) {

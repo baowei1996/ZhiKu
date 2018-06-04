@@ -132,6 +132,20 @@ CREATE TABLE `admin_user_op` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+/* 管理员登录日志 */
+CREATE TABLE `admin_loginout` (
+  `lid` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `logintime` datetime DEFAULT NULL,
+  `logouttime` datetime DEFAULT NULL,
+  `opip` varchar(45) DEFAULT NULL,
+  `opsource` varchar(45) DEFAULT NULL,
+  `descs` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`lid`),
+  KEY `fk_al_u_idx` (`uid`),
+  CONSTRAINT `fk_al_u` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /* 活动表 */
 CREATE TABLE `activity` (
   `aid` int(11) NOT NULL AUTO_INCREMENT,

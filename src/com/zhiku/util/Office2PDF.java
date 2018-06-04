@@ -10,6 +10,11 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
+
+
 //import org.artofsolving.jodconverter.OfficeDocumentConverter;  
 //import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;  
 //import org.artofsolving.jodconverter.office.OfficeManager;  
@@ -34,8 +39,11 @@ public class Office2PDF {
 	
 	//不同系统下openoffice的安装路径
 	public static String WINDOWS_PATH = "C:\\Program Files (x86)\\OpenOffice 4\\program\\soffice.exe";
-	public static String LINUX_PATH = "";
+	public static String LINUX_PATH = "/opt/openoffice4/program/soffice";
 	public static String MAC_PATH = "";
+	
+	public static String LOCAL_IP = "127.0.0.1";
+	public static String REMOTE_IP = "123.206.229.207";
 
 	
 	//openoffice的一个进程
@@ -121,12 +129,12 @@ public class Office2PDF {
      * @throws ConnectException 
      */
     public static OpenOfficeConnection getConnection() throws ConnectException {  
-    	if(p == null){
-    		startOpenOffice();
-    	}
+//    	if(p == null){
+//    		startOpenOffice();
+//    	}
     	
     	if (connection == null){
-    		connection = new SocketOpenOfficeConnection("127.0.0.1",8100);
+    		connection = new SocketOpenOfficeConnection(LOCAL_IP,8100);
     	}else{
     		if(!connection.isConnected()){
     			connection.connect();
@@ -158,7 +166,8 @@ public class Office2PDF {
      * @return 
      */  
     public static String getOutputFilePath(String inputFilePath) {  
-    	String outputFilePath = inputFilePath.replaceAll("." + getPostfix(inputFilePath), ".pdf");  
+    	String outputFilePath = inputFilePath.replaceAll("." + getPostfix(inputFilePath), ".pdf"); 
+//    	outputFilePath = outputFilePath.replaceAll("upload", "buffer");
     	return outputFilePath;  
     }  
     
@@ -208,6 +217,7 @@ public class Office2PDF {
      */  
     public static boolean office2pdf(String inputFilePath, String outputFilePath) throws ConnectException {  
         boolean flag = false;  
+        
         // 连接OpenOffice  
         DocumentConverter converter = new  OpenOfficeDocumentConverter(getConnection());
 //        long begin_time = new Date().getTime();
@@ -216,7 +226,9 @@ public class Office2PDF {
             if (inputFile.exists()) {// 找不到源文件, 则返回  
             	converterFile(inputFile, outputFilePath, inputFilePath, outputFilePath, converter);  
             	flag = true;  
-            }  
+            } else{
+            	System.out.println("找不到源文件");
+            }
         } else {  
             System.out.println("con't find the resource");  
         }  
