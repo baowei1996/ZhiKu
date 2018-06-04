@@ -110,33 +110,36 @@ public class SearchDocumentAction extends Action {
 				filelist = FileView.findByCids(XMCService.findCoursesInMtoc(mid),page);
 			}
 			
-			
 			//设置返回的data信息
 			List<Data> data = new ArrayList<Data>();
-			Data d = null;
-			for(FileView f : filelist){
-				d = new Data();
-				d.put("fid", f.getFid());
-				d.put("upuid", f.getUid());
-				
-				Data fileinfo = new Data();
-				fileinfo.put("name", f.getName());
-				fileinfo.put("module", f.getModule());
-				fileinfo.put("course", f.getCname());
-				fileinfo.put("docformat", f.getDocformat());
-				fileinfo.put("origin", f.getOrigin());
-				fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
-				fileinfo.put("desc", f.getDescs());
-				fileinfo.put("dncnt", f.getDncnt());
-				d.put("fileinfo", fileinfo);
-				
-				Data upperinfo = new Data();
-				upperinfo.put("nickname", f.getNick());
-				upperinfo.put("xname", f.getXname());
-				upperinfo.put("mname", f.getMname());
-				d.put("upperinfo", upperinfo);
-				
-				data.add(d);
+			
+			//为空时直接返回
+			if(filelist != null){
+				Data d = null;
+				for(FileView f : filelist){
+					d = new Data();
+					d.put("fid", f.getFid());
+					d.put("upuid", f.getUid());
+					
+					Data fileinfo = new Data();
+					fileinfo.put("name", f.getName());
+					fileinfo.put("module", f.getModule());
+					fileinfo.put("course", f.getCname());
+					fileinfo.put("docformat", f.getDocformat());
+					fileinfo.put("origin", f.getOrigin());
+					fileinfo.put("uptime", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(f.getUptime()));
+					fileinfo.put("desc", f.getDescs());
+					fileinfo.put("dncnt", f.getDncnt());
+					d.put("fileinfo", fileinfo);
+					
+					Data upperinfo = new Data();
+					upperinfo.put("nickname", f.getNick());
+					upperinfo.put("xname", f.getXname());
+					upperinfo.put("mname", f.getMname());
+					d.put("upperinfo", upperinfo);
+					
+					data.add(d);
+				}
 			}
 			
 			rmsg.setStatus(200);
