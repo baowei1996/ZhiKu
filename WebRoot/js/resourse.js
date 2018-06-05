@@ -105,13 +105,13 @@ if(document.getElementById('dropdownMenu5')){
         })
         
     }
-    document.getElementById('searchBtn').onclick = function(){
-        if(document.getElementById('dropdownMenu5').value.trim()==''){
-            new Toast().showMsg("请输入课程",1000);
-        }else{
-            searchAll(1);        
-        }
-    }
+    // document.getElementById('searchBtn').onclick = function(){
+    //     if(document.getElementById('dropdownMenu5').value.trim()==''){
+    //         new Toast().showMsg("请输入课程",1000);
+    //     }else{
+    //         searchAll(1);        
+    //     }
+    // }
 }
 
 
@@ -185,6 +185,8 @@ function searchDocument(page){
                 console.log(method,course,xid,mid,page);
                 showList();
                 isLoading = false;
+            }else{
+                console.log('no file')
             }
         },function(){})
     }
@@ -295,7 +297,7 @@ window.onscroll = function(){
     }
 };
 function downloadfile(fid){
-    if(!$.cookie('username')){
+    if(checkLogin()){
         new Toast().showMsg('请先登录',1000);
         return;
     }
@@ -314,6 +316,6 @@ function downloadfile(fid){
 }
 
 function preview(fid){
-	window.open('preview.html?'+fid);
+    window.open('preview.html?'+fid);
 
 }

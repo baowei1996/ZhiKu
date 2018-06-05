@@ -1,7 +1,29 @@
 // console.log(API)
+
+function checkLogin(){
+    return !!localStorage.getItem('token');
+}
+
+
 function AjaxHandler(){
     function ajaxHandler(){
 
+    }
+    function getToken(){
+        if(!!localStorage.getItem('token')){
+            return null;
+        }
+        return localStorage.getItem('token');
+    }
+    function handleTokenFailed(code){
+        if(code==401){
+            localStorage.clear();
+            new Toast().showMsg('登录信息已过期，请重新登录',1000)
+            setTimeout(function () { 
+                location.href = 'index.html';
+             },1000)
+            
+        }
     }
     //无权限请求
     ajaxHandler.prototype.login = function(username,password,success,failed){
@@ -30,7 +52,7 @@ function AjaxHandler(){
         $.ajax({
             url:API.logout,
             type:'POST',
-            data:{},
+            data:{token:getToken()},
             dataType:"JSON",
             success:function(data,state){
                 success(data,state)},
@@ -127,16 +149,17 @@ function AjaxHandler(){
         formData.append('origin',origion);
         formData.append('desc',filedesc);
         formData.append('course',course);
+        formData.append('token',getToken());
 
-        var sendData = {
-            name:dname,
-            file:formData,
-            teacher,
-            upusername:username,
-            origin:origion,
-            desc:filedesc,
-            course,
-        };
+        // var sendData = {
+        //     name:dname,
+        //     file:formData,
+        //     teacher,
+        //     upusername:username,
+        //     origin:origion,
+        //     desc:filedesc,
+        //     course,
+        // };
         // console.log(document.getElementById(`${fileElelmentID}`).files[0]);
         // console.log(sendData)
         $.ajax({
@@ -147,9 +170,32 @@ function AjaxHandler(){
             contentType:false,
             processData:false,//为了保证formData能传过去 ，不加会报错
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
-                failed(data,state)}
+                failed(data,state)},
+            xhr:function () {
+                this_xhr = $.ajaxSettings.xhr();
+                if(this_xhr.upload){
+                    this_xhr.upload.addEventListener('progress',function(e){
+                        if (e.lengthComputable) {
+                            var percent = Math.floor(e.loaded/e.total*100);
+                            if(percent <= 100) {
+                              console.log('set progress', percent);
+                             document.getElementById('pro').style.display='block';
+                             $('#process').attr('aria-valuenow',percent).css('width',percent+'%').text(percent);
+
+                            }
+                            if(percent >= 100) {
+                              console.log('文件上传完毕，请等待...');
+                              document.getElementById('pro').style.display='none';
+                             
+                            }
+                          }
+                    },false)
+                }
+                return this_xhr;
+              }
         })
     }
     ajaxHandler.prototype.getUserInfo = function(userName,success,failed){
@@ -159,12 +205,13 @@ function AjaxHandler(){
         $.ajax({
             url:matchword(API.gerUserInfo,userName),
             type:'GET',
-            data:{},
+            data:{token:getToken()},
             dataType:"JSON",
             // xhrFields: {
             //     withCredentials: true
             //  },
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -178,12 +225,13 @@ function AjaxHandler(){
         $.ajax({
             url:matchword(API.getNotification,userName),
             type:'GET',
-            data:{},
+            data:{token:getToken()},
             dataType:"JSON",
             // xhrFields: {
             //     withCredentials: true
             //  },
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -197,12 +245,13 @@ function AjaxHandler(){
         $.ajax({
             url:matchword(API.readNotification,userName),
             type:'GET',
-            data:{"noticeId":nid},
+            data:{"noticeId":nid,token:getToken()},
             dataType:"JSON",
             // xhrFields: {
             //     withCredentials: true
             //  },
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -214,10 +263,10 @@ function AjaxHandler(){
         success = typeof success ==='function'?success:new Function();
         failed = typeof failed ==='function'?failed:new Function();
         console.log(matchword(API.filedownload,fileId))
-            window.open(matchword(API.filedownload,fileId))
+            window.open(matchword(API.filedownload,fileId)+`token=${getToken()}`)
     }
      
-
+    //弃用
     ajaxHandler.prototype.docDetail = function(fileId,success,failed){
         success = typeof success ==='function'?success:new Function();
         failed = typeof failed ==='function'?failed:new Function();
@@ -225,9 +274,10 @@ function AjaxHandler(){
         $.ajax({
             url:matchword(API.docDetail,fileId),
             type:'GET',
-            data:{},
+            data:{token:getToken()},
             dataType:"JSON",
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -235,16 +285,17 @@ function AjaxHandler(){
 
 
     }
-
+//弃用
     ajaxHandler.prototype.modifyFile = function(fileId,{name,model,teacher,course,docformat,fileformat,upuid,origin,desc},success,failed){
         success = typeof success ==='function'?success:new Function();
         failed = typeof failed ==='function'?failed:new Function();
         $.ajax({
             url:matchword(API.modifyFile,fileId),
             type:'POST',
-            data:{name,model,teacher,course,docformat,fileformat,upuid,origin,desc},
+            data:{name,model,teacher,course,docformat,fileformat,upuid,origin,desc,token:getToken()},
             dataType:"JSON",
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -260,10 +311,10 @@ function AjaxHandler(){
         $.ajax({
             url:matchword(API.modifyUserInfo,username),
             type:'POST',
-            data:{nickname,oldpwd,newpwd,avator,mail,phone,qq,xid,mid},
+            data:{nickname,oldpwd,newpwd,avator,mail,phone,qq,xid,mid,token:getToken()},
             dataType:"JSON",
             success:function(data,state){
-
+                handleTokenFailed(data.state);
                 success(data,state);
 
             },
@@ -329,6 +380,7 @@ function AjaxHandler(){
             data:{method,course,college,major,page},
             dataType:"JSON",
             success:function(data,state){
+                // console.log(data,state)
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -348,6 +400,7 @@ function AjaxHandler(){
                 failed(data,state)}
         })
     }
+    //弃用
     ajaxHandler.prototype.fileDownload=function (fileId,success,failed) {
         success = typeof success ==='function'?success:new Function();
         failed = typeof failed ==='function'?failed:new Function();
@@ -358,7 +411,7 @@ function AjaxHandler(){
             data:{},
             dataType:"JSON",
             success:function(data,state){
-            onsole.log(fileId);
+            console.log(fileId);
         
                 success(data,state)},
             error:function(data,state){
@@ -372,12 +425,13 @@ function AjaxHandler(){
         $.ajax({
             url:API.getDownloadList,
             type:'GET',
-            data:{username,page},
+            data:{username,page,token:getToken()},
             dataType:"JSON",
             // xhrFields: {
             //     withCredentials: true
             //  },
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -391,12 +445,13 @@ function AjaxHandler(){
         $.ajax({
             url:API.getUploadList,
             type:'GET',
-            data:{username,page},
+            data:{username,page,token:getToken()},
             dataType:"JSON",
             // xhrFields: {
             //     withCredentials: true
             //  },
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -410,12 +465,13 @@ function AjaxHandler(){
         $.ajax({
             url:matchword(API.deleteDocument,fid),
             type:'GET',
-            data:{},
+            data:{token:getToken()},
             dataType:"JSON",
             // xhrFields: {
             //     withCredentials: true
             //  },
             success:function(data,state){
+                handleTokenFailed(data.state);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
