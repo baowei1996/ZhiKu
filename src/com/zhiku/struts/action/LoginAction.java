@@ -93,7 +93,7 @@ public class LoginAction extends Action {
 					
 					//设置cookie信息
 					Cookie cookie = new Cookie("username",u.getUsr());
-					cookie.setMaxAge(OVER_TIME);
+					cookie.setMaxAge(OVER_TIME*60);
 					cookie.setPath(request.getContextPath());
 					response.addCookie(cookie);
 				}else if(u.getStatus() == User.UNACTIVE){

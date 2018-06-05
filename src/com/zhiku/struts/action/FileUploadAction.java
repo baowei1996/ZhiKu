@@ -68,8 +68,13 @@ public class FileUploadAction extends Action {
 //				return null;
 //			}
 			
+			
+			
+			FileUpDownLoad fileUpload = new FileUpDownLoad();
+			Data data = fileUpload.upload(this.getServlet(), request,FileUpDownLoad.FILE_UPLOAD_PATH);
+			
 			//token验证
-			String token = request.getParameter("token");
+			String token = (String)data.get("token");
 			if(token != null){
 				int status = Token.testToken(token);
 				if(status == Token.OVERTIME){
@@ -93,9 +98,6 @@ public class FileUploadAction extends Action {
 			
 			int uid = (Integer)Token.getPayload(token.substring(token.indexOf('.')+1, token.lastIndexOf('.'))).get("uid");
 			
-			
-			FileUpDownLoad fileUpload = new FileUpDownLoad();
-			Data data = fileUpload.upload(this.getServlet(), request,FileUpDownLoad.FILE_UPLOAD_PATH);
 			
 			int result = (Integer)data.get("result");
 			if(result != FileUpDownLoad.FAIL){
