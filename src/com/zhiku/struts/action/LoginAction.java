@@ -5,11 +5,12 @@
 package com.zhiku.struts.action;
 
 import java.io.PrintWriter;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.struts.action.Action;
@@ -17,7 +18,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.zhiku.token.Token;
 import com.zhiku.user.User;
+import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
 
 /** 
@@ -29,7 +32,8 @@ import com.zhiku.util.RMessage;
  */
 public class LoginAction extends Action {
 	
-	public static final int OVER_TIME  = 30*60;
+	//有效时间为30分钟
+	public static final int OVER_TIME  = 30;
 	
 	/*
 	 * Generated Methods
@@ -66,10 +70,28 @@ public class LoginAction extends Action {
 				if(u.getStatus() == User.NORMAL){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
-					//将uid的值放到session中
-					HttpSession session = request.getSession();
-					session.setMaxInactiveInterval(OVER_TIME);	//设置session的有效时间为30min
-					session.setAttribute("uid", u.getUid());
+					
+//					//将uid的值放到session中
+//					HttpSession session = request.getSession();
+//					session.setMaxInactiveInterval(OVER_TIME);	//设置session的有效时间为30min
+//					session.setAttribute("uid", u.getUid());
+					
+					//设置token信息
+					Data payload = new Data();
+					payload.put("uid", u.getUid());
+					Date current = new Date();
+					payload.put("iat", current);
+					Calendar c = Calendar.getInstance();
+					c.setTime(current);
+					c.add(Calendar.MINUTE, OVER_TIME);
+					payload.put("exp", c.getTime());
+					String token = Token.getToken(payload);
+					//将token放入返回数据中
+					Data data = new Data();
+					data.put("token", token);
+					rmsg.setData(data);
+					
+					//设置cookie信息
 					Cookie cookie = new Cookie("username",u.getUsr());
 					cookie.setMaxAge(OVER_TIME);
 					cookie.setPath(request.getContextPath());

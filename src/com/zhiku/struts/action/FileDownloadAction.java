@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -17,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.DB.Transaction;
 import com.zhiku.file.JFile;
+import com.zhiku.token.Token;
 import com.zhiku.user.User;
 import com.zhiku.util.FileUpDownLoad;
 import com.zhiku.util.RMessage;
@@ -49,17 +49,49 @@ public class FileDownloadAction extends Action {
 		try{
 			
 			//获取用户的session，判断用户的登录状态
-			HttpSession session = request.getSession();
-			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+//			HttpSession session = request.getSession();
+//			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			
+			//token验证
+			String token = request.getParameter("token");
+			if(token != null){
+				int status = Token.testToken(token);
+				if(status == Token.OVERTIME){
+					response.setContentType("application/json;charset=utf-8");
+					response.setHeader("pragme", "no-cache");
+					rmsg.setStatus(401);
+					rmsg.setMessage("认证过期，请重新登录!");
+					out = response.getWriter();
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}else if(status != Token.NORMAL){
+					response.setContentType("application/json;charset=utf-8");
+					response.setHeader("pragme", "no-cache");
+					rmsg.setStatus(300);
+					rmsg.setMessage("验证失败,请尝试重新登录!");
+					out = response.getWriter();
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}
+			}else{
+				response.setContentType("application/json;charset=utf-8");
+				response.setHeader("pragme", "no-cache");
+				rmsg.setStatus(300);
+				rmsg.setMessage("请先登录!");
+				out = response.getWriter();
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
+			
+			int uid = (Integer)Token.getPayload(token.substring(token.indexOf('.')+1, token.lastIndexOf('.'))).get("uid");
+			
 			User u = User.findByUid(uid);
 			
 			if (uid == -1 || u == null){
 				rmsg.setStatus(300);
-				rmsg.setMessage("需要登录才可下载文件!");
+				rmsg.setMessage("未知用户!");
 				response.setContentType("application/json;charset=utf-8");
 				response.setHeader("pragme", "no-cache");
-				response.setHeader("Access-Control-Allow-Credentials", "true");
-				response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 				out = response.getWriter();
 				out.write(RMessage.getJson(rmsg));;
 				return null;
@@ -81,7 +113,6 @@ public class FileDownloadAction extends Action {
 				rmsg.setMessage("无法找到对应文件!");
 				response.setContentType("application/json;charset=utf-8");
 				response.setHeader("pragme", "no-cache");
-				response.setHeader("Access-Control-Allow-Credentials", "true");
 				out = response.getWriter();
 				out.write(RMessage.getJson(rmsg));
 				return null;
@@ -95,7 +126,6 @@ public class FileDownloadAction extends Action {
 			//设置返回信息
 			response.setContentType("application/json;charset=utf-8");
 			response.setHeader("pragme", "no-cache");
-			response.setHeader("Access-Control-Allow-Credentials", "true");
 			
 			//文件不存在信息提示
 			if(!ex){

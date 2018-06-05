@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -22,6 +21,7 @@ import com.zhiku.file.FileView;
 import com.zhiku.file.operation.FileOP;
 import com.zhiku.file.operation.FileOPService;
 import com.zhiku.file.operation.FileOPView;
+import com.zhiku.token.Token;
 import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.RMessage;
@@ -59,16 +59,41 @@ public class GetDownloadAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			//获取用户的session，判断用户的登录状态
-			HttpSession session = request.getSession();
-			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+//			//获取用户的session，判断用户的登录状态
+//			HttpSession session = request.getSession();
+//			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
 			
-			if (uid == -1){
+			//token验证
+			String token = request.getParameter("token");
+			if(token != null){
+				int status = Token.testToken(token);
+				if(status == Token.OVERTIME){
+					rmsg.setStatus(401);
+					rmsg.setMessage("认证过期，请重新登录!");
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}else if(status != Token.NORMAL){
+					rmsg.setStatus(300);
+					rmsg.setMessage("验证失败,请尝试重新登录!");
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}
+			}else{
 				rmsg.setStatus(300);
 				rmsg.setMessage("请先登录!");
-				out.write(RMessage.getJson(rmsg));;
+				out.write(RMessage.getJson(rmsg));
 				return null;
 			}
+			
+			
+			int uid = (Integer)Token.getPayload(token.substring(token.indexOf('.')+1, token.lastIndexOf('.'))).get("uid");
+			
+//			if (uid == -1){
+//				rmsg.setStatus(300);
+//				rmsg.setMessage("请先登录!");
+//				out.write(RMessage.getJson(rmsg));;
+//				return null;
+//			}
 			
 			String username = request.getParameter("username");
 			User u = User.findByUsr(username);
