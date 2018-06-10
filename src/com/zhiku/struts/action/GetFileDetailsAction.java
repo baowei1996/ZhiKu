@@ -42,6 +42,7 @@ public class GetFileDetailsAction extends Action {
 	 * @param response
 	 * @return ActionForward
 	 */
+	@SuppressWarnings("resource")
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 		
@@ -76,14 +77,25 @@ public class GetFileDetailsAction extends Action {
 				return null;
 			}else{
 				if(Office2PDF.isConvert(file.getPath())){
-					String outputFilePath = Office2PDF.getOutputFilePath(file.getPath());
-					if(Office2PDF.openOfficeToPDF(file.getPath(), outputFilePath)){
-						
-						Office2PDF.closeConnection();
-						
+					String outputFilePath = file.getPath();
+					//如果可以转化并且不是pdf
+					if(!"pdf".equals(Office2PDF.getPostfix(file.getPath()))){
+						outputFilePath = Office2PDF.getOutputFilePath(file.getPath());
+						if(!Office2PDF.openOfficeToPDF(file.getPath(), outputFilePath)){
+							response.setContentType("application/json;charset=utf-8");
+							response.setHeader("pragme", "no-cache");
+							rmsg.setStatus(300);
+							rmsg.setMessage("发生了一个未知错误code:1，请重试！");
+							out = response.getWriter();
+							out.write(RMessage.getJson(rmsg));
+							return null;
+						}
+					}
+					
+					//将文件输出到前端
+					try{
 						response.setContentType("application/pdf;charset=utf-8");
 						response.setHeader("pragme", "no-cache");
-						@SuppressWarnings("resource")
 						FileInputStream in = new FileInputStream(new File(outputFilePath));
 						OutputStream outer = response.getOutputStream();
 						byte[] buffer = new byte[1024];
@@ -91,6 +103,17 @@ public class GetFileDetailsAction extends Action {
 						while((len = in.read(buffer))>0){
 							outer.write(buffer, 0, len);
 						}
+						in.close();
+						outer.close();
+						return null;
+					}catch(Exception e){
+						e.printStackTrace();
+						response.setContentType("application/json;charset=utf-8");
+						response.setHeader("pragme", "no-cache");
+						rmsg.setStatus(300);
+						rmsg.setMessage("发生了一个未知错误code:2，请重试！\\n" + e.toString());
+						out = response.getWriter();
+						out.write(RMessage.getJson(rmsg));
 						return null;
 					}
 				}else{
@@ -118,7 +141,9 @@ public class GetFileDetailsAction extends Action {
 			}
 			out.write(RMessage.getJson(rmsg));
 		}finally{
-			
+			if(out != null){
+				out.close();
+			}
 		}
 		return null;
 	}

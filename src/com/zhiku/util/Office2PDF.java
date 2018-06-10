@@ -49,7 +49,7 @@ public class Office2PDF {
 	//openoffice的一个进程
 	public static Process p = null;
 	//openoffice的一个连接
-	public static OpenOfficeConnection connection = null;
+//	public static OpenOfficeConnection connection = null;
   
     /** 
      * 使Office2003-2007全部格式的文档(.doc|.docx|.xls|.xlsx|.ppt|.pptx) 转化为pdf文件<br> 
@@ -122,41 +122,41 @@ public class Office2PDF {
     	return can;
     }
     
-    
-    /**
-     * 获取连接  
-     * @return 返回一个soffice的连接
-     * @throws ConnectException 
-     */
-    public static OpenOfficeConnection getConnection() throws ConnectException {  
-//    	if(p == null){
-//    		startOpenOffice();
+//    
+//    /**
+//     * 获取连接  
+//     * @return 返回一个soffice的连接
+//     * @throws ConnectException 
+//     */
+//    public static OpenOfficeConnection getConnection() throws ConnectException {  
+////    	if(p == null){
+////    		startOpenOffice();
+////    	}
+//    	
+//    	if (connection == null){
+//    		connection = new SocketOpenOfficeConnection(LOCAL_IP,8100);
+//    	}else{
+//    		if(!connection.isConnected()){
+//    			connection.connect();
+//    		}
 //    	}
-    	
-    	if (connection == null){
-    		connection = new SocketOpenOfficeConnection(LOCAL_IP,8100);
-    	}else{
-    		if(!connection.isConnected()){
-    			connection.connect();
-    		}
-    	}
-        return connection;  
-    }  
-    
-    
-    
-    /**
-     * 关闭连接
-     * @return 是否关闭连接
-     */
-    public static boolean closeConnection(){
-    	if(connection != null && connection.isConnected()){
-    		connection.disconnect();
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }
+//        return connection;  
+//    }  
+//    
+//    
+//    
+//    /**
+//     * 关闭连接
+//     * @return 是否关闭连接
+//     */
+//    public static boolean closeConnection(){
+//    	if(connection != null && connection.isConnected()){
+//    		connection.disconnect();
+//    		return true;
+//    	}else{
+//    		return false;
+//    	}
+//    }
     
     
     /** 
@@ -165,8 +165,10 @@ public class Office2PDF {
      * @param inputFilePath 
      * @return 
      */  
-    public static String getOutputFilePath(String inputFilePath) {  
-    	String outputFilePath = inputFilePath.replaceAll("." + getPostfix(inputFilePath), ".pdf"); 
+    public static String getOutputFilePath(String inputFilePath) { 
+    	String file_name = inputFilePath.substring(inputFilePath.lastIndexOf(File.separator)+1,inputFilePath.lastIndexOf("."));
+    	String outputFilePath = "/zhiku/buffer/" + file_name + ".pdf";
+    	System.out.println(outputFilePath);
 //    	outputFilePath = outputFilePath.replaceAll("upload", "buffer");
     	return outputFilePath;  
     }  
@@ -183,27 +185,6 @@ public class Office2PDF {
     }  
   
     
-    /** 
-     * 转换文件 
-     *  
-     * @param inputFile 
-     * @param outputFilePath_end 
-     * @param inputFilePath 
-     * @param outputFilePath 
-     * @param converter 
-     */  
-    
-    public static void converterFile(File inputFile, String outputFilePath_end, String inputFilePath, String outputFilePath, DocumentConverter converter) {  
-        File outputFile = new File(outputFilePath_end);  
-        // 假如目标路径不存在,则新建该路径  
-        if (!outputFile.getParentFile().exists()) {  
-            outputFile.getParentFile().mkdirs();  
-        }  
-        //如果文件已存在，则不进行转化
-        if(!outputFile.exists()){
-        	converter.convert(inputFile, outputFile);  
-        }
-    }  
   
     /** 
      * 使Office2003-2007全部格式的文档(.doc|.docx|.xls|.xlsx|.ppt|.pptx) 转化为pdf文件<br> 
@@ -218,22 +199,33 @@ public class Office2PDF {
     public static boolean office2pdf(String inputFilePath, String outputFilePath) throws ConnectException {  
         boolean flag = false;  
         
-        // 连接OpenOffice  
-        DocumentConverter converter = new  OpenOfficeDocumentConverter(getConnection());
-//        long begin_time = new Date().getTime();
-        if (null != inputFilePath) {  
-            File inputFile = new File(inputFilePath);  
-            if (inputFile.exists()) {// 找不到源文件, 则返回  
-            	converterFile(inputFile, outputFilePath, inputFilePath, outputFilePath, converter);  
-            	flag = true;  
-            } else{
-            	System.out.println("找不到源文件");
-            }
-        } else {  
-            System.out.println("con't find the resource");  
-        }  
-//        long end_time = new Date().getTime();  
-//        System.out.println("文件转换耗时：[" + (end_time - begin_time) + "]ms");  
+        //检查输入文件是否存在
+        File inputFile = new File(inputFilePath);
+        if(!inputFile.exists()){
+        	return false;
+        }
+        
+        //检查输出文件父目录以及文件本身是否存在
+        File outputFile = new File(outputFilePath);
+        if(!outputFile.getParentFile().exists()){
+        	outputFile.getParentFile().mkdirs();
+        }else if (outputFile.exists()){
+        	return true;
+        }
+        
+        
+        
+        // 连接OpenOffice 
+        OpenOfficeConnection connection = new SocketOpenOfficeConnection(LOCAL_IP,8100);
+        connection.connect();
+        DocumentConverter converter = new  OpenOfficeDocumentConverter(connection);
+        
+//      long begin_time = new Date().getTime();
+        converter.convert(inputFile, outputFile);
+        flag = true;
+//      long end_time = new Date().getTime();  
+//    	System.out.println("文件转换耗时：[" + (end_time - begin_time) + "]ms");  
+        connection.disconnect();
         return flag;  
     }  
   
