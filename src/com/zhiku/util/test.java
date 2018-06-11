@@ -2,6 +2,7 @@ package com.zhiku.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,20 +13,27 @@ import javax.mail.internet.AddressException;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zhiku.token.Token;
 import com.zhiku.user.User;
 
 
 public class test {
 	public static void main(String[] args) throws Exception {
 		
-		String inputPath = "/zhiku/upload\\2\\9\\f04b17d2-fd7c-4c44-941f-d128ca506ceb_数据结构与编程.ppt"; 
-		if(Office2PDF.isConvert(inputPath)){
-			if(Office2PDF.openOfficeToPDF(inputPath, Office2PDF.getOutputFilePath(inputPath))){
-				System.out.println("Yes");
-			}else{
-				System.out.println("No");
-			}
-		}
+		FileInputStream in = new FileInputStream(new File("D:\\csdn推荐信息.json"));
+		byte[] buff = new byte[1024*20];
+		int length = in.read(buff);
+		String blog = new String(buff, 0, length);
+		ObjectMapper om = new ObjectMapper();
+		ArrayList<Data> d = om.readValue(blog, ArrayList.class);
+		Data data = new Data();
+		data.put("blog", d);
+		RMessage rmsg = new RMessage();
+		rmsg.setData(data);
+		rmsg.setStatus(200);
+		rmsg.setMessage("ok");
+		System.out.println(RMessage.getJson(rmsg));
 		
 		//sha256只针对内容进行哈希，所有文件名的修改不影响sha256的值
 //		FileInputStream fi1 = new FileInputStream(new File("E:") + File.separator + "config.txt");
