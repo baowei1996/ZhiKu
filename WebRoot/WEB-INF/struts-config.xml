@@ -121,6 +121,14 @@
       path="/getFileDetails/*"
       type="com.zhiku.struts.action.GetFileDetailsAction"
       cancellable="true" />
+    <action
+      path="/recommendation"
+      type="com.zhiku.recommend.RecommendationAction"
+      cancellable="true" />
+    <action
+      path="/statistics"
+      type="com.zhiku.recommend.StatisticsAction"
+      cancellable="true" />
 
   </action-mappings>
 
