@@ -128,7 +128,7 @@ public class FileOPService {
 			upload.put("value", resultSet[0]);
 			Data download = new Data();
 			download.put("content", "下载总数");
-			download.put("value", resultSet[0]);
+			download.put("value", resultSet[1]);
 			up_down_sum.add(upload);
 			up_down_sum.add(download);
 		}catch(Exception e){

@@ -3,6 +3,7 @@ package com.zhiku.file;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.zhiku.hibernate.HibernateSessionFactory;
@@ -256,4 +257,50 @@ public class FileDAO {
 		return exist;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static List<JFile> getUntagPdf(){
+		Session session = null;
+		List<JFile> filelist = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			
+			String sql = "SELECT * FROM zhiku.file_info where fileformat = 'pdf' and fid not in (select fid from kw_list)";
+			SQLQuery q = session.createSQLQuery(sql);
+			filelist = q.list();
+					
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			HibernateSessionFactory.closeSession();
+		}
+		
+		return filelist;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<FileView> tagSearch(String kw,int page){
+		Session session = null;
+		List<FileView> filelist = null;
+		
+		try{
+			session = HibernateSessionFactory.getSession();
+			session.beginTransaction();
+			
+			String sql = "from FileView where descs = \'" + kw + "\'";
+			Query q = session.createQuery(sql);
+			q.setFirstResult((page-1)*PAGE_SIZE);
+			q.setMaxResults(PAGE_SIZE);
+			filelist = q.list();
+			
+					
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			session.getTransaction().commit();
+			HibernateSessionFactory.closeSession();
+		}
+		
+		return filelist;
+	}
 }

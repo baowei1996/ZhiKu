@@ -67,8 +67,8 @@ public class RecommendationAction extends Action {
 			//运行py文件
 			int fid = Integer.parseInt(request.getParameter("fid"));
 			try{
-				PythonExe.Run_Python("/xxx.py", "["+fid+","+u.getUid()+"]");
-				PythonExe.Run_Python("/xxx.py", "["+fid+"]");
+				PythonExe.Run_Python(servlet.getServletContext().getRealPath("/py/recommend_files.py"), "["+u.getUid()+","+fid+"]");
+				PythonExe.Run_Python(servlet.getServletContext().getRealPath("/py/csdn.py"), fid+"");
 			}catch(Exception e){
 				e.printStackTrace();
 				rmsg.setStatus(300);
@@ -80,13 +80,15 @@ public class RecommendationAction extends Action {
 			ArrayList<Data> files = null;
 			ArrayList<Data> blogs = null;
 			try{
-				File file_recommend = new File("/zhiku/智库文档推荐.json");
+				File file_recommend = new File("/zhiku/recommend_files.json");
 				if(file_recommend.exists()){
 					files = PythonExe.getJson("files", file_recommend);
+					file_recommend.delete();
 				}
 				File csdn_recommend = new File("/zhiku/csdn.json");
 				if(csdn_recommend.exists()){
-					blogs = PythonExe.getJson("files", file_recommend);
+					blogs = PythonExe.getJson("blogs", csdn_recommend);
+					csdn_recommend.delete();
 				}
 			}catch(FileNotFoundException fnfe){
 				fnfe.printStackTrace();

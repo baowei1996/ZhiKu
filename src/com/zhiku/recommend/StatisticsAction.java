@@ -96,7 +96,7 @@ public class StatisticsAction extends Action {
 			rmsg.setMessage("OK");
 			
 			try{
-				PythonExe.Run_Python("D:\\zhiku\\pythonTest.py", "["+uid+"]");
+				PythonExe.Run_Python(servlet.getServletContext().getRealPath("/py/user_words_cloud.py"), uid+"");
 			}catch(Exception e){
 				e.printStackTrace();
 				rmsg.setStatus(300);
@@ -107,9 +107,10 @@ public class StatisticsAction extends Action {
 			//读取py文件运行后生成的文件
 			ArrayList<Data> graph3 = null;
 			try{
-				File words = new File("D:\\csdn.json");
+				File words = new File("/zhiku/user_words_cloud.json");
 				if(words.exists()){
 					graph3 = PythonExe.getJson("files", words);
+					words.delete();
 				}
 			}catch(FileNotFoundException fnfe){
 				fnfe.printStackTrace();

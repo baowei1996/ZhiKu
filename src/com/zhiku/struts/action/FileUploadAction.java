@@ -21,6 +21,7 @@ import com.zhiku.token.Token;
 import com.zhiku.user.User;
 import com.zhiku.util.Data;
 import com.zhiku.util.FileUpDownLoad;
+import com.zhiku.util.PythonExe;
 import com.zhiku.util.RMessage;
 
 /** 
@@ -179,6 +180,18 @@ public class FileUploadAction extends Action {
 				if(Transaction.saveUploadInfo(file, u, opip,result)){
 					rmsg.setStatus(200);
 					rmsg.setMessage("OK");
+					//插入数据成功之后如果是Word则运行分词
+					if(file.getFileformat().equals("docx")){
+						file = JFile.findBySha(sha256);
+						try{
+							System.out.println("[" + file.getFid() + "," + descs + "]");
+							PythonExe.Run_Python(servlet.getServletContext().getRealPath("/py/upload_tags.py"), "[" + file.getFid() + "," + descs + "]");
+						}catch(Exception e){
+							rmsg.setStatus(300);
+							rmsg.setMessage("异常");
+							e.printStackTrace();
+						}
+					}
 				}else{
 					rmsg.setStatus(300);
 					rmsg.setMessage("发生了一个预期以外的错误，请重试!");

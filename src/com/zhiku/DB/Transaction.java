@@ -50,7 +50,7 @@ public class Transaction {
 			fp.setUid(user.getUid());
 			fp.setOptime(file.getUptime());
 			fp.setOpip(opip);
-			fp.setCat(FileOP.UPLOAD);
+			fp.setType(FileOP.UPLOAD);
 			FileOPService.save(fp,session);
 			session.getTransaction().commit();
 
@@ -90,7 +90,7 @@ public class Transaction {
 			FileOP fp = new FileOP();
 			fp.setFid(f.getFid());
 			fp.setUid(u.getUid());
-			fp.setCat(FileOP.DOWNLOAD);
+			fp.setType(FileOP.DOWNLOAD);
 			fp.setOptime(new Date());
 			fp.setOpip(opip);
 			FileOPService.save(fp, session);

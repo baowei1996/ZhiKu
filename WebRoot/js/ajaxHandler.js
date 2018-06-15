@@ -171,7 +171,7 @@ function AjaxHandler(){
             contentType:false,
             processData:false,//为了保证formData能传过去 ，不加会报错
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)},
@@ -212,7 +212,7 @@ function AjaxHandler(){
             //     withCredentials: true
             //  },
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -232,7 +232,7 @@ function AjaxHandler(){
             //     withCredentials: true
             //  },
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -252,7 +252,7 @@ function AjaxHandler(){
             //     withCredentials: true
             //  },
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -278,7 +278,7 @@ function AjaxHandler(){
             data:{token:getToken()},
             dataType:"JSON",
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -296,7 +296,7 @@ function AjaxHandler(){
             data:{name,model,teacher,course,docformat,fileformat,upuid,origin,desc,token:getToken()},
             dataType:"JSON",
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -315,7 +315,7 @@ function AjaxHandler(){
             data:{nickname,oldpwd,newpwd,avator,mail,phone,qq,xid,mid,token:getToken()},
             dataType:"JSON",
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state);
 
             },
@@ -432,7 +432,7 @@ function AjaxHandler(){
             //     withCredentials: true
             //  },
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -452,7 +452,7 @@ function AjaxHandler(){
             //     withCredentials: true
             //  },
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
@@ -472,12 +472,49 @@ function AjaxHandler(){
             //     withCredentials: true
             //  },
             success:function(data,state){
-                handleTokenFailed(data.state);
+                handleTokenFailed(data.status);
                 success(data,state)},
             error:function(data,state){
                 failed(data,state)}
         })
     }
+
+    ajaxHandler.prototype.statistics=function (success,failed) {
+        success = typeof success ==='function'?success:new Function();
+        failed = typeof failed ==='function'?failed:new Function();
+        $.ajax({
+            url:API.statistics,
+            type:'GET',
+            data:{token:getToken(),username:$.cookie('username')},
+            dataType:"JSON",
+            success:function(data,state){
+                handleTokenFailed(data.status);
+                success(data,state);
+            },
+            error:function(data,state){
+                failed(data,state);
+            }
+        })
+
+      }
+    ajaxHandler.prototype.getRecommend=function (fid,success,failed) {
+        success = typeof success ==='function'?success:new Function();
+        failed = typeof failed ==='function'?failed:new Function();
+        $.ajax({
+            url:API.getRecommend,
+            type:'GET',
+            data:{fid,username:$.cookie('username')},
+            dataType:"JSON",
+            success:function(data,state){
+                //handleTokenFailed(data.status);
+                success(data,state);
+            },
+            error:function(data,state){
+                failed(data,state);
+            }
+        })
+
+      }
 
 
     return new ajaxHandler();

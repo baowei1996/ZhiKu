@@ -1,6 +1,6 @@
 
-var baseUrl = 'http://localhost:8080/JPidea';
-//var baseUrl = 'http://719daze.me:8080/JPidea';
+//var baseUrl = 'http://localhost:8080/JPidea';
+var baseUrl = 'http://719daze.me:8080/JPidea';
 var prefix =
          '';
         // '/JPidea';
@@ -29,8 +29,10 @@ var API = {
     getUploadList:`${baseUrl}/getupld.do`,
     deleteDocument:`${baseUrl}/del/{fid}`,
     gerUserInfo:`${baseUrl}/userinfo/{fid}`,
-    getNotification:`getNotification/{userid}.do`,
-    readNotification:`readNotification/{userid}.do`,
-    forgetPwd:`${baseUrl}/forgetpwd.do`
+    getNotification:`${baseUrl}/getNotification/{userid}.do`,
+    readNotification:`${baseUrl}/readNotification/{userid}.do`,
+    forgetPwd:`${baseUrl}/forgetpwd.do`,
+    statistics:`${baseUrl}/statistics.do`,
+    getRecommend:`${baseUrl}/recommendation.do`
     
 }

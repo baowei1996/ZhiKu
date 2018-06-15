@@ -18,7 +18,7 @@ public class PythonExe {
 	 */
 	public static void Run_Python(String py_filepath,String arg) throws InterruptedException, IOException{
 		
-		Process ps = Runtime.getRuntime().exec("python " + py_filepath + " " + arg);
+		Process ps = Runtime.getRuntime().exec("python3 " + py_filepath + " " + arg);
 		ps.waitFor();
 		
 		return ;

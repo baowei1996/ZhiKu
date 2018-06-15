@@ -296,11 +296,12 @@ window.onscroll = function(){
             
     }
 };
-function downloadfile(fid){
+function downloadfile(fid,open){
     if(!checkLogin()){
         new Toast().showMsg('请先登录',1000);
         return;
     }
+    
     var user =new AjaxHandler();
     console.log(fid);
     user.downloadFile(fid,function(data,state){
@@ -312,6 +313,58 @@ function downloadfile(fid){
        //  a.download = fileName;
         // a.click();
     },function(){})
+    if(arguments.length==2){
+        return;
+    }
+    user.getRecommend(fid,function(data,state) {
+        var files=data.data.files;
+        var blogs=data.data.blogs;
+        if(data.status==300){
+            new Toast().showMsg('暂无推荐',1500);
+        }
+        if(Array.isArray(files)&&files.length!=0){
+            var doc_div = document.getElementById('doc-list');
+            doc_div.innerHTML='';
+            files.map(function(item){
+                
+                var temp=`<a href="javascript:downloadfile(${item.fid},1)" class="list-group-item ">
+                <h4 class="list-group-item-heading">${item.fileinfo.name}</h4>
+                <p class="list-group-item-text">上传自：${item.nickname}\t\t下载：${item.fileinfo.dncnt}次</p>
+                <p class="list-group-item-text">描述：${item.fileinfo.desc}</p>
+            </a>`;
+            doc_div.innerHTML+=temp;
+            })
+        }else{
+            var doc_div = document.getElementById('doc-list');
+            doc_div.innerHTML=`<a class="list-group-item ">
+            <h4 class="list-group-item-heading" style="color:lightgray">暂无推荐文档</h4></a>`;
+        }
+        if(Array.isArray(blogs)&&blogs.length!=0){
+            var blog_div = document.getElementById('blog-list');
+            blog_div.innerHTML='';
+            blogs.map(function(item){
+                var temp=`<a href=${item.url} class="list-group-item ">
+                <h4 class="list-group-item-heading">${item.title}</h4>
+                <p class="list-group-item-text">时间：${item.date}\t\t作者：${item.auth}\t\t浏览量：${item.scancut}次</p>
+                <p class="list-group-item-text">链接：${item.url}</p>
+            </a>`;
+            blog_div.innerHTML+=temp;
+            })
+        }else{
+            var blog_div = document.getElementById('blog-list');
+            blog_div.innerHTML=`<a class="list-group-item ">
+            <h4 class="list-group-item-heading" style="color:lightgray">暂无推荐博客</h4></a>`;
+        }
+       
+        // var blog_h = document.getElementById('blog-recom').offsetHeight;
+        // var file_h = document.getElementById('doc-recom').offsetHeight;
+        // var all_h =  blog_h>file_h?blog_h:file_h;
+        // document.getElementById('blog-recom').style.height=all_h+'px';
+        // document.getElementById('doc-recom').style.height=all_h+'px';
+        $('#recommend-btn').click();
+    },function(data){
+        new Toast().showMsg("网络异常,推荐失败",1500);
+    })
     
 }
 

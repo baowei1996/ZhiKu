@@ -129,6 +129,10 @@
       path="/statistics"
       type="com.zhiku.recommend.StatisticsAction"
       cancellable="true" />
+    <action
+      path="/tagsearch"
+      type="com.zhiku.struts.action.TagSearchAction"
+      cancellable="true" />
 
   </action-mappings>
 

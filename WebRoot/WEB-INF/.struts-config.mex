@@ -28,11 +28,12 @@
   <StrutsActivity path="/addNotification/*.do" location="1250,1850" dimension="265,104" />
   <StrutsActivity path="/getFileDetails/*.do" location="650,2050" dimension="290,104" />
   <StrutsActivity path="/recommendation.do" location="1250,2050" dimension="314,104" />
+  <StrutsActivity path="/statistics.do" location="50,2250" dimension="291,104" />
   <StrutsActivity path="/index.html" location="50,1650" dimension="96,53" />
   <StrutsActivity path="/ResetPassword.html" location="1250,850" dimension="153,53" />
   <StrutsActivity path="/ResetPwd.html" location="1250,450" dimension="121,53" />
   <StrutsActivity path="/index.jsp" location="50,1450" dimension="88,53" />
-  <StrutsActivity path="/statistics.do" location="50,2250" dimension="291,104" />
+  <StrutsActivity path="/tagsearch.do" />
   <StrutsTransition id="/mail.do,success,/index.html,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="785,1850" />
