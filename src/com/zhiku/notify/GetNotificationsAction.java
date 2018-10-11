@@ -106,7 +106,7 @@ public class GetNotificationsAction extends Action {
 				rmsg.setStatus(300);
 				rmsg.setMessage("错误的用户");
 			}else{		//检查通知
-				List<Notification> ns = NotificationService.getNotifications(u.getUid());
+				List<Notification> ns = NotificationService.getNotifications(u.getUsr());
 				
 				if(ns != null){
 					

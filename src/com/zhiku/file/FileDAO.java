@@ -287,7 +287,7 @@ public class FileDAO {
 			session = HibernateSessionFactory.getSession();
 			session.beginTransaction();
 			
-			String sql = "from FileView where descs = \'" + kw + "\'";
+			String sql = "from FileView where descs like \'%" + kw + "%\' or name like \'%" + kw + "%\'";
 			Query q = session.createQuery(sql);
 			q.setFirstResult((page-1)*PAGE_SIZE);
 			q.setMaxResults(PAGE_SIZE);

@@ -60,13 +60,13 @@ public class NotificationService {
 	 * @param uid 用户id
 	 * @return 用户的所有通知
 	 */
-	public static List<Notification> getNotifications(int uid){
+	public static List<Notification> getNotifications(String usr){
 		List<Notification> notifications = null;
 		Session session = null;
 		
 		try{
 			session = HibernateSessionFactory.getSession();
-			String sql = "from Notification where to = " + uid + "order by ntime ";
+			String sql = "from Notification where toer = \'" + usr + "\' order by ntime ";
 			notifications = session.createQuery(sql).list();
 		}catch(Exception e){
 			e.printStackTrace();

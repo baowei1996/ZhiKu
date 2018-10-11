@@ -36,8 +36,11 @@ public class Activity {
 	@Column(name = "scancnt")
 	private int scancnt;
 	
-	@Column(name = "username")
+	@Column(name = "pubuser")
 	private String username;
+	
+	@Column(name = "imgName")
+	private String imgName;
 	
 	//默认的动态加载数
 	public static int ACTIVITY_NUM = 2;

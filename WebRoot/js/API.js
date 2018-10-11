@@ -1,5 +1,5 @@
 
-//var baseUrl = 'http://localhost:8080/JPidea';
+
 var baseUrl = 'http://719daze.me:8080/JPidea';
 var prefix =
          '';
@@ -33,6 +33,7 @@ var API = {
     readNotification:`${baseUrl}/readNotification/{userid}.do`,
     forgetPwd:`${baseUrl}/forgetpwd.do`,
     statistics:`${baseUrl}/statistics.do`,
-    getRecommend:`${baseUrl}/recommendation.do`
+    getRecommend:`${baseUrl}/recommendation.do`,
+    tagsearch:`${baseUrl}/tagsearch.do`
     
 }

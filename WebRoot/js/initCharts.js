@@ -69,7 +69,7 @@ function wordChart(data1) {
     });
 
     
-data1 = data1.slice(0,7);
+    data1 = data1.slice(0,7);
     let dv = new DataSet.View().source(data1)
     var range = dv.range('value');
     var min = range[1];
@@ -103,7 +103,6 @@ data1 = data1.slice(0,7);
                 return d.value*1.5;
             }
 
-
             return 0;
         }, 
         text(d) {
@@ -116,8 +115,8 @@ data1 = data1.slice(0,7);
     })
     const chart = new G2.Chart({
         id: 'word',
-        // width: 500,
-        forceFit: true,
+         width: 400,
+        //forceFit: true,
         height: 300,
         padding: 0
     });

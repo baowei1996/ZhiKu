@@ -92,7 +92,7 @@ public class AddNotificationAction extends Action {
 			nf.setNtime(new Date());
 			nf.setRead(Notification.UNREAD);
 			nf.setTitle(title);
-			nf.setTo(User.findByUsr(to).getUid());
+//			nf.setTo(User.findByUsr(to).getUid());
 			
 			if(NotificationService.addNotification(nf)){
 				rmsg.setStatus(200);

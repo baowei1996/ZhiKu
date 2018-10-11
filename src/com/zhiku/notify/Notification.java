@@ -33,7 +33,7 @@ public class Notification {
 	private String from;
 	
 	@Column(name="toer" , nullable = false)
-	private int to;
+	private String to;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date ntime;
@@ -71,10 +71,10 @@ public class Notification {
 	public void setFrom(String from) {
 		this.from = from;
 	}
-	public int getTo() {
+	public String getTo() {
 		return to;
 	}
-	public void setTo(int to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 	public Date getNtime() {

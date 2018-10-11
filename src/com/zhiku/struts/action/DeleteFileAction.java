@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import com.zhiku.DB.Transaction;
 import com.zhiku.file.JFile;
+import com.zhiku.token.Token;
 import com.zhiku.user.User;
 import com.zhiku.util.RMessage;
 
@@ -54,9 +55,35 @@ public class DeleteFileAction extends Action {
 		try{
 			out = response.getWriter();
 			
-			//获取用户的session，判断用户的登录状态
-			HttpSession session = request.getSession();
-			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+//			//获取用户的session，判断用户的登录状态
+//			HttpSession session = request.getSession();
+//			int uid = session.getAttribute("uid")==null?-1:(Integer)session.getAttribute("uid");
+			
+			
+			//token验证
+			String token = request.getParameter("token");
+			if(token != null){
+				int status = Token.testToken(token);
+				if(status == Token.OVERTIME){
+					rmsg.setStatus(401);
+					rmsg.setMessage("认证过期，请重新登录!");
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}else if(status != Token.NORMAL){
+					rmsg.setStatus(300);
+					rmsg.setMessage("验证失败,请尝试重新登录!");
+					out.write(RMessage.getJson(rmsg));
+					return null;
+				}
+			}else{
+				rmsg.setStatus(300);
+				rmsg.setMessage("请先登录!");
+				out.write(RMessage.getJson(rmsg));
+				return null;
+			}
+			
+			int uid = (Integer)Token.getPayload(token.substring(token.indexOf('.')+1, token.lastIndexOf('.'))).get("uid");
+
 			User u = User.findByUid(uid);
 			
 			if (uid == -1 && u == null){
