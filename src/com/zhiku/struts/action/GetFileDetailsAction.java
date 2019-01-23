@@ -96,14 +96,15 @@ public class GetFileDetailsAction extends Action {
 					try{
 						response.setContentType("application/pdf;charset=utf-8");
 						response.setHeader("pragme", "no-cache");
-						FileInputStream in = new FileInputStream(new File(outputFilePath));
+//						FileInputStream in = new FileInputStream(new File(outputFilePath));
 						OutputStream outer = response.getOutputStream();
-						byte[] buffer = new byte[1024];
-						int len = 0;
-						while((len = in.read(buffer))>0){
-							outer.write(buffer, 0, len);
-						}
-						in.close();
+//						byte[] buffer = new byte[1024];
+//						int len = 0;
+//						while((len = in.read(buffer))>0){
+//							outer.write(buffer, 0, len);
+//						}
+						Office2PDF.writeOut(new File(outputFilePath), outer);
+//						in.close();
 						outer.close();
 						return null;
 					}catch(Exception e){

@@ -2,7 +2,7 @@
 CREATE database zhiku;
 use zhiku;
 
-/* 学院表 */
+/*学院表*/
 CREATE TABLE `college` (
   `xid` int(11) NOT NULL,
   `xname` varchar(100) NOT NULL,
@@ -10,15 +10,16 @@ CREATE TABLE `college` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* 课程表 */
+/*课程表*/
 CREATE TABLE `course` (
-  `cid` int(11) NOT NULL,
+  `cid` int(11) NOT NULL AUTO_INCREMENT,
   `cname` varchar(100) NOT NULL,
+  `credit` int(11) DEFAULT '0',
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
 
 
-/* 专业表 */
+/*专业表*/
 CREATE TABLE `major` (
   `mid` int(11) NOT NULL,
   `mname` varchar(100) NOT NULL,
@@ -29,7 +30,7 @@ CREATE TABLE `major` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* 课程和专业对应表 */
+/*课程和专业对应表*/
 CREATE TABLE `mtoc` (
   `mid` int(11) NOT NULL,
   `cid` int(11) NOT NULL,
@@ -41,7 +42,7 @@ CREATE TABLE `mtoc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* 用户表 */
+/*用户表*/
 CREATE TABLE `user` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `usr` varchar(20) NOT NULL,
@@ -73,10 +74,10 @@ CREATE TABLE `user` (
   KEY `fk_mid_idx` (`mid`),
   CONSTRAINT `fk_mid` FOREIGN KEY (`mid`) REFERENCES `major` (`mid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_xid` FOREIGN KEY (`xid`) REFERENCES `college` (`xid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 
-/* 文件表 */
+/*文件表*/
 CREATE TABLE `file_info` (
   `fid` int(11) NOT NULL AUTO_INCREMENT,
   `path` varchar(200) NOT NULL,
@@ -95,14 +96,14 @@ CREATE TABLE `file_info` (
   `origin` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`fid`),
-  KEY `fk_course_idx` (`course`),
   KEY `fk_upuid_idx` (`upuid`),
+  KEY `fk_course_idx` (`course`),
   CONSTRAINT `fk_course` FOREIGN KEY (`course`) REFERENCES `course` (`cid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_upuid` FOREIGN KEY (`upuid`) REFERENCES `user` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 
-/* 文件操作 */
+/*文件操作表*/
 CREATE TABLE `file_op` (
   `fid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
@@ -117,7 +118,7 @@ CREATE TABLE `file_op` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* 管理员操作表 */
+/*管理员操作表*/
 CREATE TABLE `admin_user_op` (
   `opuid` int(11) NOT NULL,
   `targetuid` int(11) NOT NULL,
@@ -132,7 +133,7 @@ CREATE TABLE `admin_user_op` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* 管理员登录日志 */
+/*管理员登录日志*/
 CREATE TABLE `admin_loginout` (
   `lid` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
@@ -144,22 +145,25 @@ CREATE TABLE `admin_loginout` (
   PRIMARY KEY (`lid`),
   KEY `fk_al_u_idx` (`uid`),
   CONSTRAINT `fk_al_u` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
-/* 活动表 */
+
+/*活动表*/
 CREATE TABLE `activity` (
   `aid` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(45) NOT NULL,
-  `img` varchar(200) DEFAULT 'null',
+  `img` longtext,
   `linkweb` varchar(100) DEFAULT 'null',
-  `scancnt` int(11) DEFAULT NULL,
+  `scancnt` int(11) DEFAULT '0',
   `descs` varchar(200) DEFAULT 'null',
   `pubtime` datetime DEFAULT NULL,
+  `pubuser` varchar(45) CHARACTER SET big5 DEFAULT NULL,
+  `imgName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 
-/* 通知表 */
+/*通知表*/
 CREATE TABLE `notification` (
   `nid` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(45) NOT NULL DEFAULT '系统通知',
@@ -167,14 +171,37 @@ CREATE TABLE `notification` (
   `ntime` datetime DEFAULT NULL,
   `content` varchar(500) DEFAULT NULL,
   `isread` int(11) DEFAULT NULL,
-  `toer` int(11) DEFAULT NULL,
+  `toer` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`nid`),
   KEY `fk_n_u_to_idx` (`toer`),
-  CONSTRAINT `fk_n_u_to` FOREIGN KEY (`toer`) REFERENCES `user` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_n_u_to` FOREIGN KEY (`toer`) REFERENCES `user` (`usr`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+
+/*关键字表*/
+CREATE TABLE `kw_list` (
+  `fid` int(11) NOT NULL,
+  `kw1` varchar(45) DEFAULT NULL,
+  `kw2` varchar(45) DEFAULT NULL,
+  `kw3` varchar(45) DEFAULT NULL,
+  `kw4` varchar(45) DEFAULT NULL,
+  `kw5` varchar(45) DEFAULT NULL,
+  `kw6` varchar(45) DEFAULT NULL,
+  `kw7` varchar(45) DEFAULT NULL,
+  `kw8` varchar(45) DEFAULT NULL,
+  `kw9` varchar(45) DEFAULT NULL,
+  `kw10` varchar(45) DEFAULT NULL,
+  `kw11` varchar(45) DEFAULT NULL,
+  `kw12` varchar(45) DEFAULT NULL,
+  `kw13` varchar(45) DEFAULT NULL,
+  `kw14` varchar(45) DEFAULT NULL,
+  `kw15` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`fid`),
+  CONSTRAINT `fk_kw_file` FOREIGN KEY (`fid`) REFERENCES `file_info` (`fid`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* 文件操作视图 */
+/*文件操作视图*/
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `file_op_view` AS 
 select 
 	`file_op`.`fid` AS `fid`,
@@ -211,9 +238,9 @@ where ((`file_op`.`fid` = `file_info`.`fid`)
 		and (`user`.`xid` = `college`.`xid`) 
 		and (`major`.`mid` = `user`.`mid`) 
 		and (`file_info`.`course` = `course`.`cid`));
-		
-		
-/*文件视图 */
+
+
+/*文件视图*/
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `file_view` AS 
 select 
 	`user`.`uid` AS `uid`,
@@ -244,8 +271,8 @@ where ((`user`.`uid` = `file_info`.`upuid`)
 		and (`user`.`mid` = `major`.`mid`) 
 		and (`file_info`.`course` = `course`.`cid`));
 		
-		
-/* 用户视图 */
+
+/*用户视图*/
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `user_view` AS 
 select 
 	`user`.`uid` AS `uid`,
@@ -271,7 +298,7 @@ where ((`user`.`xid` = `college`.`xid`)
 		and (`user`.`mid` = `major`.`mid`));
 		
 
-/* 管理员视图 */
+/*管理员视图*/
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_user_view` AS 
 select 
 	`admin_user_op`.`opuid` AS `opuid`,

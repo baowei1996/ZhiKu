@@ -46,6 +46,7 @@
             container.style.display = "block";
             // var url = 'http://127.0.0.1:8080/java.pdf';
             var url = baseUrl+'/'+load;
+            console.log(baseUrl);
             // convertDataURIToBinary('${encodeBase64}');//encodeBase64是后台传递的base64编码的二进制字符串
 
             pdfjsLib.workerSrc = 'lib/pdf.worker.js';

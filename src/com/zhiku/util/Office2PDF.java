@@ -1,24 +1,18 @@
 package com.zhiku.util;
 
-import java.io.File;  
+import java.io.File;
+import java.io.OutputStream;
 import java.net.ConnectException;
 //import java.util.Date;  
-import java.util.regex.Pattern;  
-  
+import java.util.regex.Pattern;
 
-
-
-
-
-
-
-
-
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 //import org.artofsolving.jodconverter.OfficeDocumentConverter;  
 //import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;  
 //import org.artofsolving.jodconverter.office.OfficeManager;  
-import com.artofsolving.jodconverter.*;
+import com.artofsolving.jodconverter.DocumentConverter;
 import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
@@ -44,6 +38,8 @@ public class Office2PDF {
 	
 	public static String LOCAL_IP = "127.0.0.1";
 	public static String REMOTE_IP = "123.206.229.207";
+	
+	public static int DEFAULT_PAGE = 10;
 
 	
 	//openoffice的一个进程
@@ -228,6 +224,20 @@ public class Office2PDF {
         connection.disconnect();
         return flag;  
     }  
+    
+    public static void writeOut(File file, OutputStream out) throws Exception{
+    	PDDocument document = PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly());
+        document.getPages();
+        int endPage = document.getNumberOfPages()>DEFAULT_PAGE?DEFAULT_PAGE:document.getNumberOfPages();
+        
+        PDDocument pd = new PDDocument();
+        for(int i = 0;i<endPage;i++) {
+        	pd.addPage(document.getPage(i));
+        }
+        pd.save(out);
+        pd.close();
+        document.close();  
+    }
   
   
     public static void main(String[] args) throws ConnectException {

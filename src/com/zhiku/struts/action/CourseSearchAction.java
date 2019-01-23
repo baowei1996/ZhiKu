@@ -54,6 +54,8 @@ public class CourseSearchAction extends Action {
 			
 			List<Course> courses = XMCService.searchByKey(keyword);
 			
+			System.out.println(keyword);
+			System.out.println(courses == null);
 			if(courses != null){
 				//如果结果不为空，将结果转换为Json
 				Iterator<Course> it = courses.iterator();

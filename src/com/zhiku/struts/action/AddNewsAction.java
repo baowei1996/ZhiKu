@@ -61,7 +61,6 @@ public class AddNewsAction extends Action {
 			FileUpDownLoad fileUpload = new FileUpDownLoad();
 			Data data = fileUpload.upload(this.getServlet(), request,FileUpDownLoad.IMAGE_UPLOAD_PATH);
 			
-			System.out.println(data.get("result"));
 			if((Integer)data.get("result") == FileUpDownLoad.SUCCESS){
 				//获取图片的相关属性
 				String url = (String)data.get("savePath");
